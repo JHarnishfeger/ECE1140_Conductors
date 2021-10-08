@@ -146,3 +146,18 @@ void greenToConsole(){
 void redToConsole(){
 	cout << "needs finished red" << endl;
 }
+
+//Method loadTrack(string filename)
+//Params: String
+//Returns: vector<Block>
+//Desc: takes in the filename of pre-created textfile containing the track layout and transforms it into a vector of Blocks
+vector<Block> loadTrack(string filename){
+	vector<Block> retVect;
+	#WIP
+	return retVect;
+}
+
+//Method: sendData() WIP
+//Params: WIP
+//Returns: WIP
+//Desc: sends out necessary data to connecting modules

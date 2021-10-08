@@ -17,6 +17,7 @@ int Block:count = 0;
 //Desc: creates a Block with default values
 Block::Block(){
 	line = 'g';
+	branch = 'a';
 	type = "rail";
 	length = 2.0;
 	trainPresent = false;
@@ -34,13 +35,14 @@ Block::Block(){
 	powerFailure = false;
 }
 
-//Method Block(string line, string type, double length, bool trainPresent, double grade, double suggestedSpeed, double speedLimit, string direction, double temperature, int beacons, double height, bool brokenRail, bool brokenCircuit, bool powerFailure)
-//Params: stringx3, doublex6, boolx4, int
+//Method Block(char line, char branch, string type, double length, bool trainPresent, double grade, double suggestedSpeed, double speedLimit, char direction, double temperature, int beacons, double height, bool brokenRail, bool brokenCircuit, bool powerFailure)
+//Params: charx2, string, doublex6, boolx4, int
 //Returns: None
 //Desc: creates a Block with inputted values;
-Block::Block(char lineIN, string typeIN, double lengthIN, bool trainPresentIN, double gradeIN, double suggestedSpeedIN, double speedLimitIN, char directionIN,
+Block::Block(char lineIN, char branchIN, string typeIN, double lengthIN, bool trainPresentIN, double gradeIN, double suggestedSpeedIN, double speedLimitIN, char directionIN,
 double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool brokenCircuitIN, bool powerFailureIN){
 	line = lineIN;
+	branch = branchIN;
 	type = typeIN;
 	length = lengthIN;
 	trainPresent = trainPresentIN;
@@ -84,6 +86,22 @@ void Block::setLine(char lineIN){
 //Desc: returns the value of the line member variable as a char
 char Block::getLine(){
 	return line;
+}
+
+//Method: setBranch(char branch)
+//Params: char
+//Returns: None
+//Desc: sets member variable branc = to inputted char
+void Block::setBranch(char branchIN){
+	brach = branchIN;
+}
+
+//Method: getBranch()
+//Params: None
+//Returns: char
+//Desc: returns the value of the branch member variable as a char
+char Block::setBranch(){
+	return branch;
 }
 
 //Method: setType(string type)

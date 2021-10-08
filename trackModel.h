@@ -1,6 +1,7 @@
 #ifndef trackModel_H
 #define trackModel_H
 #include <string>
+#include <fstream>
 #include <vector>
 #include "Block.h"
 using namespace std;
@@ -23,8 +24,10 @@ class trackModel{
 		bool fixPower(char, int);
 		double getSuggSpeed();
 		double getAuthority();
+		vector<Block> loadTrack(string);
 		void greenToConsole();
 		void redToConsole():
+		//Send data method
 };
 //End trackModel class
 
