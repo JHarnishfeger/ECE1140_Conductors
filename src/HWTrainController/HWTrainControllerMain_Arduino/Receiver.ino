@@ -1,15 +1,8 @@
-#define BAUD 9600
-#define DELAY_TIME 100
 #define led 32
 
 String receivedString;
 
-void setup() {
-  Serial.begin(BAUD);
-  pinMode(led, OUTPUT);
-}
-
-void loop() {
+void ReceiveData() {
   if (Serial.available() > 0){
     receivedString = Serial.readStringUntil('\n');
   }

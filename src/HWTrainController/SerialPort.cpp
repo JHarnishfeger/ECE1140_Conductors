@@ -1,12 +1,12 @@
 #include "SerialPort.h"
 
-Serial::Serial(const char *portName)
+SerialPort::SerialPort(const char *portName)
 {
     //We're not yet connected
     this->connected = false;
 
     //Try to connect to the given port throuh CreateFile
-    this->hSerial = CreateFile(portName,
+    this->hSerial = CreateFileA(portName,
             GENERIC_READ | GENERIC_WRITE,
             0,
             NULL,
@@ -70,7 +70,7 @@ Serial::Serial(const char *portName)
 
 }
 
-Serial::~Serial()
+SerialPort::~SerialPort()
 {
     //Check if we are connected before trying to disconnect
     if(this->connected)
@@ -82,7 +82,7 @@ Serial::~Serial()
     }
 }
 
-int Serial::ReadData(char *buffer, unsigned int nbChar)
+int SerialPort::ReadData(char *buffer, unsigned int nbChar)
 {
     //Number of bytes we'll have read
     DWORD bytesRead;
@@ -121,7 +121,7 @@ int Serial::ReadData(char *buffer, unsigned int nbChar)
 }
 
 
-bool Serial::WriteData(const char *buffer, unsigned int nbChar)
+bool SerialPort::WriteData(const char *buffer, unsigned int nbChar)
 {
     DWORD bytesSend;
 
@@ -137,7 +137,7 @@ bool Serial::WriteData(const char *buffer, unsigned int nbChar)
         return true;
 }
 
-bool Serial::IsConnected()
+bool SerialPort::IsConnected()
 {
     //Simply return the connection status
     return this->connected;

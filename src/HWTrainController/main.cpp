@@ -1,32 +1,22 @@
-#include <stdio.h>
-#include <tchar.h>
-#include "SerialPort.h"	// Library described above
-#include <string>
+#define DATA_LENGTH 255
 
-// application reads from the specified serial port and reports the collected data
-int main()
+#include "SerialPort.h"
+#include <iostream>
+
+// const char* portName = "\\\\.\\COM3";
+
+//Declare a global object
+SerialPort* arduino;
+
+//Here '\n' is a delimiter
+const char *sendString = "ON\n";
+
+int main(void)
 {
-	printf("Welcome to the serial test app!\n\n");
-
-	Serial* SP = new Serial("\\\\.\\COM10");    // adjust as needed
-
-	if (SP->IsConnected())
-		printf("We're connected");
-
-	char incomingData[256] = "";			// don't forget to pre-allocate memory
-	//printf("%s\n",incomingData);
-	int dataLength = 255;
-	int readResult = 0;
-
-	while(SP->IsConnected())
-	{
-		readResult = SP->ReadData(incomingData,dataLength);
-		// printf("Bytes read: (0 means no data available) %i\n",readResult);
-                incomingData[readResult] = 0;
-
-        	printf("%s",incomingData);
-
-		Sleep(500);
-	}
-	return 0;
+  arduino = new SerialPort("\\\\.\\COM3");
+  if (arduino->IsConnected()){
+    bool hasWritten = arduino->WriteData(sendString, DATA_LENGTH);
+    if (hasWritten) std::cout << "Data Written Successfully" << std::endl;
+    else std::cerr << "Data was not written" << std::endl;
+  }
 }
