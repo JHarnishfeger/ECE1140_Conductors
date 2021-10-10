@@ -1,9 +1,6 @@
-//void setup() {
-//  // put your setup code here, to run once:
-//
-//}
-//
-//void loop() {
-//  // put your main code here, to run repeatedly:
-//
-//}
+const char* helloWorld = "ON";
+
+void TransmitData() {
+  Serial.println(helloWorld);
+  delay(100);
+}
