@@ -3,6 +3,7 @@ LiquidCrystal_I2C lcd(0x27,20,4);
 #define joyX A0
 #define joyY A1
 #define sw  23
+
 int xValue, yValue;
 int jxValue = 0;
 int jyValue = 0;
