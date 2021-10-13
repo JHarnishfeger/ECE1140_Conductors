@@ -74,12 +74,9 @@ public:
     QPushButton *testButton;
     QLabel *powerLabel;
     QLabel *label_14;
-    QLineEdit *commandedVelocity_2;
-    QLineEdit *commandedVelocity_3;
+    QLineEdit *announce;
+    QLineEdit *mode;
     QLabel *label_15;
-    QCheckBox *stationApproachingCB;
-    QLabel *EmergencyBreak_3;
-    QPushButton *testButton_2;
     QStatusBar *statusbar;
     QMenuBar *menubar;
 
@@ -241,24 +238,15 @@ public:
         label_14 = new QLabel(centralwidget);
         label_14->setObjectName(QString::fromUtf8("label_14"));
         label_14->setGeometry(QRect(370, 100, 99, 16));
-        commandedVelocity_2 = new QLineEdit(centralwidget);
-        commandedVelocity_2->setObjectName(QString::fromUtf8("commandedVelocity_2"));
-        commandedVelocity_2->setGeometry(QRect(360, 120, 113, 20));
-        commandedVelocity_3 = new QLineEdit(centralwidget);
-        commandedVelocity_3->setObjectName(QString::fromUtf8("commandedVelocity_3"));
-        commandedVelocity_3->setGeometry(QRect(850, 320, 113, 20));
+        announce = new QLineEdit(centralwidget);
+        announce->setObjectName(QString::fromUtf8("announce"));
+        announce->setGeometry(QRect(360, 120, 113, 20));
+        mode = new QLineEdit(centralwidget);
+        mode->setObjectName(QString::fromUtf8("mode"));
+        mode->setGeometry(QRect(850, 320, 113, 20));
         label_15 = new QLabel(centralwidget);
         label_15->setObjectName(QString::fromUtf8("label_15"));
         label_15->setGeometry(QRect(860, 300, 99, 16));
-        stationApproachingCB = new QCheckBox(centralwidget);
-        stationApproachingCB->setObjectName(QString::fromUtf8("stationApproachingCB"));
-        stationApproachingCB->setGeometry(QRect(430, 160, 70, 17));
-        EmergencyBreak_3 = new QLabel(centralwidget);
-        EmergencyBreak_3->setObjectName(QString::fromUtf8("EmergencyBreak_3"));
-        EmergencyBreak_3->setGeometry(QRect(310, 150, 101, 41));
-        testButton_2 = new QPushButton(centralwidget);
-        testButton_2->setObjectName(QString::fromUtf8("testButton_2"));
-        testButton_2->setGeometry(QRect(380, 180, 75, 23));
         TrainControllerMainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(TrainControllerMainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -322,12 +310,9 @@ public:
         testButton->setText(QCoreApplication::translate("TrainControllerMainWindow", "Test", nullptr));
         powerLabel->setText(QCoreApplication::translate("TrainControllerMainWindow", "00000", nullptr));
         label_14->setText(QCoreApplication::translate("TrainControllerMainWindow", "Next Station", nullptr));
-        commandedVelocity_2->setText(QCoreApplication::translate("TrainControllerMainWindow", "YARD", nullptr));
-        commandedVelocity_3->setText(QCoreApplication::translate("TrainControllerMainWindow", "manual", nullptr));
+        announce->setText(QCoreApplication::translate("TrainControllerMainWindow", "YARD", nullptr));
+        mode->setText(QCoreApplication::translate("TrainControllerMainWindow", "manual", nullptr));
         label_15->setText(QCoreApplication::translate("TrainControllerMainWindow", "Mode", nullptr));
-        stationApproachingCB->setText(QString());
-        EmergencyBreak_3->setText(QCoreApplication::translate("TrainControllerMainWindow", "Station Approaching", nullptr));
-        testButton_2->setText(QCoreApplication::translate("TrainControllerMainWindow", "Announce", nullptr));
     } // retranslateUi
 
 };

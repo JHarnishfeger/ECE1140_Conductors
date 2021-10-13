@@ -565,7 +565,7 @@ p, li { white-space: pre-wrap; }
      <string>Next Station</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="commandedVelocity_2">
+   <widget class="QLineEdit" name="announce">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -578,7 +578,7 @@ p, li { white-space: pre-wrap; }
      <string>YARD</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="commandedVelocity_3">
+   <widget class="QLineEdit" name="mode">
     <property name="geometry">
      <rect>
       <x>850</x>
@@ -602,45 +602,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>Mode</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="stationApproachingCB">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>160</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="EmergencyBreak_3">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>150</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Station Approaching</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="testButton_2">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>180</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Announce</string>
     </property>
    </widget>
   </widget>
