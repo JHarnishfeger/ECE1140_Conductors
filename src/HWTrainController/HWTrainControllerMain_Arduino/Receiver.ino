@@ -14,14 +14,14 @@ void ReceiveData() {
     char 31-35        = stationCode
     */
 
-    Kp = receivedString.substring(1,5);
-    Ki = receivedString.substring(6,10);
-    authority = receivedString.substring(11,15);
-    commandedSpeed = receivedString.substring(16,20);
-    setpointSpeed = receivedString.substring(21,25);
-    currentSpeed = receivedString.substring(26,30);
+    Kp = receivedString.substring(1,6);
+    Ki = receivedString.substring(6,11);
+    authority = receivedString.substring(11,16);
+    commandedSpeed = receivedString.substring(16,21);
+    setpointSpeed = receivedString.substring(21,26);
+    currentSpeed = receivedString.substring(26,31);
     
-    stationCode = receivedString.substring(31,35);
+    stationCode = receivedString.substring(31,36);
     stationName = decodeStationName(stationCode);
     
 

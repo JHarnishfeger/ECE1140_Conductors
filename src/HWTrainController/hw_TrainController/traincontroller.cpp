@@ -77,11 +77,11 @@ void TrainController::decodeData(QString inputData)
         }
         if(decodedData.substr(11,1) == "1")
         {
-            mode = "manual";
+            mode = "automatic";
         }
         else
         {
-            mode = "automatic";
+            mode = "manual";
         }
     }
 
@@ -98,6 +98,7 @@ QByteArray TrainController::encodeData()
     char 21-25        = setpointSpeed
     char 26-30        = currentSpeed
     char 31-35        = stationCode
+    char 36           = announcing
     */
 
     if(nextStation == "ShadySide")                  stationCode = "00000";
@@ -179,6 +180,11 @@ QString TrainController::getAuthority()
     return authority;
 }
 
+QString TrainController::getMode()
+{
+    return mode;
+}
+
 bool TrainController::getLeftDoors()
 {
     return leftDoors;
@@ -247,6 +253,11 @@ void TrainController::setSpeedLimit(QString SpeedLimit)
 void TrainController::setAuthority(QString Authority)
 {
     authority = Authority;
+}
+
+void TrainController::setNextStation(QString nxtStation)
+{
+    nextStation = nxtStation;
 }
 
 TrainController trainController;

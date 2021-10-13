@@ -79,6 +79,7 @@ void TrainControllerMainWindow::on_testButton_clicked()
     trainController.setSpeedLimit(ui->speedLimit->text());
     trainController.setSpeedLimit(ui->speedLimit->text());
     trainController.setAuthority(ui->authority->text());
+    trainController.setNextStation(ui->announce->text());
 }
 
 void TrainControllerMainWindow::setUtilities()
@@ -89,11 +90,12 @@ void TrainControllerMainWindow::setUtilities()
     ui->ExteriorLightsCB->setChecked(trainController.getExteriorLights());
     ui->ServiceBreakCB->setChecked(trainController.getServiceBreak());
     ui->EmergencyBreakCB->setChecked(trainController.getEBreak());
+    ui->mode->setText(trainController.getMode());
 }
 
 void TrainControllerMainWindow::setPower()
 {
     ui->powerLabel->setText(trainController.getPower());
-    qDebug() << trainController.getPower();
+    //qDebug() << trainController.getPower();
 }
 

@@ -21,6 +21,7 @@ public:
     bool exteriorLights = false;
     bool serviceBreak = false;
     bool eBreak = false;
+    QString announcing = "0";
     QString mode = "manual";
     QString power = "00000";
     QString nextStation = "YARD";
@@ -36,6 +37,7 @@ public:
     QString getSuggestedVelocity();
     QString getSpeedLimit();
     QString getAuthority();
+    QString getMode();
     bool getLeftDoors();
     bool getRightDoors();
     bool getInteriorLights();
@@ -51,8 +53,7 @@ public:
     void setSuggestedVelocity(QString SuggestedVelocity);
     void setSpeedLimit(QString SpeedLimit);
     void setAuthority(QString Authority);
-
-
+    void setNextStation(QString nxtStation);
 
 
 
