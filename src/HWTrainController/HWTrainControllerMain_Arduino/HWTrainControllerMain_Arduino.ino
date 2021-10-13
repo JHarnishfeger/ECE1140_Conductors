@@ -13,12 +13,12 @@ const int breakPin = 36;
 const int eBreakPin = 25;
 const int modePin = 32;
 
-String Kp = "";
-String Ki = "";
-String authority = "";
-String commandedSpeed = "";
-String setpointSpeed = "";
-String currentSpeed = "";
+//String Kp = "";
+//String Ki = "";
+//String authority = "";
+//String commandedSpeed = "";
+//String setpointSpeed = "";
+//String currentSpeed = "";
 
 void setup() {
   // put your setup code here, to run once:
@@ -37,12 +37,12 @@ void setup() {
   pinMode(eBreakPin, INPUT);
   pinMode(modePin, INPUT);
   //configure();
-  //joystickSetup();
+  joystickSetup();
 }
 
 void loop() {
   //put your main code here, to run repeatedly:
-  //joystick();
+  joystick();
   TransmitData();
   ReceiveData();
   delay(900);
