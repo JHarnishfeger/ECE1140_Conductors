@@ -94,6 +94,6 @@ void TrainControllerMainWindow::setUtilities()
 void TrainControllerMainWindow::setPower()
 {
     ui->powerLabel->setText(trainController.getPower());
-    qDebug() << trainController.getPower();
+    //qDebug() << trainController.getPower();
 }
 

@@ -56,7 +56,7 @@ void SerialPort::readSerial()
             trainController.decodeData(dataIN_concat);
             dataIN_concat = "";
         }
-        if(dataIN_concat.length() >= 13*12)
+        if(dataIN_concat.length() >= 13*2)
         {
             dataIN_concat = "";
         }
