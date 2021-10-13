@@ -197,17 +197,26 @@ void SWTrackController::updateWaysides()
 
 void SWTrackController::createWaysides(int waysideNum)
 {
+    //std::cout << "Creating waysides" << std::endl;
     int id=0;
     int trackSize = redLine.size() + greenLine.size(); //Finding most effective way to set waysides
     int redWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(redLine.size()) / trackSize);
     int greenWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(greenLine.size()) / trackSize);
-    if(waysideNum!=(redWaysideNum+greenWaysideNum))
+    while(waysideNum>(redWaysideNum+greenWaysideNum))
     {
         if(redLine.size()>greenLine.size())
             redWaysideNum++;
         else
             greenWaysideNum++;
     }
+    while(waysideNum<(redWaysideNum+greenWaysideNum))
+    {
+        if(redWaysideNum>greenWaysideNum)
+            redWaysideNum--;
+        else
+            greenWaysideNum--;
+    }
+    waysideNum = redWaysideNum + greenWaysideNum;
 
     int redWaysideSectorSize = redLine.size() / redWaysideNum; //Dividing up each line equally with waysides
     int greenWaysideSectorSize = greenLine.size() / greenWaysideNum;
@@ -248,6 +257,7 @@ void SWTrackController::createWaysides(int waysideNum)
             nextSector += greenWaysideSectorSize;
         }
     }
+    //std::cout << "Waysides done" << std::endl;
 }
 
 vector<Block> SWTrackController::setHardwareWayside(int id)
@@ -427,11 +437,11 @@ bool SWTrackController::switchTrack(Block swt)
             {
                 if(waysides[i].sector[j].getId()==swt.getId())
                 {
-                    waysides[i].switchTrack(swt);
+                    waysides[i].switchTrack(waysides[i].sector[j]);
                     for(int k=0;k<swich.size();k++)
                     {
                         if(swich[k].getId()==swt.getId()&&swich[k].getLine()==swt.getLine())
-                            swich[k].setSwitch(swt.getSwitch());
+                            swich[k].setSwitch(waysides[i].sector[j].getSwitch());
                     }
                     i = waysides.size();
                     found = 1;
@@ -453,18 +463,23 @@ bool SWTrackController::toggleCrossing(Block crs)
     for(int i=0;i<waysides.size();i++)
         for(int j=0;j<waysides[i].sector.size();j++)
         {
-            if(waysides[i].sector[j].getId()==crs.getId())
+            if(waysides[i].sector[j].getLine()==crs.getLine())
             {
-                waysides[i].toggleCrossing(crs);
-                for(int k=0;k<crossing.size();k++)
+                if(waysides[i].sector[j].getId()==crs.getId())
                 {
-                    if(crossing[k].getId()==crs.getId()&&crossing[k].getLine()==crs.getLine())
-                        crossing[k].setSwitch(crs.getCrossing());
+                    waysides[i].toggleCrossing(waysides[i].sector[j]);
+                    for(int k=0;k<crossing.size();k++)
+                    {
+                        if(crossing[k].getId()==crs.getId()&&crossing[k].getLine()==crs.getLine())
+                            crossing[k].setCrossing(waysides[i].sector[j].getCrossing());
+                    }
+                    i = waysides.size();
+                    found = 1;
+                    break;
                 }
-                i = waysides.size();
-                found = 1;
-                break;
             }
+            else
+                break;
         }
     if(!found)
         return 0;
@@ -476,7 +491,8 @@ void SWTrackController::getTrackOccupancy()
 {
     trackOccupancy.clear();
     for(int i=0;i<waysides.size();i++)
-        trackOccupancy.insert(std::end(trackOccupancy), std::begin(waysides[i].getTrackOccupancy()), std::end(waysides[i].getTrackOccupancy()));
+        for(int j=0;j<waysides[i].getTrackOccupancy().size();j++)
+            trackOccupancy.push_back(waysides[i].getTrackOccupancy()[j]);
 }
 
 void SWTrackController::testValues()
@@ -497,27 +513,27 @@ void SWTrackController::testValues()
     std::cout << std::endl << std::endl << "RED LINE TRAIN POSITIONS: ";
     for(int i=0;i<trackOccupancy.size();i++)
     {
-        if(!trackOccupancy[i].getLine())
+        if(trackOccupancy[i].getLine()=='r')
             std::cout << trackOccupancy[i].getId() << ", ";
     }
 
     std::cout << std::endl << "GREEN LINE TRAIN POSITIONS: ";
     for(int i=0;i<trackOccupancy.size();i++)
     {
-        if(trackOccupancy[i].getLine())
+        if(trackOccupancy[i].getLine()=='g')
             std::cout << trackOccupancy[i].getId() << ", ";
     }
 
     std::cout << std::endl << std::endl << "SWITCHES: ";
     for(int i=0;i<swich.size();i++)
     {
-        std::cout << swich[i].getId() << ", ";
+        std::cout << swich[i].getId() << "(" << swich[i].getSwitch() << "), ";
     }
 
     std::cout << std::endl << "CROSSINGS: ";
     for(int i=0;i<crossing.size();i++)
     {
-        std::cout << crossing[i].getId() << ", ";
+        std::cout << crossing[i].getId() << "(" << crossing[i].getCrossing() << "), ";
     }
 
     std::cout << std::endl << "MAINTENANCE: ";

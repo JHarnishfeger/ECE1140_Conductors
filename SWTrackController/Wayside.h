@@ -31,8 +31,8 @@ public:
     vector<Block> getMaintenance(); //Produces a list of all blocks undergoing maintenance
     bool getMode(); //Checks if device is in maintenance mode
     void setMode(bool); //Sets device to the proper mode
-    bool switchTrack(Block); //Switches a track
-    bool toggleCrossing(Block); //Toggles a crossing
+    bool switchTrack(Block&); //Switches a track
+    bool toggleCrossing(Block&); //Toggles a crossing
     vector<Block> getTrackOccupancy(); //Fetches track occupancy over sector
     vector<Block> trackOccupancy; //Holds the blocks of where any trains are currently on the track
     vector<Block> sector; //Holds all info about each block associated with the current wayside

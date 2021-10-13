@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
-#include "SWTrackController.h"
+#include <vector>
+using std::vector;
+#include "SWTrackController.cpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SWTCInterface; }

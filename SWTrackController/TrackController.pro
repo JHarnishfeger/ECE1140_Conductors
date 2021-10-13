@@ -9,18 +9,11 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Block.cpp \
-    PLCController.cpp \
-    SWTrackController.cpp \
-    Wayside.cpp \
     main.cpp \
     swtcinterface.cpp
 
 HEADERS += \
-    Block.h \
-    PLCController.h \
     SWTrackController.h \
-    Wayside.h \
     swtcinterface.h
 
 FORMS += \
