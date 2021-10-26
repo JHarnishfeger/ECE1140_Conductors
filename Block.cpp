@@ -73,9 +73,9 @@ double speedLimitIN, double suggestedSpeedIN){
 	temperature = temperatureIN;
 	speedLimit = speedLimitIN;
 	suggestedSpeed = suggestedSpeedIN;
-	railStatus = false;
-	circuitStatus = false;
-	powerStatus = false;
+	railStatus = true;
+	circuitStatus = true;
+	powerStatus = true;
 	heaterStatus = true;
 	crossingStatus = false;
 	switchStatus = true;
@@ -94,6 +94,7 @@ int Block::getId(){
 //Params: string
 //Returns: None
 //Desc: sets the value of the attribute line = to inputted string
+//Notes: line should be set to "green" or "red" function assumes no user error
 void Block::setLine(string lineIN){
 	line = lineIN;
 }
@@ -122,6 +123,7 @@ string Block::getBranch(){
 //Params: string
 //Returns: None
 //Desc: sets the value of the attribute type = to inputted string
+//Notes: type should be set to "rail", "yard", "station", "switch", or "crossing" function assumes no user error
 void Block::setType(string typeIN){
 	type = typeIN;
 }
@@ -136,6 +138,7 @@ string Block::getType(){
 //Params: string
 //Returns: None
 //Desc: sets the value of the attribute direction = to inputted string
+//Notes: direction should be set to "north", "east", "south", or "west" fucntion assumes no user error
 void Block::setDirection(string directionIN){
 	direction = directionIN;
 }
@@ -245,6 +248,7 @@ double Block::getSuggestedSpeed(){
 }
 
 //railStatus -----------------------------------------------------------
+//Notes: bool true == no rail failures bool false = rail failure
 //Params: bool
 //Returns: None
 //Desc: sets the value of the attribute railStatus = to inputted bool
@@ -265,6 +269,7 @@ void Block::toggleRailStatus(){
 }
 
 //circuitStatus --------------------------------------------------------
+//Notes: bool true = no circuit failures bool false = circuit failure
 //Params: bool 
 //Returns: None
 //Desc: sets the value of the attribute circuitStatus = to inputted bool
@@ -285,6 +290,7 @@ void Block::toggleCircuitStatus(){
 }
 
 //powerStatus ----------------------------------------------------------
+//Notes: bool true = no power failures bool false = power failure
 //Params: bool
 //Returns: None
 //Desc: sets the value of the attribute powerStatus = to inputted bool
@@ -305,6 +311,7 @@ void Block::togglePowerStatus(){
 }
 
 //heaterStatus ---------------------------------------------------------
+//Notes: bool true = heater is active bool false = heater is inactive
 //Params: bool 
 //Returns: None
 //Desc: sets the value of the attribute heaterStatus = to inputted bool
@@ -325,6 +332,7 @@ void Block::toggleHeaterStatus(){
 }
 
 //crossingStatus -------------------------------------------------------
+//Notes: bool true = crossing is active bool false = crossing is inactive
 //Params: bool
 //Returns: None
 //Desc: sets the value of the attribute crossingStatus = to inputted bool
@@ -345,6 +353,7 @@ void Block::toggleCrossingStatus(){
 }
 
 //switchStatus ---------------------------------------------------------
+//Notes: bool true = crossing is pointed upwards towards nextBranch[0] bool false = crossing is pointed downwards towards nextBranch[1]
 //Params: bool
 //Returns: None
 //Desc: sets the value of the attribute switchStatus = to inputted bool
