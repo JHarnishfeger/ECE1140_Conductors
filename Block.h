@@ -95,8 +95,7 @@ class Block{
 		void setSwitchStatus(bool);
 		bool getSwitchStatus();
 		void toggleSwitchStatus();
-		//Authority
-		//NextBranches?
+		//Authority?
 };
 //End Block class
 #endif
