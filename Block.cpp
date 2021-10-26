@@ -27,11 +27,12 @@ Block::Block(){
 	heaterStatus = true;
 	crossingStatus = false;
 	switchStatus = true;
+	trainPresent = false;
 }
 
 //Full input constructor
 Block::Block(string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, double lengthIN, double gradeIN, double heightIN, double temperatureIN,
-double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN){
+double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN){
 	id = instanceCounter;
 	instanceCounter++;
 	line = lineIN;
@@ -51,6 +52,7 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 	heaterStatus = heaterStatusIN;
 	crossingStatus = crossingStatusIN;
 	switchStatus = switchStatusIN;
+	trainPresent = trainPresentIN;
 }
 //Functional constructor
 Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
@@ -79,6 +81,7 @@ double speedLimitIN, double suggestedSpeedIN){
 	heaterStatus = true;
 	crossingStatus = false;
 	switchStatus = true;
+	trainPresent = false;
 }
 
 //Attributes:
@@ -371,6 +374,26 @@ bool Block::getSwitchStatus(){
 //Desc: toggles the bool value of the attribute switchStatus
 void Block::toggleSwitchStatus(){
 	switchStatus = ~switchStatus;
+}
+//trainPresent ---------------------------------------------------------
+//Notes: bool true = train is present on block false = no train is present
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute trainPresent = to inputted bool
+void Block::setTrainPresent(bool trainPresentIN){
+	trainPresent = trainPresentIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute trainPresent as a bool
+bool Block::getTrainPresent(){
+	return trainPresent;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute trainPresent
+void Block::toggleTrainPresent(){
+	trainPresent = ~trainPresent;
 }
 
 

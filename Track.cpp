@@ -63,6 +63,30 @@ Block* Track::searchBlock(string line, int id){
 		return NULL;
 	}
 }
+//Params: int,double
+//Returns: Block*
+//Desc: returns the Block* that is at the inputted distance away from the inputted Block id on the inputted line, otherwise returns NULL
+Block* Track::go(string line, int id, double distance){
+	double remainingDistance = distance;
+	if(line == "green"){
+		for(unsigned int g = id; g < greenLine.size(); g++){
+			remainingDistance = remainingDistance - (greenLine.at(g)->getLength());
+			if(remainingDistance == 0 || remainingDistance - (greenLine.at(g + 1)->getLength()) < 0){
+				return greenLine.at(g);
+			}
+		}
+	}else{
+		for(unsigned int r = id; r < redLine.size(); r++){
+			remainingDistance = remainingDistance - (redLine.at(r)->getLength());
+			if(remainingDistance == 0 || remainingDistance - (redLine.at(r + 1)->getLength()) < 0){
+				return redLine.at(r);
+			}
+		}
+	}
+	return NULL;
+}
+
+
 //Params: string,string
 //Returns: vector<Block*>
 //Desc: searches for blocks on inputted line that match the inputted type and returns them as a vector<Block*>

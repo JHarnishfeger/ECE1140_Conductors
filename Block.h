@@ -30,10 +30,11 @@ class Block{
 		bool heaterStatus;
 		bool crossingStatus;
 		bool switchStatus;
+		bool trainPresent;
 	public:
 		//Constructors:
 		Block();
-		Block(string,string,string,string,string,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool);
+		Block(string,string,string,string,string,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool);
 		Block(string,string,string,double,double,double,double,double,double);
 		//Attributes:
 		//id
@@ -53,6 +54,7 @@ class Block{
 		//nextBranches
 		void setNextBranches(string);
 		string getNextBranches();
+		//authority?
 		//length
 		void setLength(double);
 		double getLength();
@@ -95,7 +97,10 @@ class Block{
 		void setSwitchStatus(bool);
 		bool getSwitchStatus();
 		void toggleSwitchStatus();
-		//Authority?
+		//trainPresent
+		void setTrainPresent(bool);
+		bool getTrainPresent();
+		void toggleTrainPresent();
 };
 //End Block class
 #endif

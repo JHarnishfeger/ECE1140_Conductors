@@ -32,6 +32,7 @@ class Track{
 		//authority?
 		//Class Functions:
 		Block* searchBlock(string,int);
+		Block* go(string,int,double);
 		vector<Block*> filterByType(string,string);
 		vector<Block*> filterByBranch(string,string);
 		vector<Block*> filterByRailStatus(string,bool);
