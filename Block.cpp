@@ -1,358 +1,367 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cmath>
-#include <vector>
 #include "Block.h"
-using namespace std;
 
-//Initalizing count as 0 (should increase everytime a Block constructor is called)
-int Block:count = 0;
+//Init statics
+int Block::instanceCounter = 0;
+string Block::branchesList = "abcdefghijklmnopqrstuvwxyz";
+int Block::branchIndex = 0;
 
-//Method: Block()
-//Params: None
-//Returns: None
-//Desc: creates a Block with default values
+//Constructors:
+//Default constructor
 Block::Block(){
-	line = 'g';
-	branch = 'a';
+	id = instanceCounter;
+	instanceCounter++;
+	line = "green";
+	branch = "a";
 	type = "rail";
-	length = 2.0;
-	trainPresent = false;
-	id = count;
-	count++;
-	grade = 5.0;
-	suggestedSpeed = 25.0;
-	speedLimit = 30.0;
-	direction = 'e';
-	temperature = 32.0;
-	beacons = 0;
-	height = 1.0;
-	brokenRail = false;
-	brokenCircuit = false;
-	powerFailure = false;
+	direction = "north";
+	nextBranches = "bc";
+	length = 10.0;
+	grade = 1.0;
+	height = 5.0;
+	temperature = 50.0;
+	speedLimit = 45.0;
+	suggestedSpeed = 45.0;
+	railStatus = true;
+	circuitStatus = true;
+	powerStatus = true;
+	heaterStatus = true;
+	crossingStatus = false;
+	switchStatus = true;
 }
 
-//Method Block(char line, char branch, string type, double length, bool trainPresent, double grade, double suggestedSpeed, double speedLimit, char direction, double temperature, int beacons, double height, bool brokenRail, bool brokenCircuit, bool powerFailure)
-//Params: charx2, string, doublex6, boolx4, int
-//Returns: None
-//Desc: creates a Block with inputted values;
-Block::Block(char lineIN, char branchIN, string typeIN, double lengthIN, bool trainPresentIN, double gradeIN, double suggestedSpeedIN, double speedLimitIN, char directionIN,
-double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool brokenCircuitIN, bool powerFailureIN){
+//Full input constructor
+Block::Block(string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, double lengthIN, double gradeIN, double heightIN, double temperatureIN,
+double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN){
+	id = instanceCounter;
+	instanceCounter++;
 	line = lineIN;
 	branch = branchIN;
 	type = typeIN;
-	length = lengthIN;
-	trainPresent = trainPresentIN;
-	id = count; 
-	count++; 
-	grade = gradeIN;
-	suggestedSpeed = suggestedSpeedIN;
-	speedLimit = speedLimitIN;
 	direction = directionIN;
-	temperature = temperatureIN;
-	beacons = beaconsIN;
-	height = heightIN;
-	brokenRail = brokenRailIN;
-	brokenCircuit = brokenCircuitIN;
-	powerFailure = powerFailureIN;
-}
-
-//Method: getCount()
-//Params: None
-//Returns: int
-//Desc: returns the value of the member variable count as an int
-int Block::getCount() const{
-	return count;
-}
-
-//Method: setLine(char line)
-//Params: char
-//Returns: None
-//Desc: sets member variable line = to inputted char only accepts ('g' or 'r')(case sensitive) otherwise defaults to NULL
-void Block::setLine(char lineIN){
-	if(lineIN == 'g' || lineIN == 'r'){
-		line = lineIN;
-	}else{
-		line = NULL;
-	}
-}
-
-//Method: getLine()
-//Params: None
-//Returns: char
-//Desc: returns the value of the line member variable as a char
-char Block::getLine(){
-	return line;
-}
-
-//Method: setBranch(char branch)
-//Params: char
-//Returns: None
-//Desc: sets member variable branc = to inputted char
-void Block::setBranch(char branchIN){
-	brach = branchIN;
-}
-
-//Method: getBranch()
-//Params: None
-//Returns: char
-//Desc: returns the value of the branch member variable as a char
-char Block::setBranch(){
-	return branch;
-}
-
-//Method: setType(string type)
-//Params: string
-//Returns: None
-//Desc: sets member variable type = inputted string only accepts ("rail", "station", "yard", "crossing", "switch")(case sensitive) otherwise defaults to NULL
-void Block::setType(string typeIN){
-	if(typeIN == "rail" || typeIN == "station" || typeIN == "yard" || typeIN == "crossing" || typeIN == "switch"){
-		type = typeIN;
-	}else{
-		type = NULL;
-	}
-}
-
-//Method: getType()
-//Params: None
-//Returns: string
-//Desc: returns the value of the type member variable as a string
-string Block::getType(){
-	return type;
-}
-
-//Method: setLength(double length)
-//Params: double
-//Returns: None
-//Desc: sets member variable length = inputted double
-void Block::setLength(double lengthIN){
+	nextBranches = nextBranchesIN;
 	length = lengthIN;
+	grade = gradeIN;
+	height = heightIN;
+	temperature = temperatureIN;
+	speedLimit = speedLimitIN;
+	suggestedSpeed = suggestedSpeedIN;
+	railStatus = railStatusIN;
+	circuitStatus = circuitStatusIN;
+	powerStatus = powerStatusIN;
+	heaterStatus = heaterStatusIN;
+	crossingStatus = crossingStatusIN;
+	switchStatus = switchStatusIN;
+}
+//Functional constructor
+Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
+double speedLimitIN, double suggestedSpeedIN){
+	id = instanceCounter;
+	instanceCounter++;
+	line = lineIN;
+	branch = branchesList[branchIndex];
+	type = typeIN;
+	direction = directionIN;
+	if(type == "switch"){
+		nextBranches = branchesList.substr(branchIndex,2);
+		branchIndex++;
+	}else{
+		nextBranches = "";
+	}
+	length = lengthIN;
+	grade = gradeIN;
+	height = heightIN;
+	temperature = temperatureIN;
+	speedLimit = speedLimitIN;
+	suggestedSpeed = suggestedSpeedIN;
+	railStatus = false;
+	circuitStatus = false;
+	powerStatus = false;
+	heaterStatus = true;
+	crossingStatus = false;
+	switchStatus = true;
 }
 
-//Method: getLength()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member variable length as a double
-double Block::getLength(){
-	return length;
-}
-
-//Method: setTrainPresent(bool trainPresent)
-//Params: bool
-//Returns: None
-//Desc: sets member variable trainPresent = to inputted bool
-void Block::setTrainPresent(bool trainPresentIN){
-	trainPresent = trainPresentIN;
-}
-
-//Method: getTrainPresent()
-//Params: None
-//Returns: bool
-//Desc: returns the value of the member variable trainPresent as a bool
-bool Block::getTrainPresent()[
-	return trainPresent;
-}
-
-//Method: setId(int)
-//Params: int
-//Returns: None
-//Desc: set the member variable id = to inputted int
-void Block:setId(int idIN){
-	id = idIN;
-}
-
-//Method: getId()
+//Attributes:
+//id -------------------------------------------------------------------
 //Params: None
 //Returns: int
-//Desc: returns the value of the member variable Id as an int
+//Desc: returns the value of the attribute id as an integer
 int Block::getId(){
 	return id;
 }
 
-//Method: setGrade(double grade)
+//line -----------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute line = to inputted string
+void Block::setLine(string lineIN){
+	line = lineIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute line as a string
+string Block::getLine(){
+	return line;
+}
+
+//branch ---------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute branch = to inputted string
+void Block::setBranch(string branchIN){
+	branch = branchIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute branch as a string
+string Block::getBranch(){
+	return branch;
+}
+
+//type -----------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute type = to inputted string
+void Block::setType(string typeIN){
+	type = typeIN;
+}
+//Params: None
+//Returns: string 
+//Desc: returns the value of the attribute type as a string
+string Block::getType(){
+	return type;
+}
+
+//direction ------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute direction = to inputted string
+void Block::setDirection(string directionIN){
+	direction = directionIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute direction as a string
+string Block::getDirection(){
+	return direction;
+}
+
+//nextBranches ---------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute nextBranches = to inputted string
+void Block::setNextBranches(string nextBranchesIN){
+	nextBranches = nextBranchesIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute nextBranches as a string
+string Block::getNextBranches(){
+	return nextBranches;
+}
+
+//length ---------------------------------------------------------------
 //Params: double
 //Returns: None
-//Desc: set the member variable grade = to the inputted double
+//Desc: sets the value of the attribute length = to inputted double
+void Block::setLength(double lengthIN){
+	length = lengthIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute length as a double
+double Block::getLength(){
+	return length;
+}
+
+//grade ----------------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute grade = to inputted double
 void Block::setGrade(double gradeIN){
 	grade = gradeIN;
 }
-
-//Method: getGrade()
 //Params: None
 //Returns: double
-//Desc: returns the value of the member varaible grade as a double
+//Desc: returns the value of the attribute grade as a double
 double Block::getGrade(){
 	return grade;
 }
 
-//Method: setSuggestedSpeed(double suggestedSpeed)
-//Params:	double
-//Returns:	None
-//Desc: set the member variable suggestedSpeed = the the inputted double
-void Block::setSuggestedSpeed(double suggestedSpeedIN){
-	suggestedSpeed = suggestedSpeedIN;
-}
-
-//Method: getSuggestedSpeed()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member variable suggestedSpeed as a double
-double Block::getSuggestedSpeed(){
-	return suggestedSpeed;
-}
-
-//Method: setSpeedLimit(double speedLimit)
+//height ---------------------------------------------------------------
 //Params: double
 //Returns: None
-//Desc: sets the member variable speedLimit = to the inputted double
-void Block::setSpeedLimit(double speedLimitIN){
-	speedLimit = speedLimitIN;
-}
-
-//Method: getSpeedLimit()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member variable speedLimit as a double
-double Block::getSpeedLimit(){
-	return speedLimit;
-}
-
-//Method: setDirection(char direction)
-//Params: char
-//Returns: None
-//Desc: set the member variable direction = to inputted char ('n', 'e', 's', 'w') ('n' = north, 'e' = east, 's' = south, 'w' = west) otherwise defaults to None
-void Block::setDirection(char directionIN){
-	if(directionIN == 'n' || directionIN == 'e' || directionIN == 's' || directionIN == 'w'){
-		direction = directionIN;
-	}else{
-		direction = NULL;
-	}
-}
-
-//Method: getDirection()
-//Params: None
-//Returns: char
-//Desc: returns the value of the member variable direction as a char
-char Block::getDirection(){
-	return direction;
-}
-
-//Method: setTemperature(double temperature)
-//Params: double
-//Returns: None
-//Desc: set the member variable temperature = to the inputted double
-void Block::setTemperature(double temperatureIN){
-	temperature = temperatureIN;
-}
-
-//Method: getTemperature()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member variable temperature as a double
-double Block::getTemperature(){
-	return temperature;
-}
-
-//Method: setBeacons(int beacons)
-//Params: int
-//Returns: None
-//Desc: set the member variable beacons = to the inputted int
-void Block::setBeacons(double beaconsIN){
-	beacons = beaconsIN;
-}
-
-//Method: getBeacons()
-//Params: None
-//Returns: int
-//Desc: returns the value of the member variable beacons as an int
-int Block::getBeacons(){
-	return beacons;
-}
-
-//Method: setHeight(double height)
-//Params: double
-//Returns: None
-//Desc: set the member variable height = to the inputted double
+//Desc: sets the value of the attribute height = to inputted double
 void Block::setHeight(double heightIN){
 	height = heightIN;
 }
-
-//Method: getHeight()
 //Params: None
 //Returns: double
-//Desc: returns the value of the member variable height as a double
+//Desc: returns the value of the attribute height as a double
 double Block::getHeight(){
 	return height;
 }
 
-//Method: setBrokenRail(bool brokenRailIN)
+//temperature ----------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute temperature = to inputted double
+void Block::setTemperature(double temperatureIN){
+	temperature = temperatureIN;
+}
+//Params: None
+//Returns: double 
+//Desc: returns the value of the attribute temperature as a double
+double Block::getTemperature(){
+	return temperature;
+}
+
+//speedLimit -----------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute speedLimit = to inputted double
+void Block::setSpeedLimit(double speedLimitIN){
+	speedLimit = speedLimitIN;
+}
+//Params: None
+//Returns: double 
+//Desc: returns the value of the attribute speedLimit as a double
+double Block::getSpeedLimit(){
+	return speedLimit;
+}
+
+//suggestedSpeed -------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute suggestedSpeed = to inputted double
+void Block::setSuggestedSpeed(double suggestedSpeedIN){
+	suggestedSpeed = suggestedSpeedIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute suggestedSpeed as a double
+double Block::getSuggestedSpeed(){
+	return suggestedSpeed;
+}
+
+//railStatus -----------------------------------------------------------
 //Params: bool
 //Returns: None
-//Desc: set the member variable brokenRail = to the inputted bool
-void Block::setBrokenRail(bool brokenRailIN){
-	brokenRail = brokenRailIN;
+//Desc: sets the value of the attribute railStatus = to inputted bool
+void Block::setRailStatus(bool railStatusIN){
+	railStatus = railStatusIN;
 }
-
-//Method: getBrokenRail()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable brokenRail as a bool
-bool Block::getBrokenRail(){
-	return brokenRail;
+//Desc: returns the value of the attribute railStatus as a bool
+bool Block::getRailStatus(){
+	return railStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute railStatus 
+void Block::toggleRailStatus(){
+	railStatus = ~railStatus;
 }
 
-//Method: setBrokenCircuit(bool brokenCircuitIN)
+//circuitStatus --------------------------------------------------------
+//Params: bool 
+//Returns: None
+//Desc: sets the value of the attribute circuitStatus = to inputted bool
+void Block::setCircuitStatus(bool circuitStatusIN){
+	circuitStatus = circuitStatusIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute circuitStatus as a bool
+bool Block::getCircuitStatus(){
+	return circuitStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute circuitStatus
+void Block::toggleCircuitStatus(){
+	circuitStatus = ~circuitStatus;
+}
+
+//powerStatus ----------------------------------------------------------
 //Params: bool
 //Returns: None
-//Desc: set the member variable brokenCircuit = to the inputted bool
-void Block::setBrokenCircuit(bool brokenCircuitIN){
-	brokenCircuit = brokenCircuitIN;
+//Desc: sets the value of the attribute powerStatus = to inputted bool
+void Block::setPowerStatus(bool powerStatusIN){
+	powerStatus = powerStatusIN;
 }
-
-//Method: getBrokenCircuit()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable brokenCircuit as a bool
-bool Block::getBrokenCircuit(){
-	return brokenCircuit;
+//Desc: returns the value of the attribute powerStatus as a bool
+bool Block::getPowerStatus(){
+	return powerStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute powerStatus
+void Block::togglePowerStatus(){
+	powerStatus = ~powerStatus;
 }
 
-//Method: setPowerFailure(bool powerFailureIN)
+//heaterStatus ---------------------------------------------------------
+//Params: bool 
+//Returns: None
+//Desc: sets the value of the attribute heaterStatus = to inputted bool
+void Block::setHeaterStatus(bool heaterStatusIN){
+	heaterStatus = heaterStatusIN;
+}
+//Params: None
+//Returns: bool 
+//Desc: returns the value of the attribute heaterStatus as a bool
+bool Block::getHeaterStatus(){
+	return heaterStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute heaterStatus
+void Block::toggleHeaterStatus(){
+	heaterStatus = ~heaterStatus;
+}
+
+//crossingStatus -------------------------------------------------------
 //Params: bool
 //Returns: None
-//Desc: set the member variable powerFailure = to the inputted bool
-void Block::setPowerFailure(bool powerFailureIN){
-	powerFailure = powerFailureIN;
+//Desc: sets the value of the attribute crossingStatus = to inputted bool
+void Block::setCrossingStatus(bool crossingStatusIN){
+	crossingStatus = crossingStatusIN;
 }
-
-//Method: getPowerFailure()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable powerFailure as a bool
-bool Block::getPowerFailure(){
-	return powerFailure;
+//Desc: returns the value of the attribute crossingStaus as a bool
+bool Block::getCrossingStatus(){
+	return crossingStatus;
 }
-
-//Method: toConsole()
 //Params: None
 //Returns: None
-//Desc: prints the Blocks member variable values in a fromatted string to console
-void Block::toString(){
-	cout << "line: " << line << " direction: " << direction << endl;
-	cout << "type: " << type << " temperature: " << temperature << endl;
-	cout << "length: " << length << " beacons: " << beacons << endl;
-	cout << "trainPresent: " << trainPresent << " height: " << height << endl;
-	cout << "count: " << count << " brokenRail: " << brokenRail << endl;
-	cout << "id: " << id << " brokenCircuit: " << brokenCircuit << endl;
-	cout << "grade: " << grade << " powerFailure: " << powerFailure << endl;
-	cout << "suggestedSpeed: " << suggestedSpeed << " speedLimit: " << speedLimit << endl;
+//Desc: toggles the bool value of the attribute crossingStatus
+void Block::toggleCrossingStatus(){
+	crossingStatus = ~crossingStatus;
 }
-	
-	
 
-
+//switchStatus ---------------------------------------------------------
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute switchStatus = to inputted bool
+void Block::setSwitchStatus(bool switchStatusIN){
+	switchStatus = switchStatusIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute switchStatus as a bool
+bool Block::getSwitchStatus(){
+	return switchStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute switchStatus
+void Block::toggleSwitchStatus(){
+	switchStatus = ~switchStatus;
+}
 
 
