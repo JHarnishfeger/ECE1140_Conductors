@@ -125,13 +125,13 @@ void Wayside::setMode(bool m)
     manualMode = m;
 }
 
-bool Wayside::switchTrack(Block sw)
+bool Wayside::switchTrack(Block &sw)
 {
     sw.setSwitch(!sw.getSwitch());
     return sw.getSwitch();
 }
 
-bool Wayside::toggleCrossing(Block crossing)
+bool Wayside::toggleCrossing(Block &crossing)
 {
     crossing.setCrossing(!crossing.getCrossing());
     return crossing.getCrossing();

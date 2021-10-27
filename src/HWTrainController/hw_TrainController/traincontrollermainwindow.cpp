@@ -47,6 +47,7 @@ void TrainControllerMainWindow::on_testButton_clicked()
     trainController.setAuthority(ui->authority->text());
     trainController.setNextStation(ui->nextStation->text());
 
+   
 }
 
 void TrainControllerMainWindow::setUtilities()

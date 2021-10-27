@@ -428,6 +428,7 @@ p, li { white-space: pre-wrap; }
     </property>
    </widget>
    <widget class="QLineEdit" name="nextStation">
+   <widget class="QLineEdit" name="announce">
     <property name="geometry">
      <rect>
       <x>360</x>

@@ -38,7 +38,6 @@ public:
     QString getSpeedLimit();
     QString getAuthority();
     QString getMode();
-
     bool getLeftDoors();
     bool getRightDoors();
     bool getInteriorLights();

@@ -48,6 +48,7 @@ private slots:
     void setUtilities();
     void setPower();
 
+
 private:
     QList<QSerialPortInfo> portList;
     SerialConnectDialog *serialConnectDialog;
