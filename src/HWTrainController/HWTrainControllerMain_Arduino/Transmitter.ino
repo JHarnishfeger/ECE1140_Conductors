@@ -1,12 +1,3 @@
-String parity = "1";
-
-bool leftDoors = false;
-bool rightDoors = false;
-bool interiorLights = false;
-bool exteriorLights = false;
-bool mode = false;
-bool serviceBreak = false;
-
 void TransmitData() {
   
   String outData = parity;
@@ -17,10 +8,11 @@ void TransmitData() {
     char 2    = right doors     (0 = closed, 1 = open)
     char 3    = interior lights (0 = off, 1 = on)
     char 4    = exterior lights (0 = off, 1 = on)
-    char 5-9  = power
-    char 10   = break           (0 = off, 1 = on)
-    char 11   = emergency break (0 = off, 1 = on)
-    char 12   = mode            (0 = automatic, 1 = manual)
+    char 5    = serviceBreak    (0 = off, 1 = on)
+    char 6    = eBreak          (0 = off, 1 = on)         
+    char 7    = passengerBreak  (0 = off, 1 = on)
+    char 8    = mode            (0 = automatic, 1 = manual)
+    char 9-13 = commandedPower  
   */
   if (digitalRead(leftDoorsPin) == HIGH) {
       if (leftDoors == false) {
@@ -54,46 +46,83 @@ void TransmitData() {
       }
   }
 
-  if(leftDoors) outData += "1";
-  else outData += "0";
-
-  if(rightDoors) outData += "1";
-  else outData += "0";
-
-  if(interiorLights) outData += "1";
-  else outData += "0";
-
-  if(exteriorLights) outData += "1";
-  else outData += "0";
-
-  //5 chars
-  outData += powerIn;
-
-  if (digitalRead(breakPin) == HIGH) {
+  
+  if (digitalRead(serviceBreakPin) == HIGH) {
       if (serviceBreak == false) {
           serviceBreak = true;     
       } else {
           serviceBreak = false;
       }
   }
-  if(serviceBreak) outData += "1";
-  else outData += "0";
 
-  if(digitalRead(eBreakPin) == HIGH) outData += "1";
-  else outData += "0";    
-
-  if (digitalRead(modePin) == HIGH) {
-      if (mode == false) {
-          mode = true;     
+  if (digitalRead(eBreakPin) == HIGH) {
+      if (eBreak == false) {
+          eBreak = true;     
       } else {
-          mode = false;
+          eBreak = false;
       }
   }
 
-  if(mode) outData += "1";
+  if (digitalRead(passengerBreakPin) == HIGH) {
+      passengerBreak = true;
+  }
+  else
+  {
+      passengerBreak = false;
+  }
+
+  if (digitalRead(modePin) == HIGH) {
+      mode = true;
+  }
+  else
+  {
+      mode = false;
+  }
+
+  if(leftDoors) outData += "1"; //button 1
   else outData += "0";
 
+  if(rightDoors) outData += "1"; //button 2
+  else outData += "0";
+
+  if(interiorLights) outData += "1"; //button 3
+  else outData += "0";
+
+  if(exteriorLights) outData += "1"; //button 4
+  else outData += "0";
+
+  if(serviceBreak) outData += "1"; //button 5
+  else outData += "0";
+
+  if(eBreak) outData += "1"; //button 6
+  else outData += "0";
+
+  if(passengerBreak) outData += "1"; //switch 1
+  else outData += "0";
+
+  if(mode) outData += "1"; //switch 2
+  else outData += "0";
+
+  //convert double to string
+  commandedPowerString = String(commandedPower);
+
+//  int lengthCommandedPower = commandedPowerString.length();
+//  Serial.print("lengthCommandedPower: ");
+//  Serial.println(lengthCommandedPower);
+//  
+//  
+//  Serial.print("commandedPower: ");
+//  Serial.println(commandedPower);
+//  Serial.print("commandedPowerString: ");
+//  Serial.println(commandedPowerString);
+
+  //5 chars
+  outData += commandedPowerString;
+
   Serial.println(outData);
+
+//  Serial.print("outData length: ");
+//  Serial.println(outData.length());
   
   Serial.flush();
 }

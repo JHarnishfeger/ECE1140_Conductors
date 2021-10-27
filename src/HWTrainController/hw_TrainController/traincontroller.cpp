@@ -10,19 +10,21 @@ void TrainController::decodeData(QString inputData)
 {
 
     /*String decoding
-      char 0        = parity bit      (1)
-      char 1        = left doors      (0 = closed, 1 = open)
-      char 2        = right doors     (0 = closed, 1 = open)
-      char 3        = interior lights (0 = off, 1 = on)
-      char 4        = exterior lights (0 = off, 1 = on)
-      char 5-9      = power
-      char 10       = break           (0 = off, 1 = on)
-      char 11       = emergency break (0 = off, 1 = on)
-      char 12       = mode            (0 = automatic, 1 = manual)
+        char 0    = parity bit      (1)
+        char 1    = left doors      (0 = closed, 1 = open)
+        char 2    = right doors     (0 = closed, 1 = open)
+        char 3    = interior lights (0 = off, 1 = on)
+        char 4    = exterior lights (0 = off, 1 = on)
+        char 5    = serviceBreak    (0 = off, 1 = on)
+        char 6    = eBreak          (0 = off, 1 = on)
+        char 7    = passengerBreak  (0 = off, 1 = on)
+        char 8    = mode            (0 = automatic, 1 = manual)
+        char 9-13 = commandedPower
     */
+
     string decodedData = inputData.toStdString();
 
-    if(decodedData.length() == 12)
+    if(decodedData.length() == 13)
     {
         if(decodedData.substr(0,1) == "1")
         {
@@ -32,6 +34,7 @@ void TrainController::decodeData(QString inputData)
         {
             leftDoors = false;
         }
+
         if(decodedData.substr(1,1) == "1")
         {
             rightDoors = true;
@@ -40,6 +43,7 @@ void TrainController::decodeData(QString inputData)
         {
             rightDoors = false;
         }
+
         if(decodedData.substr(2,1) == "1")
         {
             interiorLights = true;
@@ -48,6 +52,7 @@ void TrainController::decodeData(QString inputData)
         {
             interiorLights = false;
         }
+
         if(decodedData.substr(3,1) == "1")
         {
             exteriorLights = true;
@@ -57,9 +62,7 @@ void TrainController::decodeData(QString inputData)
             exteriorLights = false;
         }
 
-        power = QString::fromStdString(decodedData.substr(4,5));
-
-        if(decodedData.substr(9,1) == "1")
+        if(decodedData.substr(4,1) == "1")
         {
             serviceBreak = true;
         }
@@ -67,7 +70,8 @@ void TrainController::decodeData(QString inputData)
         {
             serviceBreak = false;
         }
-        if(decodedData.substr(10,1) == "1")
+
+        if(decodedData.substr(5,1) == "1")
         {
             eBreak = true;
         }
@@ -75,14 +79,26 @@ void TrainController::decodeData(QString inputData)
         {
             eBreak = false;
         }
-        if(decodedData.substr(11,1) == "1")
+
+        if(decodedData.substr(6,1) == "1")
         {
-            mode = "manual";
+            passengerBreak = true;
         }
         else
         {
+            passengerBreak = false;
+        }
+
+        if(decodedData.substr(7,1) == "1")
+        {
             mode = "automatic";
         }
+        else
+        {
+            mode = "manual";
+        }
+
+        commandedPower = QString::fromStdString(decodedData.substr(8,5));
     }
 
 }
@@ -93,14 +109,15 @@ QByteArray TrainController::encodeData()
     char 0            = parity
     char 1-5          = kp
     char 6-10         = ki
-    char 11-15        = authority
-    char 16-20        = commandedSpeed
-    char 21-25        = setpointSpeed
-    char 26-30        = currentSpeed
-    char 31-35        = stationCode
+    char 11-15        = commandedSpeed
+    char 16-20        = currentSpeed
+    char 21-25        = suggestedSpeed
+    char 26-30        = speedLimit
+    char 31-35        = authority
+    char 36-40        = stationCode
     */
 
-    if(nextStation == "ShadySide")                  stationCode = "00000";
+    if(nextStation == "Shadyside")                  stationCode = "00000";
     else if(nextStation == "Herron Ave")            stationCode = "00001";
     else if(nextStation == "Swissville")            stationCode = "00010";
     else if(nextStation == "Penn Station")          stationCode = "00011";
@@ -126,17 +143,12 @@ QByteArray TrainController::encodeData()
 
     output += "1";
     output += Kp.toLocal8Bit();
-    //qDebug() << output;
     output += Ki.toLocal8Bit();
-    //qDebug() << output;
+    output += commandedSpeed.toLocal8Bit();
+    output += currentSpeed.toLocal8Bit();
+    output += suggestedSpeed.toLocal8Bit(); //AKA setPointSpeed
+    output += speedLimit.toLocal8Bit();
     output += authority.toLocal8Bit();
-    //qDebug() << output;
-    output += commandedVelocity.toLocal8Bit();
-   // qDebug() << output;
-    output += suggestedVelocity.toLocal8Bit();
-    //qDebug() << output;
-    output += currentVelocity.toLocal8Bit();
-    //qDebug() << output;
     output += stationCode.toLocal8Bit();
     output += '\n';
 
@@ -154,19 +166,19 @@ QString TrainController::getKi()
     return Ki;
 }
 
-QString TrainController::getCommandedVelocity()
+QString TrainController::getCommandedSpeed()
 {
-    return commandedVelocity;
+    return commandedSpeed;
 }
 
-QString TrainController::getCurrentVelocity()
+QString TrainController::getCurrentSpeed()
 {
-    return currentVelocity;
+    return currentSpeed;
 }
 
-QString TrainController::getSuggestedVelocity()
+QString TrainController::getSuggestedSpeed()
 {
-    return suggestedVelocity;
+    return suggestedSpeed;
 }
 
 QString TrainController::getSpeedLimit()
@@ -177,6 +189,11 @@ QString TrainController::getSpeedLimit()
 QString TrainController::getAuthority()
 {
     return authority;
+}
+
+QString TrainController::getMode()
+{
+    return mode;
 }
 
 bool TrainController::getLeftDoors()
@@ -209,9 +226,14 @@ bool TrainController::getEBreak()
     return eBreak;
 }
 
-QString TrainController::getPower()
+bool TrainController::getPassengerBreak()
 {
-    return power;
+    return passengerBreak;
+}
+
+QString TrainController::getCommandedPower()
+{
+    return commandedPower;
 }
 
 void TrainController::setKp(QString kp)
@@ -224,19 +246,19 @@ void TrainController::setKi(QString ki)
     Ki = ki;
 }
 
-void TrainController::setCommandedVelocity(QString CommandedVelocity)
+void TrainController::setCommandedSpeed(QString CommandedSpeed)
 {
-    commandedVelocity = CommandedVelocity;
+    commandedSpeed = CommandedSpeed;
 }
 
-void TrainController::setCurrentVelocity(QString CurrentVelocity)
+void TrainController::setCurrentSpeed(QString CurrentSpeed)
 {
-    currentVelocity = CurrentVelocity;
+    currentSpeed = CurrentSpeed;
 }
 
-void TrainController::setSuggestedVelocity(QString SuggestedVelocity)
+void TrainController::setSuggestedSpeed(QString SuggestedSpeed)
 {
-    suggestedVelocity = SuggestedVelocity;
+    suggestedSpeed = SuggestedSpeed;
 }
 
 void TrainController::setSpeedLimit(QString SpeedLimit)
@@ -247,6 +269,11 @@ void TrainController::setSpeedLimit(QString SpeedLimit)
 void TrainController::setAuthority(QString Authority)
 {
     authority = Authority;
+}
+
+void TrainController::setNextStation(QString NextStation)
+{
+    nextStation = NextStation;
 }
 
 TrainController trainController;

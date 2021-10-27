@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1034</width>
-    <height>606</height>
+    <width>1033</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -137,7 +137,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="setKpKiButton">
+   <widget class="QPushButton" name="enterButton">
     <property name="geometry">
      <rect>
       <x>740</x>
@@ -228,145 +228,7 @@
      <string>W</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>300</y>
-      <width>81</width>
-      <height>231</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="LeftDoors">
-       <property name="text">
-        <string>Left Doors</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="RightDoors">
-       <property name="text">
-        <string>Right Doors</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="InteriorLights">
-       <property name="text">
-        <string>Interior Lights</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ExteriorLights">
-       <property name="text">
-        <string>Exterior Lights</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="ServiceBreak">
-       <property name="text">
-        <string>Service Break</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QCheckBox" name="LeftDoorsCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>310</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="InteriorLightsCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>410</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="ExteriorLightsCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>450</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="ServiceBreakCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>500</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="RightDoorsCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>360</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="EmergencyBreak_2">
-    <property name="geometry">
-     <rect>
-      <x>648</x>
-      <y>520</y>
-      <width>91</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Emergency Break</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="EmergencyBreakCB">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>540</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="commandedVelocity">
+   <widget class="QLineEdit" name="commandedSpeed">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -379,7 +241,7 @@
      <string>00.00</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="currentVelocity">
+   <widget class="QLineEdit" name="currentSpeed">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -392,7 +254,7 @@
      <string>00.00</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="suggestedVelocity">
+   <widget class="QLineEdit" name="suggestedSpeed">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -402,7 +264,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>00.00</string>
+     <string>10.00</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="speedLimit">
@@ -471,7 +333,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>Commanded Velocity</string>
+     <string>Commanded Speed</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -484,7 +346,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>Current Velocity</string>
+     <string>Current Speed</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -523,7 +385,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>Suggested Velocity</string>
+     <string>Suggested Speed</string>
     </property>
    </widget>
    <widget class="QPushButton" name="testButton">
@@ -565,7 +427,7 @@ p, li { white-space: pre-wrap; }
      <string>Next Station</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="commandedVelocity_2">
+   <widget class="QLineEdit" name="nextStation">
     <property name="geometry">
      <rect>
       <x>360</x>
@@ -575,10 +437,10 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>YARD</string>
+     <string>Yard</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="commandedVelocity_3">
+   <widget class="QLineEdit" name="mode">
     <property name="geometry">
      <rect>
       <x>850</x>
@@ -617,7 +479,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="EmergencyBreak_3">
+   <widget class="QLabel" name="StationApproaching">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -630,7 +492,7 @@ p, li { white-space: pre-wrap; }
      <string>Station Approaching</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="testButton_2">
+   <widget class="QPushButton" name="announceButton">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -643,6 +505,128 @@ p, li { white-space: pre-wrap; }
      <string>Announce</string>
     </property>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>300</y>
+      <width>16</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QCheckBox" name="LeftDoorsCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="RightDoorsCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="InteriorLightsCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ExteriorLightsCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ServiceBreakCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="EmergencyBreakCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="PassengerBreakCB">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>310</y>
+      <width>85</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="LeftDoors">
+       <property name="text">
+        <string>Left Doors</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="RightDoors">
+       <property name="text">
+        <string>Right Doors</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="InteriorLights">
+       <property name="text">
+        <string>Interior Lights</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ExteriorLights">
+       <property name="text">
+        <string>Exterior Lights</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ServiceBreak">
+       <property name="text">
+        <string>Service Break</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="EmergencyBreak">
+       <property name="text">
+        <string>Emergency Break</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="PassengerBreak">
+       <property name="text">
+        <string>Passenger Break</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
@@ -650,7 +634,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1034</width>
+     <width>1033</width>
      <height>21</height>
     </rect>
    </property>

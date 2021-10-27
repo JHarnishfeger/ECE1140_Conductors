@@ -14,16 +14,17 @@ class TrainController : public QObject
     Q_OBJECT
 public:
     QByteArray encodeData();
-    QString Kp, Ki, commandedVelocity, currentVelocity, suggestedVelocity, speedLimit, authority;
+    QString Kp, Ki, commandedSpeed, currentSpeed, suggestedSpeed, speedLimit, authority;
     bool leftDoors = false;
     bool rightDoors = false;
     bool interiorLights = false;
     bool exteriorLights = false;
     bool serviceBreak = false;
     bool eBreak = false;
+    bool passengerBreak = false;
     QString mode = "manual";
-    QString power = "00000";
-    QString nextStation = "YARD";
+    QString commandedPower = "00000";
+    QString nextStation = "ShadySide";
     QString stationCode = "00000";
 
     explicit TrainController(QObject *parent = nullptr);
@@ -31,26 +32,31 @@ public:
 
     QString getKp();
     QString getKi();
-    QString getCommandedVelocity();
-    QString getCurrentVelocity();
-    QString getSuggestedVelocity();
+    QString getCommandedSpeed();
+    QString getCurrentSpeed();
+    QString getSuggestedSpeed();
     QString getSpeedLimit();
     QString getAuthority();
+    QString getMode();
+
     bool getLeftDoors();
     bool getRightDoors();
     bool getInteriorLights();
     bool getExteriorLights();
     bool getServiceBreak();
     bool getEBreak();
-    QString getPower();
+    bool getPassengerBreak();
+
+    QString getCommandedPower();
 
     void setKp(QString kp);
     void setKi(QString ki);
-    void setCommandedVelocity(QString CommandedVelocity);
-    void setCurrentVelocity(QString CurrentVelocity);
-    void setSuggestedVelocity(QString SuggestedVelocity);
+    void setCommandedSpeed(QString CommandedSpeed);
+    void setCurrentSpeed(QString CurrentSpeed);
+    void setSuggestedSpeed(QString SuggestedSpeed);
     void setSpeedLimit(QString SpeedLimit);
     void setAuthority(QString Authority);
+    void setNextStation(QString NextStation);
 
 
 

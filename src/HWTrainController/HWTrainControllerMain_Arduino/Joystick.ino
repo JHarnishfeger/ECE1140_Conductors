@@ -5,16 +5,6 @@ int xValue, yValue;
 int jxValue = 0;
 int jyValue = 0;
 
-String Kp = "";
-String Ki = "";
-String authority = "";
-String commandedSpeed = "";
-String setpointSpeed = "";
-String currentSpeed = "";
-String stationName = "";
-String stationCode = "";
-bool stationUpcoming;
-
 void joystickSetup()
 {
   // put your setup code here, to run once:
@@ -39,19 +29,19 @@ void joystick()
     lcd.setCursor(0,0);
     lcd.print("Current Speed: ");
     lcd.setCursor(0,1);
-    lcd.print(currentSpeed + "mph");
+    lcd.print(currentSpeedString + "mph");
     lcd.setCursor(0,2);
-    lcd.print("Setpoint Speed:");
+    lcd.print("Suggested Speed:");
     lcd.setCursor(0,3);
-    lcd.print(setpointSpeed + " mi/hr");
+    lcd.print(suggestedSpeedString + " mph");
   }
   else if(abs(jxValue)% 5 == 1)
   {
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print("Kp: " + Kp + " W/(m/s)");
+    lcd.print("Kp: " + KpString + " W/(m/s)");
     lcd.setCursor(0,1);
-    lcd.print("Ki: " + Ki + " W/m"); 
+    lcd.print("Ki: " + KiString + " W/m"); 
   }
   else if(abs(jxValue)% 5 == 2)
   {
@@ -59,11 +49,11 @@ void joystick()
     lcd.setCursor(0,0);
     lcd.print("Commanded Speed: ");
     lcd.setCursor(0,1);
-    lcd.print(commandedSpeed + " mi/hr");
+    lcd.print(commandedSpeedString + " mph");
     lcd.setCursor(0,2);
     lcd.print("Authority: ");
     lcd.setCursor(0,3);
-    lcd.print(authority + " blocks");   
+    lcd.print(authorityString + " blocks");   
   }
     else if(abs(jxValue) % 5 == 3)
   {

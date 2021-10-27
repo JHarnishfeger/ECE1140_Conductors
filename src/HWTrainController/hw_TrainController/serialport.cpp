@@ -45,18 +45,18 @@ void SerialPort::readSerial()
 
     qDebug() << "Initial Data: " << temp.length() << " " << temp;
 
-    if(dataIN_concat.length() != 13)
+    if(dataIN_concat.length() != 14)
     {
         dataIN_concat += temp;
-        qDebug() << "Data in concat: " << dataIN_concat.length() << " " << dataIN_concat;
-        if(dataIN_concat.length() == 13 && dataIN_concat.front() == "1")
+        //qDebug() << "Data in concat: " << dataIN_concat.length() << " " << dataIN_concat;
+        if(dataIN_concat.length() == 14 && dataIN_concat.front() == "1")
         {
             dataIN_concat.remove(0,1);
-            qDebug() << "Correct Data: " << dataIN_concat.length() << " " << dataIN_concat;
+            qDebug() << "Receiving: " << dataIN_concat.length() << " " << dataIN_concat;
             trainController.decodeData(dataIN_concat);
             dataIN_concat = "";
         }
-        if(dataIN_concat.length() >= 13*12)
+        if(dataIN_concat.length() >= 14*12)
         {
             dataIN_concat = "";
         }

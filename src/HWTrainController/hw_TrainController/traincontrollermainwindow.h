@@ -32,7 +32,7 @@ public:
 private slots:
     void on_connectionSettingsButton_clicked();
 
-    void on_setKpKiButton_clicked();
+    void on_enterButton_clicked();
 
 //    void on_commandedVelocity_editingFinished();
 
