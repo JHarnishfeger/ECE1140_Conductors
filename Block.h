@@ -8,9 +8,12 @@ using std::string;
 //Block class
 class Block{
 	private:
-		static int instanceCounter;
-		static string branchesList;
+		static int instanceCounter;	
 		static int branchIndex;
+		static double xCordTotal;
+		static double yCordTotal;
+		static string branchesList;
+		int passengers;
 		int id;
 		string line;
 		string branch;
@@ -18,6 +21,8 @@ class Block{
 		string direction;
 		string nextBranches;
 		double length;
+		double xCord;
+		double yCord;
 		double grade;
 		double height;
 		double temperature;
@@ -34,9 +39,12 @@ class Block{
 	public:
 		//Constructors:
 		Block();
-		Block(string,string,string,string,string,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool);
+		Block(int,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool);
 		Block(string,string,string,double,double,double,double,double,double);
 		//Attributes:
+		//passengers
+		void setPassengers(int);
+		int getPassengers();
 		//id
 		int getId();
 		//line
@@ -58,6 +66,12 @@ class Block{
 		//length
 		void setLength(double);
 		double getLength();
+		//xCord
+		void setXCord(double);
+		double getXCord();
+		//yCord
+		void setYCord(double);
+		double getYCord();
 		//grade
 		void setGrade(double);
 		double getGrade();

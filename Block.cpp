@@ -4,10 +4,13 @@
 int Block::instanceCounter = 0;
 string Block::branchesList = "abcdefghijklmnopqrstuvwxyz";
 int Block::branchIndex = 0;
+double Block::xCordTotal = 0.0;
+double Block::yCordTotal = 0.0;
 
 //Constructors:
 //Default constructor
 Block::Block(){
+	passengers = 10;
 	id = instanceCounter;
 	instanceCounter++;
 	line = "green";
@@ -16,6 +19,8 @@ Block::Block(){
 	direction = "north";
 	nextBranches = "bc";
 	length = 10.0;
+	xCord = 0.0;
+	yCord = 0.0;
 	grade = 1.0;
 	height = 5.0;
 	temperature = 50.0;
@@ -31,8 +36,9 @@ Block::Block(){
 }
 
 //Full input constructor
-Block::Block(string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, double lengthIN, double gradeIN, double heightIN, double temperatureIN,
+Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
 double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN){
+	passengers = passengersIN;
 	id = instanceCounter;
 	instanceCounter++;
 	line = lineIN;
@@ -41,6 +47,8 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 	direction = directionIN;
 	nextBranches = nextBranchesIN;
 	length = lengthIN;
+	xCord = xCordIN;
+	yCord = yCordIN;
 	grade = gradeIN;
 	height = heightIN;
 	temperature = temperatureIN;
@@ -57,6 +65,11 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 //Functional constructor
 Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
 double speedLimitIN, double suggestedSpeedIN){
+	if(type == "station"){
+		passengers = rand() % 100 + 1;
+	}else{
+		passengers = 0;
+	}
 	id = instanceCounter;
 	instanceCounter++;
 	line = lineIN;
@@ -70,6 +83,17 @@ double speedLimitIN, double suggestedSpeedIN){
 		nextBranches = "";
 	}
 	length = lengthIN;
+	xCord = xCordTotal;
+	yCord = yCordTotal;
+	if(direction == "north"){
+		yCordTotal = yCordTotal + length;
+	}else if(direction == "east"){
+		xCordTotal = xCordTotal + length;
+	}else if(direction == "south"){
+		yCordTotal = yCordTotal - length;
+	}else{
+		xCordTotal = xCordTotal - length;
+	}
 	grade = gradeIN;
 	height = heightIN;
 	temperature = temperatureIN;
@@ -85,6 +109,20 @@ double speedLimitIN, double suggestedSpeedIN){
 }
 
 //Attributes:
+//passengers -----------------------------------------------------------
+//Params:
+//Returns:
+//Desc:
+void Block::setPassengers(int passengersIN){
+	passengers = passengersIN;
+}
+//Params:
+//Returns:
+//Desc:
+int Block::getPassengers(){
+	return passengers;
+}
+
 //id -------------------------------------------------------------------
 //Params: None
 //Returns: int
@@ -178,6 +216,34 @@ void Block::setLength(double lengthIN){
 //Desc: returns the value of the attribute length as a double
 double Block::getLength(){
 	return length;
+}
+
+//xCord ----------------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute xCord = to inputted double
+void Block::setXCord(double xCordIN){
+	xCord = xCordIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute xCord as a double
+double Block::getXCord(){
+	return xCord;
+}
+
+//yCord ----------------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute yCord = to inputted double
+void Block::setYCord(double yCordIN){
+	yCord = yCordIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute yCord as a double
+double Block::getYCord(){
+	return yCord;
 }
 
 //grade ----------------------------------------------------------------

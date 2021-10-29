@@ -49,6 +49,8 @@ class Track{
 		bool fixCircuit(string,int);
 		bool fixPower(string,int);
 		string toString();
+		unsigned int encodeData();
+		void decodeData(unsigned int);
 };
 //End Track class
 #endif
