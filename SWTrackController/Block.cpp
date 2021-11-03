@@ -88,7 +88,7 @@ char Block::getLine(){
 //Params: char
 //Returns: None
 //Desc: sets member variable branc = to inputted char
-void Block::setBranch(char branchIN){
+void Block::setBranch(string branchIN){
 	branch = branchIN;
 }
 
@@ -96,7 +96,7 @@ void Block::setBranch(char branchIN){
 //Params: None
 //Returns: char
 //Desc: returns the value of the branch member variable as a char
-char Block::getBranch(){
+string Block::getBranch(){
 	return branch;
 }
 

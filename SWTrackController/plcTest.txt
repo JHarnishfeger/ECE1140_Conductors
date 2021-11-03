@@ -1,0 +1,9 @@
+TASK Switch_All
+OPP (SL0)
+OUT SW0 1
+ENDTASK
+
+TASK Activate_Crossing
+OPP (TR0+)
+OUT CR0 1
+ENDTASK

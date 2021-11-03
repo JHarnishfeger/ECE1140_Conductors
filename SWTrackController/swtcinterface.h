@@ -18,18 +18,18 @@ class SWTCInterface : public QMainWindow
 public:
     SWTCInterface(QWidget *parent = nullptr);
     ~SWTCInterface();
-    void fillLists();
-    SWTrackController tc;
-    Block selected;
+    //void fillLists();
+    //SWTrackController tc;
+    //Block selected;
 
 private slots:
-    void on_CrossingButton_clicked();
+    //void on_CrossingButton_clicked();
 
-    void on_SwitchButton_clicked();
+    //void on_SwitchButton_clicked();
 
-    void on_SwitchList_itemClicked(QListWidgetItem *item);
+    //void on_SwitchList_itemClicked(QListWidgetItem *item);
 
-    void on_CrossingList_itemClicked(QListWidgetItem *item);
+    //void on_CrossingList_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::SWTCInterface *ui;

@@ -6,7 +6,7 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     , ui(new Ui::SWTCInterface)
 {
     ui->setupUi(this);
-    fillLists();
+    //fillLists();
 }
 
 SWTCInterface::~SWTCInterface()
@@ -14,7 +14,7 @@ SWTCInterface::~SWTCInterface()
     delete ui;
 }
 
-void SWTCInterface::fillLists()
+/*void SWTCInterface::fillLists()
 {
     ui->SwitchList->clear();
     ui->CrossingList->clear();
@@ -137,5 +137,5 @@ void SWTCInterface::on_CrossingList_itemClicked(QListWidgetItem *item)
     ui->TargetName->setText("Selected Item: Crossing");
     ui->BlockNumber->setText(QString::fromStdString("Block: " + std::to_string(id)));
     ui->SwitchPosition->setText(QString::fromStdString("Position: Not Selected"));
-}
+}*/
 

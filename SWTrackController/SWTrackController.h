@@ -1,20 +1,12 @@
 #ifndef SWTRACKCONTROLLER_H
 #define SWTRACKCONTROLLER_H
-
-#include <vector>
-#include <fstream>
-#include <iostream>
-#include <cstdio>
-#include <math.h>
-using std::vector;
-#include "Block.cpp"
-#include "PLCController.cpp"
 #include "Wayside.cpp"
 
 class SWTrackController
 {
 private:
-    double speed; //Current suggested speed (imperial units)
+    double suggestedSpeed; //Current suggested speed (imperial units)
+    double commandedSpeed; //Current commanded speed (imperial units)
     double authority; //Current authority (imperial units)
     bool manualMode; //Shows if controller is in Manual mode. 0 = Automatic, 1 = Manual
 public:
@@ -34,8 +26,10 @@ public:
     vector<Block> maintenance; //Holds the block number of any blocks undergoing maintenance
     vector<Block> trackOccupancy; //Vector of all blocks that have a train on them
     vector<string> alerts; //Vector of alerts
-    double getSpeed(); //Returns current suggested speed (imperial units)
-    void setSpeed(double); //Sets current suggested speed (imperial units)
+    double getSuggestedSpeed(); //Returns current suggested speed (imperial units)
+    void setSuggestedSpeed(double); //Sets current suggested speed (imperial units)
+    double getCommandedSpeed(); //Returns current commanded speed (imperial units)
+    void setCommandedSpeed(double); //Sets current commanded speed (imperial units)
     double getAuthority(); //Returns current authority (imperial units)
     void setAuthority(double); //Sets current authority (imperial units)
     bool getMode(); //Checks if device is in manual mode

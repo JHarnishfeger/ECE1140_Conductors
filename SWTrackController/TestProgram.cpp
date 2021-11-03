@@ -1,5 +1,4 @@
 #include "SWTrackController.cpp"
-#include <sstream>
 #include <Windows.h>
 #include <time.h>
 
@@ -7,14 +6,24 @@ Block a('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,
 Block b('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
 Block c('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
 Block d('g','a',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block e('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block f('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block g('r','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block h('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block i('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block j('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-vector<Block> green{a,b,c,d};
-vector<Block> red{e,f,g,h,i,j};
+Block e('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block f('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block g('g','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block h('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block i('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block j('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block k('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block l('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block m('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block n('r','a',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block o('r','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block p('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block q('r','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block r('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block s('r','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block t('r','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+vector<Block> green{a,b,c,d,e,f,g,h,i,j,k,l,m};
+vector<Block> red{n,o,p,q,r,s,t};
 
 int main()
 {
@@ -24,14 +33,15 @@ int main()
         std::system("cls");
         string command;
         double value;
+        string file;
         tc.testValues();
-        tc.plcCheck();
+        //tc.plcCheck();
         std::cout << std::endl;
         std::cin >> command;
         std::cin >> value;
         //std::cout << command << ", " << value << std::endl << std::endl;
         if(command=="speed")
-            tc.setSpeed(value);
+            tc.setSuggestedSpeed(value);
         else if(command=="authority")
             tc.setAuthority(value);
         else if(command=="mode")
@@ -100,6 +110,28 @@ int main()
                     if(tc.waysides[i].sector[j].getId()==value)
                         tc.waysides[i].sector[j].setTrainPresent(false);
             tc.getTrackOccupancy();
+        }
+        else if(command=="runPLC")
+        {
+            std::cin >> file;
+            for(int i=0;i<tc.waysides.size();i++)
+            {
+                tc.waysides[i].importPLC(file);
+                tc.waysides[i].runPLC();
+                Sleep(2000);
+            }
+            std::cin >> file;
+        }
+        else if(command=="runPLCOnce")
+        {
+            std::cin >> file;
+            for(int i=0;i<tc.waysides.size();i++)
+            {
+                tc.waysides[i].importPLC(file);
+                tc.waysides[i].runPLCOnce(value);
+                Sleep(2000);
+            }
+            std::cin >> file;
         }
     }
 }

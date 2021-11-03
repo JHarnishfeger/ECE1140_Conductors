@@ -2,7 +2,7 @@
 
 SWTrackController::SWTrackController()
 {
-    speed = 0;
+    suggestedSpeed = 0;
     authority = 0;
     manualMode = 0;
 }
@@ -12,7 +12,7 @@ void SWTrackController::initialize(vector<Block> red, vector<Block> green, int n
     redLine = red;
     greenLine = green;
     createWaysides(num);
-    setSpeed(s);
+    setSuggestedSpeed(s);
     setAuthority(a);
     setMode(m);
     for(int i=0;i<redLine.size();i++)
@@ -24,6 +24,15 @@ void SWTrackController::initialize(vector<Block> red, vector<Block> green, int n
         else if(redLine[i].getBrokenRail())
             brokenRail.push_back(redLine[i]);
     }
+    for(int i=0;i<greenLine.size();i++)
+    {
+        if(greenLine[i].getType()=="switch")
+            swich.push_back(greenLine[i]);
+        else if(greenLine[i].getType()=="crossing")
+            crossing.push_back(greenLine[i]);
+        else if(greenLine[i].getBrokenRail())
+            brokenRail.push_back(greenLine[i]);
+    }
 }
 
 SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int num, double s, double a, bool m)
@@ -31,7 +40,7 @@ SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int
     redLine = red;
     greenLine = green;
     createWaysides(num);
-    setSpeed(s);
+    setSuggestedSpeed(s);
     setAuthority(a);
     setMode(m);
     for(int i=0;i<redLine.size();i++)
@@ -188,7 +197,7 @@ void SWTrackController::updateWaysides()
 {
     for(int i=0;i<waysides.size();i++)
     {
-        waysides[i].setSpeed(speed);
+        waysides[i].setSuggestedSpeed(suggestedSpeed);
         waysides[i].setAuthority(authority);
         waysides[i].setMode(manualMode);
     }
@@ -262,18 +271,29 @@ void SWTrackController::createWaysides(int waysideNum)
 
 vector<Block> SWTrackController::setHardwareWayside(int id)
 {
-    waysides.erase(waysides.begin()+id-1);
+    //waysides.erase(waysides.begin()+id-1);  BREAKS CODE-----------
     return waysides[id-1].sector;
 }
 
-double SWTrackController::getSpeed()
+double SWTrackController::getSuggestedSpeed()
 {
-    return speed;
+    return suggestedSpeed;
 }
 
-void SWTrackController::setSpeed(double sp)
+void SWTrackController::setSuggestedSpeed(double sp)
 {
-    speed = sp;
+    suggestedSpeed = sp;
+    updateWaysides();
+}
+
+double SWTrackController::getCommandedSpeed()
+{
+    return commandedSpeed;
+}
+
+void SWTrackController::setCommandedSpeed(double sp)
+{
+    commandedSpeed = sp;
     updateWaysides();
 }
 
@@ -497,7 +517,7 @@ void SWTrackController::getTrackOccupancy()
 
 void SWTrackController::testValues()
 {
-    std::cout << "Speed: " << speed << std::endl;
+    std::cout << "Speed: " << suggestedSpeed << std::endl;
     std::cout << "Authority: " << authority << std::endl;
     std::cout << "Mode: " << manualMode << std::endl;
     std::cout << "# of Waysides: " << waysides.size() << std::endl;

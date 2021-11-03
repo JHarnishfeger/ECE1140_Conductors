@@ -16,7 +16,7 @@ class Block{
   private:
     static int count;
     char line;
-	char branch;
+	string branch;
     string type;
     double length;
     bool trainPresent;
@@ -39,8 +39,8 @@ class Block{
 	int getCount() const;
     void setLine(char);
     char getLine();
-	void setBranch(char);
-	char getBranch();
+	void setBranch(string);
+	string getBranch();
     void setType(string);
     string getType();
     void setLength(double);
