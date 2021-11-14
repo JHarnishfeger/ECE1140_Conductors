@@ -1,11 +1,14 @@
 #include "SWTrackController.cpp"
+#include "Wayside.cpp"
+#include "PLCController.cpp"
+#include "Block.cpp"
 #include <Windows.h>
 #include <time.h>
 
 Block a('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block b('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block b('g','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
 Block c('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-Block d('g','a',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+Block d('g','a',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false); //Occ
 Block e('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
 Block f('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
 Block g('g','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
@@ -27,11 +30,15 @@ vector<Block> red{n,o,p,q,r,s,t};
 
 int main()
 {
+    //std::cout << "check" << std::endl;
     SWTrackController tc(red,green,2,0,0,0);
+    //std::cout << "made" << std::endl;
+    string command;
+    //std::cin >> command;
+    //tc.sanityCheck();
     while(1==1)
     {
         std::system("cls");
-        string command;
         double value;
         string file;
         tc.testValues();
@@ -86,14 +93,14 @@ int main()
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
                     if(tc.waysides[i].sector[j].getId()==value)
-                        tc.switchTrack(tc.waysides[i].sector[j]);
+                        tc.waysides[i].switchTrack(tc.waysides[i].sector[j]);
         }
         else if(command=="crossing")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
                     if(tc.waysides[i].sector[j].getId()==value)
-                        tc.toggleCrossing(tc.waysides[i].sector[j]);
+                        tc.waysides[i].toggleCrossing(tc.waysides[i].sector[j]);
         }
         else if(command=="setTrain")
         {
@@ -117,9 +124,10 @@ int main()
             for(int i=0;i<tc.waysides.size();i++)
             {
                 tc.waysides[i].importPLC(file);
-                tc.waysides[i].runPLC();
+                tc.waysides[i].detectTrack();
                 Sleep(2000);
             }
+            tc.updateFromWaysides();
             std::cin >> file;
         }
         else if(command=="runPLCOnce")
@@ -131,6 +139,7 @@ int main()
                 tc.waysides[i].runPLCOnce(value);
                 Sleep(2000);
             }
+            tc.updateFromWaysides();
             std::cin >> file;
         }
     }

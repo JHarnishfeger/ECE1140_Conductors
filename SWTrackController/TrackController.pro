@@ -14,17 +14,20 @@ SOURCES += \
     SWTrackController.cpp \
     Wayside.cpp \
     main.cpp \
-    swtcinterface.cpp
+    swtcinterface.cpp \
+    waysidewin.cpp
 
 HEADERS += \
     Block.h \
     PLCController.h \
     SWTrackController.h \
     Wayside.h \
-    swtcinterface.h
+    swtcinterface.h \
+    waysidewin.h
 
 FORMS += \
-    swtcinterface.ui
+    swtcinterface.ui \
+    waysidewin.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

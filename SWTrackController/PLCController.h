@@ -1,8 +1,17 @@
 #ifndef PLCCONTROLLER_H
 #define PLCCONTROLLER_H
 
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <cstdio>
+#include <math.h>
 #include <sstream>
+#include "Block.h"
+using std::vector;
+using std::string;
 using std::stringstream;
+
 
 class PLCController
 {
@@ -18,11 +27,17 @@ public:
     vector<bool> SW; //Binary string representing switch position (1 = 1 Position, 0 = 0 Position)
     vector<bool> CL; //Binary string representing crossing location (1 = Crossing, 0 = Not Crossing)
     vector<bool> CR; //Binary string representing switch position (1 = Active, 0 = Inactive)
+    vector<bool> BR; //Binary string representing broken rail status (1 = Broken, 0 = Unbroken)
+    vector<bool> SS; //Binary string representing a block where speed limit is violated (1 = Violated, 0 = Safe)
+    vector<bool> SR; //Binary string representing blocks that need to be reduced to speed limit (1 = Reset, 0 = Keep)
+    vector<bool> ST; //Binary string representing blocks that the commanded speed should be 0 (1 = Set 0, 0 = Keep)
+    vector<bool> SA; //Binary string representing station location (1 = Station, 0 = Not Station)
     vector<Block> track; //All blocks controlled by wayside, in order to create boolean vectors
     vector<Block> occupancy; //All blocks that are occupied by trains
     vector<string> branchOccupancy; //All branches in the sector that are occupied
     int getPos(); //Retrieves iterator
     void setPos(int); //Sets iterator
+    string getFilename();
     bool branchOccupied(Block); //Checks if branch is occupied
     bool checkTrack(vector<Block>); //Uses PLC program to check for any actionable situations on the latest track. Returns 1 if the track has been changed.
     bool checkSwitches(bool,bool); //Uses PLC program to check for switches to be switched, returns 1 on appplicable block. Part of checkTrack().
@@ -32,7 +47,7 @@ public:
     bool switchTrack(); //Switches a junction at target the other direction. Returns 1 if the function was successful, 0 if an error occured.
     bool toggleCrossing(); //Activates/Deactivates a railroad crossing at target, and the lights. Returns 1 if the function was successful, 0 if an error occured.
     void importPLC(string);
-    void runPLC();
+    bool runPLC();
     void execute();
     void runPLCOnce();
 };

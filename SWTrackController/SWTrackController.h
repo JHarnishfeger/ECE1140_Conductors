@@ -1,6 +1,7 @@
 #ifndef SWTRACKCONTROLLER_H
 #define SWTRACKCONTROLLER_H
-#include "Wayside.cpp"
+#include "Wayside.h"
+//#include "Wayside.cpp"
 
 class SWTrackController
 {
@@ -11,13 +12,17 @@ private:
     bool manualMode; //Shows if controller is in Manual mode. 0 = Automatic, 1 = Manual
 public:
     SWTrackController(); //Creates empty instance of track controller
-    void initialize(vector<Block>,vector<Block>,int,double,double,bool); //Initializes an empty controller
+    void initialize(vector<Block>,vector<Block>,double,double,bool); //Initializes an empty controller
     SWTrackController(vector<Block>,vector<Block>,int,double,double,bool); //Takes red model, green model, number of waysides, speed, authority, and mode to create an instance of the SWTrackController
+    vector<Block> getHWTrack();
+    void sanityCheck();
     void plcCheck(); //Runs PLC on each wayside
     void updateWaysides(); //Sends current values to all waysides
+    void updateFromWaysides();
     void createWaysides(int); //Initializes a given number of waysides around the track
     vector<Block> setHardwareWayside(int); //Sets a wayside of the given ID to be the hardware-controlled wayside
     vector<Wayside> waysides; //Holds all waysides as part of the track controller
+    vector<Wayside>* wayPtr;
     vector<Block> redLine; //Holds all info about each block of the red line.
     vector<Block> greenLine; //Holds all info about each block of the green line.
     vector<Block> swich; //Holds the block number of any blocks with broken rails
@@ -25,6 +30,7 @@ public:
     vector<Block> brokenRail; //Holds the block number of any blocks with broken rails
     vector<Block> maintenance; //Holds the block number of any blocks undergoing maintenance
     vector<Block> trackOccupancy; //Vector of all blocks that have a train on them
+    vector<Block> hwTrack;
     vector<string> alerts; //Vector of alerts
     double getSuggestedSpeed(); //Returns current suggested speed (imperial units)
     void setSuggestedSpeed(double); //Sets current suggested speed (imperial units)

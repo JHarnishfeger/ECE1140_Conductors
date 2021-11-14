@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <QVector>
 #include <vector>
+#include <array>
 using std::vector;
-#include "SWTrackController.cpp"
+#include "SWTrackController.h"
+#include "waysidewin.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SWTCInterface; }
@@ -18,20 +21,22 @@ class SWTCInterface : public QMainWindow
 public:
     SWTCInterface(QWidget *parent = nullptr);
     ~SWTCInterface();
-    //void fillLists();
-    //SWTrackController tc;
-    //Block selected;
-
+    void fillLists();
+    vector<Block> getHWTrack();
 private slots:
-    //void on_CrossingButton_clicked();
+    void on_CreateWaysides_clicked();
 
-    //void on_SwitchButton_clicked();
+    void on_DesignateHWWayside_clicked();
 
-    //void on_SwitchList_itemClicked(QListWidgetItem *item);
-
-    //void on_CrossingList_itemClicked(QListWidgetItem *item);
+    void on_WaysideList_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::SWTCInterface *ui;
+    QVector<WaysideWin*> wui;
+    SWTrackController tc;
+    vector<Block> hwTrack;
+    int selected;
+    bool hwMade;
+    bool waysidesMade;
 };
 #endif // SWTCINTERFACE_H
