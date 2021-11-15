@@ -2,10 +2,6 @@
 
 TrackNodes::TrackNodes(){
 
-	/* TODO: We must add extra nodes for F0, F1, E0, E1, etc, to represent that 
-	 * trains can only continue one way through each track. There are only a 
-	 * couple switches for a few of the track junctions, the rest are one-way. */
-
 	//Introduce nodes for green line
     addNodeToGreen("A", 1, 3); 
     addNodeToGreen("B", 4, 6); 
