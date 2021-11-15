@@ -3,6 +3,8 @@
 
 #include "Block.h"
 #include <vector>
+#include <list>
+#include "WayStruct.h"
 
 //A schedule consists of a train ID, a destination block, and an arrival time.
 struct CTCSchedule{
@@ -23,8 +25,8 @@ class CTC{
         //True = automatic, False = manual
         bool mode;
 
-        //Time of day.
-        double time;
+        //Time of day, in seconds.
+        int time;
 
         //FIFO queue containing list of schedules from file.
         std::vector<CTCSchedule> schedule;
@@ -37,14 +39,17 @@ class CTC{
 
         //Blocks that will have their switch direction changed
         std::vector<Block> tochangeDirection;
+        
+        //List for holding wayside pointers
+        std::list<WayStruct*> waystructs;
 
     public:
 
-        CTC();
+        CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
         void loadSchedule(std::string filepath);
         void addSchedule(CTCSchedule _schedule);
         std::string displaySchedule();
-        void update(std::vector<Block> trackData, double current_time);
+        void update(std::vector<Block> trackData, int current_time);
         void setTrackMaintenence(int blockId, bool isBroken);
         void setTrackSwitch(int blockId, char direction);
         void setCTCMode(bool _mode);

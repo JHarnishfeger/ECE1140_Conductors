@@ -30,6 +30,7 @@ set(PROJECT_SOURCES
         TrackNodes.cpp
         Authority.h
         Branch.h
+        WayStruct.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

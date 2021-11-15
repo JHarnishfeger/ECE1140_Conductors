@@ -8,9 +8,16 @@ CTCSchedule::CTCSchedule(int _train, int _destination, double _time){
     time = _time;
 }
 
-CTC::CTC(){
+CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
+
+	for(int i = 0; i < sw_waystructs->size(); i++){
+		waystructs.push_back(&(*waystructs)[i]);
+	}
+	
+	waystructs.push_back(hw_waystruct);
+
     mode = true;
-    time = 0.f;
+    time = 0;
 }
 
 /*
@@ -54,7 +61,7 @@ std::string CTC::displaySchedule(){
  * If CTC is in automatic mode, switches will be set to allow
  * trains to get to their destinations.
  */
-void CTC::update(std::vector<Block> trackData, double current_time){
+void CTC::update(std::vector<Block> trackData, int current_time){
     time = current_time;
     tochangeDirection.clear();
     track = trackData;
