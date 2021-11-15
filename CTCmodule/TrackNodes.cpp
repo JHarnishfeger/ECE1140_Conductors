@@ -10,9 +10,12 @@ TrackNodes::TrackNodes(){
     addNodeToGreen("A", 1, 3); 
     addNodeToGreen("B", 4, 6); 
     addNodeToGreen("C", 7, 12);
-    addNodeToGreen("D", 13, 16);
-    addNodeToGreen("E", 17, 20);
-    addNodeToGreen("F", 21, 28);
+    addNodeToGreen("D0", 13, 16);
+    addNodeToGreen("D1", 13, 16);
+    addNodeToGreen("E0", 17, 20);
+    addNodeToGreen("E1", 17, 20);
+    addNodeToGreen("F0", 21, 28);
+    addNodeToGreen("F1", 21, 28);
     addNodeToGreen("G", 29, 32);
     addNodeToGreen("H", 33, 35);
     addNodeToGreen("I", 36, 57);
@@ -20,7 +23,8 @@ TrackNodes::TrackNodes(){
     addNodeToGreen("K", 63, 68);
     addNodeToGreen("L", 69, 73);
     addNodeToGreen("M", 74, 76);
-    addNodeToGreen("N", 77, 85);
+    addNodeToGreen("N0", 77, 85);
+    addNodeToGreen("N1", 77, 85);
     addNodeToGreen("O", 86, 88);
     addNodeToGreen("P", 89, 97);
     addNodeToGreen("Q", 98, 100);
@@ -35,15 +39,15 @@ TrackNodes::TrackNodes(){
     addNodeToGreen("Z", 150, 150);
     
     //Link nodes together
-    findNodeByName("A")->addChild(findNodeByName("D"));
+    findNodeByName("A")->addChild(findNodeByName("D0"));
     findNodeByName("B")->addChild(findNodeByName("A"));
     findNodeByName("C")->addChild(findNodeByName("B"));
-    findNodeByName("D")->addChild(findNodeByName("C"));
-    findNodeByName("D")->addChild(findNodeByName("E"));
-    findNodeByName("E")->addChild(findNodeByName("D"));
-    findNodeByName("E")->addChild(findNodeByName("F"));
-    findNodeByName("F")->addChild(findNodeByName("E"));
-    findNodeByName("F")->addChild(findNodeByName("G"));
+    findNodeByName("D1")->addChild(findNodeByName("C"));
+    findNodeByName("D0")->addChild(findNodeByName("E0"));
+    findNodeByName("E1")->addChild(findNodeByName("D1"));
+    findNodeByName("E0")->addChild(findNodeByName("F0"));
+    findNodeByName("F1")->addChild(findNodeByName("E1"));
+    findNodeByName("F0")->addChild(findNodeByName("G"));
     findNodeByName("G")->addChild(findNodeByName("H"));
     findNodeByName("H")->addChild(findNodeByName("I"));
     findNodeByName("I")->addChild(findNodeByName("YARD"));
@@ -51,13 +55,12 @@ TrackNodes::TrackNodes(){
     findNodeByName("YARD")->addChild(findNodeByName("K"));
     findNodeByName("K")->addChild(findNodeByName("L"));
     findNodeByName("L")->addChild(findNodeByName("M"));
-    findNodeByName("M")->addChild(findNodeByName("N"));
-    findNodeByName("N")->addChild(findNodeByName("O"));
-    findNodeByName("N")->addChild(findNodeByName("R"));
-    findNodeByName("O")->addChild(findNodeByName("N"));
+    findNodeByName("M")->addChild(findNodeByName("N0"));
+    findNodeByName("N0")->addChild(findNodeByName("O"));
+    findNodeByName("N1")->addChild(findNodeByName("R"));
     findNodeByName("O")->addChild(findNodeByName("P"));
     findNodeByName("P")->addChild(findNodeByName("Q"));
-    findNodeByName("Q")->addChild(findNodeByName("N"));
+    findNodeByName("Q")->addChild(findNodeByName("N1"));
     findNodeByName("R")->addChild(findNodeByName("S"));
     findNodeByName("S")->addChild(findNodeByName("T"));
     findNodeByName("T")->addChild(findNodeByName("U"));
@@ -66,7 +69,7 @@ TrackNodes::TrackNodes(){
     findNodeByName("W")->addChild(findNodeByName("X"));
     findNodeByName("X")->addChild(findNodeByName("Y"));
     findNodeByName("Y")->addChild(findNodeByName("Z"));
-    findNodeByName("Z")->addChild(findNodeByName("F"));
+    findNodeByName("Z")->addChild(findNodeByName("F1"));
 }
 
 void TrackNodes::addNodeToGreen(std::string name, int start, int end){
@@ -93,16 +96,23 @@ Node<Branch>* TrackNodes::findNodeByName(std::string name, bool useGreen){
 }
 
 std::list<std::string> TrackNodes::getBranchRoute(std::string from, std::string to, bool useGreen){
-
-	//Use BFS to solve for the route
-	auto routeList = findNodeByName(from)->routeTo(findNodeByName(to));
+	if(useGreen){
+		//Use BFS to solve for the route
+		auto routeList = findNodeByName(from)->routeTo(findNodeByName(to));
 	
-	//Make new list containing only the branch names
-	std::list<std::string> rtn;
-	
-	for(auto node : routeList){
-		rtn.push_back(node->getValue().name);
+		//Make new list containing only the branch names
+		std::list<std::string> rtn;
+		for(auto node : routeList){
+			std::string name = node->getValue().name;
+			if(name[0] == 'D') name = "D";
+			if(name[0] == 'E') name = "E";
+			if(name[0] == 'F') name = "F";
+			if(name[0] == 'N') name = "N";
+			rtn.push_back(name);
+		}
+		return rtn;
+	}else{
+		return std::list<std::string>();
 	}
-	return rtn;
 }
 
