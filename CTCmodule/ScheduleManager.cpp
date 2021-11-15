@@ -55,6 +55,10 @@ void ScheduleManager::addSchedule(CTCSchedule _schedule){
 }
 
 CTCSchedule ScheduleManager::loadNextSchedule(){
+	if(schedule.empty()){
+		return CTCSchedule("", 0, 0);
+	}
+
 	return schedule[0];
 	schedule.erase(schedule.begin());
 }

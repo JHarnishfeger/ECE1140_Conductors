@@ -23,6 +23,12 @@ class WaysideManager{
 		
 		//Get a list of which branches have trains on them.
 		std::list<std::string> getBranchesWithTrainsPresent();
+		
+		//get a list of all the switches on the green line
+		std::list<int> getGreenLineSwitches();
+		
+		//Add the authorities for a new route to the queue
+		void addNewRouteToQueues(std::list<Authority> route);
 	
 	private:
 	

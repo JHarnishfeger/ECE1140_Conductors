@@ -11,4 +11,6 @@ WaysideManager(std::list<WayStruct>* _waystructs : waystructs(_waystructs) {
 	greenLineSwitches.push_back(85); //N->O and Q->N
 }
 
-
+std::list<int> WaysideManager::getGreenLineSwitches(){
+	return greenLineSwitches;
+}

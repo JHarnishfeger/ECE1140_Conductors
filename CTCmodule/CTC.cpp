@@ -58,14 +58,14 @@ void CTC::update(int current_time){
  * Set a single block to be open/closed due to maintenence.
  */
 void CTC::setTrackMaintenence(int blockId, bool isBroken){
-    //TODO
+    waysideManager.getBlock(blockId).setClosedForMaintenece(isBroken);
 }
 
 /*
  * Set a single block switch to a given direction (See Block.cpp)
  */
-void CTC::setTrackSwitch(int blockId, char direction){
-    //TODO
+void CTC::setTrackSwitch(int blockId, bool direction){
+    waysideManager.getBlock(blockId).setSwitch(direction);
 }
 
 /*
@@ -80,9 +80,13 @@ void CTC::setCTCMode(bool _mode){
  * Returns a vector list of only the blocks that have switches
  */
 std::vector<Block> CTC::getSwitches(){
-    std::vector<Block> switches;
-    return switches;
-    //TODO
+    auto list =  waysideManager.getgreenLineSwitches();
+    std::vector<Block> blockList;
+    blockList.resize(list.size());
+    for(int i : list){
+    	blockList.push_back(waysideManager.getBlock(i));
+    }
+    return blockList;
 }
 
 /*
@@ -90,6 +94,12 @@ std::vector<Block> CTC::getSwitches(){
  */
 void CTC::dispatchTrain(CTCSchedule schedule){
     //TODO
+    //Get the route
+    
+    //Right now, all trains come from yard
+    std::list<std::string> route = track.getBranchRoute("YARD", schedule.destination);
+    
+    //Send Authorities to each wayside queue
 }
 
 /*
@@ -105,8 +115,7 @@ double CTC::getSuggestedSpeed(){
  * False = open
  */
 bool CTC::getTrackMaintenence(int blockId){
-    //TODO
-    return false;
+    return waysideManager.getBlock(blockId).getClosedForMaintenence();
 }
 
 /*
@@ -115,15 +124,13 @@ bool CTC::getTrackMaintenence(int blockId){
  * False = doesn't have train
  */
 bool CTC::getBlockHasTrainPresent(int blockId){
-    return false;
-    //TODO
+   	return waysideManager.getBlock(blockId).getTrainPresent();
 }
 
 /*
  * Get the direction property of a Block
  */
-char CTC::getBlockDirection(int blockId){
-    return ' ';
-    //TODO
+bool CTC::getBlockDirection(int blockId){
+    return waysideManager.getBlock(blockId).getSwitch();
 }
 

@@ -74,15 +74,13 @@ void TrackNodes::addNodeToGreen(std::string name, int start, int end){
 
 Node<Branch>* TrackNodes::findNodeByName(std::string name, bool useGreen){
 	if(useGreen){
+		if(name == "D"){name = "D0";}
+		else if(name == "E"){name = "E0";}
+		else if(name == "F"){name = "F0";}
+		else if(name == "N"){name = "N0";}
+		
 		for(int i = 0; i < green.size(); i++){
 			Node<Branch>* node = &green[i];
-			if(node->getValue().name == name){
-					return node;
-			}
-		}
-	}else{
-		for(int i = 0; i < red.size(); i++){
-			Node<Branch>* node = &red[i];
 			if(node->getValue().name == name){
 					return node;
 			}

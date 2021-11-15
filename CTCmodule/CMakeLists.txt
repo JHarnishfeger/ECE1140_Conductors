@@ -31,6 +31,10 @@ set(PROJECT_SOURCES
         Authority.h
         Branch.h
         WayStruct.h
+        ScheduleManager.h
+        ScheduleManager.cpp
+        WaysideManager.h
+        WaysideManager.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
