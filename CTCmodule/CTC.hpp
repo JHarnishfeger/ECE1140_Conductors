@@ -5,15 +5,10 @@
 #include <vector>
 #include <list>
 #include "WayStruct.h"
+#include "TrackNodes.h"
+#include "WaysideManager.h"
+#include "ScheduleManager.h"
 
-//A schedule consists of a train ID, a destination block, and an arrival time.
-struct CTCSchedule{
-
-    CTCSchedule(int _train, int _destination, double _time);
-    int train;
-    int destination;
-    double time;
-};
 
 /*
  * The primary CTC module class.
@@ -27,36 +22,26 @@ class CTC{
 
         //Time of day, in seconds.
         int time;
-
-        //FIFO queue containing list of schedules from file.
-        std::vector<CTCSchedule> schedule;
-
-        //Vector containing block information.
-        std::vector<Block> track;
-
-        //Blocks that are closed for maintenence
-        std::vector<Block> closedForMaintenence;
-
-        //Blocks that will have their switch direction changed
-        std::vector<Block> tochangeDirection;
         
-        //List for holding wayside pointers
-        std::list<WayStruct*> waystructs;
+        //Wayside Manager
+        WaysideManager waysideManager;
+        
+        //Schedule Manager
+        ScheduleManager scheduleManager;
+        
+        //Track routing system
+        TrackNodes track;
 
     public:
 
         CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
-        void loadSchedule(std::string filepath);
-        void addSchedule(CTCSchedule _schedule);
         std::string displaySchedule();
-        void update(std::vector<Block> trackData, int current_time);
+        void update(int current_time);
         void setTrackMaintenence(int blockId, bool isBroken);
         void setTrackSwitch(int blockId, char direction);
         void setCTCMode(bool _mode);
         std::vector<Block> getSwitches();
         void dispatchTrain(CTCSchedule schedule);
-        std::vector<Block> getBlocksClosedForMaintenence();
-        std::vector<Block> getNewTrackSwitchChanges();
         double getSuggestedSpeed();
         bool getTrackMaintenence(int blockId);
         bool getBlockHasTrainPresent(int blockId);

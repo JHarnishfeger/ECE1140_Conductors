@@ -8,13 +8,15 @@
 #include <list>
 #include <string>
 #include <unordered_map>
+#include "WayStruct.h"
 
 class WaysideManager{
 
 	public:
 	
 		//Constructor
-		WaysideManager(std::vector<Wayside>* _waysides);
+		WaysideManager();
+		WaysideManager(std::list<WayStruct>* _waystructs);
 	
 		//Get a reference to a specific block in a wayside.
 		Block& getBlock(int id);
@@ -28,7 +30,7 @@ class WaysideManager{
 		std::list<int> greenLineSwitches;
 		
 		//This should be given by Track Controller
-		std::vector<Wayside>* waysides;
+		std::list<Wayside>* waysides;
 		
 		//The int is the block ID of a switch. Each switch has a queue associated with it.
 		std::unordered_map<int, std::queue<Authority>> authorityQueues;

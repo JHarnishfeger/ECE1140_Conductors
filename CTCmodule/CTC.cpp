@@ -1,58 +1,41 @@
 #include "CTC.hpp"
 #include <fstream>
 #include <stdexcept>
-
-CTCSchedule::CTCSchedule(int _train, int _destination, double _time){
-    train = _train;
-    destination = _destination;
-    time = _time;
-}
+#include <sstream>
 
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
 
+	//Give the waystructs to WaysideManager
+	std::list<WayStruct*> waystructs;
 	for(int i = 0; i < sw_waystructs->size(); i++){
-		waystructs.push_back(&(*waystructs)[i]);
+		waystructs.push_back(&(*sw_waystructs)[i]);
 	}
-	
 	waystructs.push_back(hw_waystruct);
+	waysideManager = WaysideManager(waystructs);
 
     mode = true;
-    time = 0;
+    time = 0; //Assuming we start at time 0
 }
 
 /*
  * Add a new schedule line to the back of the list.
  */
 void CTC::addSchedule(CTCSchedule _schedule){
-    schedule.push_back(_schedule);
+    scheduleManager.addSchedule(_schedule);
 }
 
 /*
  * Load the MBO's schedule from a CSV file.
  */
 void CTC::loadSchedule(std::string filepath){
-    std::ifstream in(filepath);
-
-    if(in.fail()){
-        return;
-    }
-
-    //TODO: File loading code here (Read csv and add schedules to vector)
-
-    in.close();
+  scheduleManager.loadSchedule(filepath);
 }
 
 /*
  * Display the currently held CTC schedule
  */
 std::string CTC::displaySchedule(){
-    std::string rtn = "";
-    for(auto s : schedule){
-        rtn += "Train " + std::to_string(s.train) + " ";
-        rtn += "to Block " + std::to_string(s.destination) + " ";
-        rtn += "at Time " + std::to_string(s.time) + "\n";
-    }
-    return rtn;
+	return scheduleManager.displaySchedule();
 }
 
 /*
@@ -61,47 +44,28 @@ std::string CTC::displaySchedule(){
  * If CTC is in automatic mode, switches will be set to allow
  * trains to get to their destinations.
  */
-void CTC::update(std::vector<Block> trackData, int current_time){
+void CTC::update(int current_time){
     time = current_time;
-    tochangeDirection.clear();
-    track = trackData;
 
     if(mode && schedule.size() > 0){
         CTCSchedule nextSchedule = schedule.front();
         schedule.erase(schedule.begin());
     }
-    //TODO
+    //TODO stuff here
 }
 
 /*
  * Set a single block to be open/closed due to maintenence.
  */
 void CTC::setTrackMaintenence(int blockId, bool isBroken){
-    if(isBroken){
-        for(int i = 0; i < closedForMaintenence.size(); i++){
-            Block block = closedForMaintenence[i];
-            if(block.getId() == blockId){
-                return;
-            }
-        }
-        closedForMaintenence.push_back(track[blockId]);
-    }else{
-        for(int i = 0; i < closedForMaintenence.size(); i++){
-            Block block = closedForMaintenence[i];
-            if(block.getId() == blockId){
-                closedForMaintenence.erase(closedForMaintenence.begin() + i);
-                return;
-            }
-        }
-    }
+    //TODO
 }
 
 /*
  * Set a single block switch to a given direction (See Block.cpp)
  */
 void CTC::setTrackSwitch(int blockId, char direction){
-    track[blockId].setDirection(direction);
-    tochangeDirection.push_back(track[blockId]);
+    //TODO
 }
 
 /*
@@ -117,12 +81,8 @@ void CTC::setCTCMode(bool _mode){
  */
 std::vector<Block> CTC::getSwitches(){
     std::vector<Block> switches;
-    for(Block block : track){
-        if (block.getType() == "switch"){
-            switches.push_back(block);
-        }
-    }
     return switches;
+    //TODO
 }
 
 /*
@@ -130,22 +90,6 @@ std::vector<Block> CTC::getSwitches(){
  */
 void CTC::dispatchTrain(CTCSchedule schedule){
     //TODO
-}
-
-/*
- * Get a list of blocks currently closed for maintenence,
- * to be sent to the Track Controller.
- */
-std::vector<Block> CTC::getBlocksClosedForMaintenence(){
-    return closedForMaintenence;
-}
-
-/*
- * Get a list of changes to the track switching since the last time update() was run,
- * to be sent to the Track Controller.
- */
-std::vector<Block> CTC::getNewTrackSwitchChanges(){
-    return tochangeDirection;
 }
 
 /*
@@ -161,14 +105,7 @@ double CTC::getSuggestedSpeed(){
  * False = open
  */
 bool CTC::getTrackMaintenence(int blockId){
-    if(track.size() <= blockId || blockId < 0){
-        throw std::out_of_range("Block does not exist");
-    }
-    for(int i = 0; i < closedForMaintenence.size(); i++){
-        if(closedForMaintenence[i].getId() == blockId){
-            return true;
-        }
-    }
+    //TODO
     return false;
 }
 
@@ -178,18 +115,15 @@ bool CTC::getTrackMaintenence(int blockId){
  * False = doesn't have train
  */
 bool CTC::getBlockHasTrainPresent(int blockId){
-    if(track.size() <= blockId || blockId < 0){
-        throw std::out_of_range("Block does not exist");
-    }
-    return track[blockId].getTrainPresent();
+    return false;
+    //TODO
 }
 
 /*
  * Get the direction property of a Block
  */
 char CTC::getBlockDirection(int blockId){
-    if(track.size() <= blockId || blockId < 0){
-        throw std::out_of_range("Block does not exist");
-    }
-    return track[blockId].getDirection();
+    return ' ';
+    //TODO
 }
+

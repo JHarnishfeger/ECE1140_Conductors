@@ -2,6 +2,8 @@
 #define WAYSTRUCT_H
 
 #include <vector>
+#include "Authority.h"
+#include "Block.h"
 
 struct WayStruct
 {
@@ -9,4 +11,6 @@ struct WayStruct
     double suggestedSpeed;
     std::vector<Authority> auth;
     std::vector<Block> sector;
-}
+};
+
+#endif
