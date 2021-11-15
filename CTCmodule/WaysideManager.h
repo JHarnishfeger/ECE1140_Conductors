@@ -36,10 +36,10 @@ class WaysideManager{
 		std::list<int> greenLineSwitches;
 		
 		//This should be given by Track Controller
-		std::list<Wayside>* waysides;
+        std::list<WayStruct>* waysides;
 		
 		//The int is the block ID of a switch. Each switch has a queue associated with it.
 		std::unordered_map<int, std::queue<Authority>> authorityQueues;
-}
+};
 
 #endif

@@ -110,3 +110,14 @@ std::list<std::string> TrackNodes::getBranchRoute(std::string from, std::string 
 	}
 }
 
+std::string TrackNodes::getBranchOfBlock(int blockId, bool useGreen){
+    if(useGreen){
+        for(auto node : green){
+            Branch branch = node.getValue();
+            if(blockId >= branch.start && blockId <= branch.end){
+                return branch.name;
+            }
+        }
+    }
+    return "";
+}

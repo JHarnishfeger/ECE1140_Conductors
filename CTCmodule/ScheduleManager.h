@@ -1,5 +1,6 @@
 #ifndef SCHEDULEMANAGER_H
 #define SCHEDULEMANAGER_H
+#include <string>
 
 //A schedule consists of a train ID, a destination block, and an arrival time.
 struct CTCSchedule{

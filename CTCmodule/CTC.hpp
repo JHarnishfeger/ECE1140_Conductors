@@ -46,6 +46,9 @@ class CTC{
         bool getTrackMaintenence(int blockId);
         bool getBlockHasTrainPresent(int blockId);
         bool getBlockDirection(int blockId);
+        void addSchedule(CTCSchedule _schedule);
+        void loadSchedule(std::string filepath);
+        std::string displaySchedule();
 };
 
 #endif

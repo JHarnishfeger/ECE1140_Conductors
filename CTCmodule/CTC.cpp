@@ -47,10 +47,6 @@ std::string CTC::displaySchedule(){
 void CTC::update(int current_time){
     time = current_time;
 
-    if(mode && schedule.size() > 0){
-        CTCSchedule nextSchedule = schedule.front();
-        schedule.erase(schedule.begin());
-    }
     //TODO stuff here
 }
 
@@ -80,7 +76,7 @@ void CTC::setCTCMode(bool _mode){
  * Returns a vector list of only the blocks that have switches
  */
 std::vector<Block> CTC::getSwitches(){
-    auto list =  waysideManager.getgreenLineSwitches();
+    auto list =  waysideManager.getGreenLineSwitches();
     std::vector<Block> blockList;
     blockList.resize(list.size());
     for(int i : list){

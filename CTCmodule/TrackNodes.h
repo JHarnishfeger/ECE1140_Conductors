@@ -19,6 +19,8 @@ public:
 	//Get a route between two branches. Bool param chooses which line to search on
 	std::list<std::string> getBranchRoute(std::string from, std::string to, bool useGreen=true);
 
+    std::string getBranchOfBlock(int blockId, bool useGreen=true);
+
 private:
 
 	void addNodeToGreen(std::string name, int start, int end);
