@@ -14,7 +14,7 @@ CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
         }
         waystructs.push_back(hw_waystruct);
     }
-    waysideManager = WaysideManager(waystructs);
+    waysideManager = WaysideManager(waystructs, &track);
     mode = true;
     time = 0; //Assuming we start at time 0
 }
@@ -60,14 +60,20 @@ void CTC::update(int current_time){
  * Set a single block to be open/closed due to maintenence.
  */
 void CTC::setTrackMaintenence(int blockId, bool isBroken){
-    waysideManager.getBlock(blockId).setClosedForMaintenece(isBroken);
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->setClosedForMaintenece(isBroken);
+    }
 }
 
 /*
  * Set a single block switch to a given direction (See Block.cpp)
  */
 void CTC::setTrackSwitch(int blockId, bool direction){
-    waysideManager.getBlock(blockId).setSwitch(direction);
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->setTrainPresent(direction);
+    }
 }
 
 /*
@@ -81,14 +87,8 @@ void CTC::setCTCMode(bool _mode){
 /*
  * Returns a vector list of only the blocks that have switches
  */
-std::vector<Block> CTC::getSwitches(){
-    auto list =  waysideManager.getGreenLineSwitches();
-    std::vector<Block> blockList;
-    blockList.resize(list.size());
-    for(int i : list){
-        blockList.push_back(waysideManager.getBlock(i));
-    }
-    return blockList;
+std::list<int> CTC::getSwitches(){
+    return waysideManager.getGreenLineSwitches();
 }
 
 /*
@@ -117,7 +117,12 @@ double CTC::getSuggestedSpeed(){
  * False = open
  */
 bool CTC::getTrackMaintenence(int blockId){
-    return waysideManager.getBlock(blockId).getClosedForMaintenence();
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->getClosedForMaintenence();
+    }else{
+        return false;
+    }
 }
 
 /*
@@ -126,13 +131,30 @@ bool CTC::getTrackMaintenence(int blockId){
  * False = doesn't have train
  */
 bool CTC::getBlockHasTrainPresent(int blockId){
-   	return waysideManager.getBlock(blockId).getTrainPresent();
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->getTrainPresent();
+    }else{
+        return false;
+    }
 }
 
 /*
  * Get the direction property of a Block
  */
 bool CTC::getBlockDirection(int blockId){
-    return waysideManager.getBlock(blockId).getSwitch();
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->getSwitch();
+    }else{
+        return false;
+    }
 }
 
+bool CTC::blockExists(int blockId){
+    return (waysideManager.getBlock(blockId) != nullptr);
+}
+
+std::list<std::string> CTC::getBranchesWithTrainsPresent(){
+    return waysideManager.getBranchesWithTrainsPresent();
+}

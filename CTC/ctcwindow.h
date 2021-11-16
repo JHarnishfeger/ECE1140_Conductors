@@ -19,6 +19,8 @@ public:
 
 private slots:
 
+    void update();
+
     void on_button_chooseSchedule_clicked();
 
     void on_horizontalSlider_mode_sliderMoved(int position);

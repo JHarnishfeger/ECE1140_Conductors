@@ -41,14 +41,16 @@ class CTC{
         void setTrackMaintenence(int blockId, bool isBroken);
         void setTrackSwitch(int blockId, bool direction);
         void setCTCMode(bool _mode);
-        std::vector<Block> getSwitches();
+        std::list<int> getSwitches();
         void dispatchTrain(CTCSchedule schedule);
         double getSuggestedSpeed();
         bool getTrackMaintenence(int blockId);
         bool getBlockHasTrainPresent(int blockId);
+        std::list<std::string> getBranchesWithTrainsPresent();
         bool getBlockDirection(int blockId);
         void addSchedule(CTCSchedule _schedule);
         void loadSchedule(std::string filepath);
+        bool blockExists(int blockId);
 };
 
 #endif

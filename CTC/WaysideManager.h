@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include "WayStruct.h"
+#include "TrackNodes.h"
 
 class WaysideManager{
 
@@ -16,10 +17,10 @@ class WaysideManager{
 	
 		//Constructor
 		WaysideManager();
-        WaysideManager(std::list<WayStruct*> _waystructs);
+        WaysideManager(std::list<WayStruct*> _waystructs, TrackNodes* _track);
 	
 		//Get a reference to a specific block in a wayside.
-		Block& getBlock(int id);
+        Block* getBlock(int id);
 		
 		//Get a list of which branches have trains on them.
 		std::list<std::string> getBranchesWithTrainsPresent();
@@ -40,6 +41,8 @@ class WaysideManager{
 		
 		//The int is the block ID of a switch. Each switch has a queue associated with it.
 		std::unordered_map<int, std::queue<Authority>> authorityQueues;
+
+        TrackNodes* track;
 };
 
 #endif

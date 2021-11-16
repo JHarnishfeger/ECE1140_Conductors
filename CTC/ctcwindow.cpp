@@ -17,31 +17,23 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
     ctc.update(0);
 
     //TODO: Add switch list to drop-down here
+    std::list<int> switches = ctc.getSwitches();
+    for(int s : switches){
+        ui->comboBox->addItem("Switch on Block " + QString::number(s), s);
+    }
 
     //Graphics setup
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
 
-    QBrush redBrush(Qt::red);
+    QBrush greenBrush(Qt::green);
     QBrush yellowBrush(Qt::yellow);
     QPen blackPen(Qt::black);
     blackPen.setWidth(2);
 
-    testRect = new QGraphicsRectItem*[100];
-    for(int i = 0; i < 50; i++){
-        if(i % 15 == 0 && i != 0){
-            testRect[i] = scene->addRect(-250+10*i, 0, 10, 10, blackPen, yellowBrush);
-        }else{
-            testRect[i] = scene->addRect(-250+10*i, 0, 10, 10, blackPen, redBrush);
-        }
-    }
-    testRect[50] = scene->addRect(-100, 10, 10, 10, blackPen, redBrush);
-    for(int i = 51; i < 100; i++){
-        if(i % 15 == 0 && i != 0){
-            testRect[i] = scene->addRect(-250+10*(i-51), 20, 10, 10, blackPen, yellowBrush);
-        }else{
-            testRect[i] = scene->addRect(-250+10*(i-51), 20, 10, 10, blackPen, redBrush);
-        }
+    testRect = new QGraphicsRectItem*[26];
+    for(int i = 0; i < 26; i++){
+        testRect[i] = scene->addRect(-250+10*i, 0, 10, 10, blackPen, greenBrush);
     }
     testText = scene->addText("This view will display a graphical map of the track.\nEach box represents a track block.\nColors will represent various block states.");
     testText->setPos(-250, -75);
@@ -52,6 +44,10 @@ CTCWindow::~CTCWindow()
     delete ui;
     delete[] testRect;
     delete testText;
+}
+
+void CTCWindow::update(){
+    ctc.update(0);
 }
 
 void CTCWindow::on_button_chooseSchedule_clicked()
@@ -83,24 +79,28 @@ void CTCWindow::on_lineEdit_selectBlock_returnPressed()
     int blockId;
     try{
         blockId = std::stoi(text);
+        if(ctc.blockExists(blockId)){
 
-        ui->textBrowser_blockPropertiesId->setText(QString::fromStdString(std::to_string(blockId)));
+            ui->textBrowser_blockPropertiesId->setText(QString::fromStdString(std::to_string(blockId)));
 
-        bool m = ctc.getTrackMaintenence(blockId);
-        if(m){
-            ui->textBrowser_blockPropertiesMaintenence->setText("Closed");
+            bool m = ctc.getTrackMaintenence(blockId);
+            if(m){
+                ui->textBrowser_blockPropertiesMaintenence->setText("Closed");
+            }else{
+                ui->textBrowser_blockPropertiesMaintenence->setText("Open");
+            }
+
+            bool tp = ctc.getBlockHasTrainPresent(blockId);
+            if(tp){
+                ui->textBrowser_blockPropertiesTrainPresent->setText("Yes");
+            }else{
+                ui->textBrowser_blockPropertiesTrainPresent->setText("No");
+            }
+
+            ui->textBrowser_blockPropertiesThroughput->setText("0");
         }else{
-            ui->textBrowser_blockPropertiesMaintenence->setText("Open");
+            throw std::logic_error("Block is not valid.");
         }
-
-        bool tp = ctc.getBlockHasTrainPresent(blockId);
-        if(tp){
-            ui->textBrowser_blockPropertiesTrainPresent->setText("Yes");
-        }else{
-            ui->textBrowser_blockPropertiesTrainPresent->setText("No");
-        }
-
-        ui->textBrowser_blockPropertiesThroughput->setText("0");
     }catch(std::exception e){
         ui->textBrowser_blockPropertiesId->setText("");
         ui->textBrowser_blockPropertiesMaintenence->setText("");
@@ -141,18 +141,19 @@ void CTCWindow::on_pushButton_selectBlockGo_clicked()
 
 void CTCWindow::on_pushButton_dispatchTrain_clicked()
 {
-    int trainNo;
+    std::string trainNo;
     int destinationBlockId;
-    double destinationTime;
+    int destinationTime;
 
     try{
-        trainNo = std::stoi(ui->label_manualDispatchtrain->text().toStdString());
+        trainNo = ui->label_manualDispatchtrain->text().toStdString();
         destinationBlockId = std::stoi(ui->label_manualDispatchTo->text().toStdString());
-        destinationTime = std::stod(ui->label_manualDispatchToTime->text().toStdString());
+        destinationTime = std::stoi(ui->label_manualDispatchToTime->text().toStdString());
     }catch(std::exception){
         return;
     }
-    //ctc.dispatchTrain(CTCSchedule(trainNo, destinationBlockId, destinationTime));
+    //string, int, int
+    ctc.dispatchTrain(CTCSchedule(trainNo, destinationBlockId, destinationTime));
 }
 
 
