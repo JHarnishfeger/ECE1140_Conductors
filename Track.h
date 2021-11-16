@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <fstream>
+#include <iostream>
 #include "Block.h"
 using std::vector;
 using std::string;
@@ -16,12 +18,12 @@ class Track{
 		vector<Block*> greenLine;
 		vector<Block*> redLine;
 		double suggSpeed;
-		//double authority?
 	public:
 		//Constructors:
 		Track();
 		Track(vector<Block*>,vector<Block*>,double);
 		Track(string,double);
+		void initalize(string,double);
 		//Attributes:
 		//greenLine
 		vector<Block*> getGreenLine();
@@ -30,7 +32,6 @@ class Track{
 		//suggSpeed
 		void setSuggSpeed(double);
 		double getSuggSpeed();
-		//authority?
 		//Class Functions:
 		Block* searchBlock(string,int);
 		Block* go(string,int,double);
@@ -51,8 +52,8 @@ class Track{
 		bool fixPower(string,int);
 		string toString();
 		string toStringDetailed();
-		unsigned int encodeData();
-		void decodeData(unsigned int);
+		uint32_t encodeData();
+		void decodeData(uint32_t);
 };
 //End Track class
 #endif

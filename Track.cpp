@@ -19,6 +19,13 @@ Track::Track(string filename, double suggSpeedIN){
 	suggSpeed = suggSpeedIN;
 }
 
+//Initalize for QT
+//Params: string, double
+void Track::initalize(string filename, double suggSpeedIN){
+	loadTrack(filename);
+	suggSpeed = suggSpeedIN;
+}
+
 //Attributes:
 //greenLine ------------------------------------------------------------
 //Params: None
@@ -256,12 +263,13 @@ bool Track::loadTrack(string filename){
 	inputFile.open(filename);
 	
 	string header, size, line, type, direction, length, grade, temperature,
-	height, speedLimit, suggestedSpeed;
+	height, speedLimit;
 	int fileSize = 0;
 	
 	getline(inputFile, header);
 	getline(inputFile, size);
-	fileSize = stoi(size);
+	std::stringstream ss(size);
+	ss >> fileSize;
 	for(int i = 0; i < fileSize; i++){
 		getline(inputFile, line, ',');
 		getline(inputFile, type, ',');
@@ -270,15 +278,14 @@ bool Track::loadTrack(string filename){
 		getline(inputFile, grade, ',');
 		getline(inputFile, temperature, ',');
 		getline(inputFile, height, ',');
-		getline(inputFile, speedLimit, ',');
-		getline(inputFile, suggestedSpeed);
+		getline(inputFile, speedLimit);
 		if(line == "green"){
 			greenLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
-			stod(height), stod(speedLimit), stod(suggestedSpeed)));
+			stod(height), stod(speedLimit), suggSpeed));
 		}
 		if(line == "red"){
 			redLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
-			stod(height), stod(speedLimit), stod(suggestedSpeed)));
+			stod(height), stod(speedLimit), suggSpeed));
 		}
 	}
 	inputFile.close();
@@ -385,5 +392,16 @@ string Track::toStringDetailed(){
 		retString = retString + redLine.at(r)->toStringDetailed();
 	}
 	return retString;
+}
+//Params: None
+//Returns: uint32_t
+//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
+uint32_t Track::encodeData(){
+	uint32_t retUint = 0;
+	
+	
+	
+	
+	return retUint;
 }
 

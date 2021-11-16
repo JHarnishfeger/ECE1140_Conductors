@@ -2,6 +2,8 @@
 #define BLOCK_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <time.h>
 #include <string>
 using std::string;
 
@@ -20,6 +22,7 @@ class Block{
 		string type;
 		string direction;
 		string nextBranches;
+		string stationName;
 		double length;
 		double xCord;
 		double yCord;
@@ -28,7 +31,7 @@ class Block{
 		double temperature;
 		double speedLimit;
 		double suggestedSpeed;
-		//double authority?
+		bool authority;
 		bool railStatus;
 		bool circuitStatus;
 		bool powerStatus;
@@ -39,7 +42,7 @@ class Block{
 	public:
 		//Constructors:
 		Block();
-		Block(int,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool);
+		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool);
 		Block(string,string,string,double,double,double,double,double,double);
 		//Attributes:
 		//passengers
@@ -62,7 +65,9 @@ class Block{
 		//nextBranches
 		void setNextBranches(string);
 		string getNextBranches();
-		//authority?
+		//stationName
+		void setStationName(string);
+		string getStationName();
 		//length
 		void setLength(double);
 		double getLength();
@@ -87,6 +92,10 @@ class Block{
 		//suggestedSpeed
 		void setSuggestedSpeed(double);
 		double getSuggestedSpeed();
+		//authority
+		void setAuthority(bool);
+		bool getAuthority();
+		void toggleAuthority();
 		//railStatus
 		void setRailStatus(bool);
 		bool getRailStatus();

@@ -18,6 +18,7 @@ Block::Block(){
 	type = "rail";
 	direction = "north";
 	nextBranches = "bc";
+	stationName = "";
 	length = 10.0;
 	xCord = 0.0;
 	yCord = 0.0;
@@ -26,6 +27,7 @@ Block::Block(){
 	temperature = 50.0;
 	speedLimit = 45.0;
 	suggestedSpeed = 45.0;
+	authority = false;
 	railStatus = true;
 	circuitStatus = true;
 	powerStatus = true;
@@ -36,8 +38,8 @@ Block::Block(){
 }
 
 //Full input constructor
-Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
-double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN){
+Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, string stationNameIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
+double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN){
 	passengers = passengersIN;
 	id = instanceCounter;
 	instanceCounter++;
@@ -46,6 +48,7 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 	type = typeIN;
 	direction = directionIN;
 	nextBranches = nextBranchesIN;
+	stationName = stationNameIN;
 	length = lengthIN;
 	xCord = xCordIN;
 	yCord = yCordIN;
@@ -54,6 +57,7 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 	temperature = temperatureIN;
 	speedLimit = speedLimitIN;
 	suggestedSpeed = suggestedSpeedIN;
+	authority = authorityIN;
 	railStatus = railStatusIN;
 	circuitStatus = circuitStatusIN;
 	powerStatus = powerStatusIN;
@@ -65,22 +69,28 @@ double speedLimitIN, double suggestedSpeedIN, bool railStatusIN, bool circuitSta
 //Functional constructor
 Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
 double speedLimitIN, double suggestedSpeedIN){
-	if(type == "station"){
-		passengers = rand() % 100 + 1;
-	}else{
-		passengers = 0;
-	}
+	srand(time(NULL));
 	id = instanceCounter;
 	instanceCounter++;
 	line = lineIN;
 	branch = branchesList[branchIndex];
 	type = typeIN;
 	direction = directionIN;
+	if(type.substr(0,2) == "st"){
+		stationName = type.substr(8,type.size()-8);
+		type = type.substr(0,7);
+	}
 	if(type == "switch"){
 		nextBranches = branchesList.substr(branchIndex,2);
 		branchIndex++;
 	}else{
 		nextBranches = "";
+	}
+	if(type == "station"){
+		stationName = 
+		passengers = rand() % 100 + 1;
+	}else{
+		passengers = 0;
 	}
 	length = lengthIN;
 	xCord = xCordTotal;
@@ -99,6 +109,7 @@ double speedLimitIN, double suggestedSpeedIN){
 	temperature = temperatureIN;
 	speedLimit = speedLimitIN;
 	suggestedSpeed = suggestedSpeedIN;
+	authority = false;
 	railStatus = true;
 	circuitStatus = true;
 	powerStatus = true;
@@ -202,6 +213,21 @@ void Block::setNextBranches(string nextBranchesIN){
 //Desc: returns the value of the attribute nextBranches as a string
 string Block::getNextBranches(){
 	return nextBranches;
+}
+
+//stationName ----------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute stationName = to inputted string
+void Block::setStationName(string stationNameIN){
+	stationName = stationNameIN;
+}
+
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute stationNAme as a string
+string Block::getStationName(){
+	return stationName;
 }
 
 //length ---------------------------------------------------------------
@@ -315,6 +341,25 @@ void Block::setSuggestedSpeed(double suggestedSpeedIN){
 double Block::getSuggestedSpeed(){
 	return suggestedSpeed;
 }
+//authority ------------------------------------------------------------
+//Params: bool
+//Returns None
+//Desc: sets the value of the attribute authority = to inputted bool
+void Block::setAuthority(bool authorityIN){
+	authority = authorityIN;
+}
+//Params: None
+//Returns bool
+//Desc: returns the value of the attribute authority as a bool
+bool Block::getAuthority(){
+	return authority;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute authority
+void Block::toggleAuthority(){
+	authority = !(authority);
+}
 
 //railStatus -----------------------------------------------------------
 //Notes: bool true == no rail failures bool false = rail failure
@@ -334,7 +379,7 @@ bool Block::getRailStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute railStatus 
 void Block::toggleRailStatus(){
-	railStatus = ~railStatus;
+	railStatus = !(railStatus);
 }
 
 //circuitStatus --------------------------------------------------------
@@ -355,7 +400,7 @@ bool Block::getCircuitStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute circuitStatus
 void Block::toggleCircuitStatus(){
-	circuitStatus = ~circuitStatus;
+	circuitStatus = !(circuitStatus);
 }
 
 //powerStatus ----------------------------------------------------------
@@ -376,7 +421,7 @@ bool Block::getPowerStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute powerStatus
 void Block::togglePowerStatus(){
-	powerStatus = ~powerStatus;
+	powerStatus = !(powerStatus);
 }
 
 //heaterStatus ---------------------------------------------------------
@@ -397,7 +442,7 @@ bool Block::getHeaterStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute heaterStatus
 void Block::toggleHeaterStatus(){
-	heaterStatus = ~heaterStatus;
+	heaterStatus = !(heaterStatus);
 }
 
 //crossingStatus -------------------------------------------------------
@@ -418,7 +463,7 @@ bool Block::getCrossingStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute crossingStatus
 void Block::toggleCrossingStatus(){
-	crossingStatus = ~crossingStatus;
+	crossingStatus = !(crossingStatus);
 }
 
 //switchStatus ---------------------------------------------------------
@@ -439,7 +484,7 @@ bool Block::getSwitchStatus(){
 //Returns: None
 //Desc: toggles the bool value of the attribute switchStatus
 void Block::toggleSwitchStatus(){
-	switchStatus = ~switchStatus;
+	switchStatus = !(switchStatus);
 }
 //trainPresent ---------------------------------------------------------
 //Notes: bool true = train is present on block false = no train is present
@@ -459,7 +504,7 @@ bool Block::getTrainPresent(){
 //Returns: None
 //Desc: toggles the bool value of the attribute trainPresent
 void Block::toggleTrainPresent(){
-	trainPresent = ~trainPresent;
+	trainPresent = !(trainPresent);
 }
 //Params: None
 //Returns: string
@@ -470,7 +515,8 @@ string Block::toString(){
 	retString = retString + "," + branch;
 	retString = retString + "," + type;
 	retString = retString + ", X: " + std::to_string(xCord);
-	retString = retString + ", Y: " + std::to_string(yCord) + "]\n";
+	retString = retString + ", Y: " + std::to_string(yCord);
+	retString = retString + ", TP: " + std::to_string(trainPresent) + "]\n";
 	return retString;
 }
 //Params: None
@@ -482,7 +528,8 @@ string Block::toStringDetailed(){
 	retString = retString + "," + branch;
 	retString = retString + "," + type;
 	retString = retString + ", X: " + std::to_string(xCord);
-	retString = retString + ", Y: " + std::to_string(yCord) + "]\n";
+	retString = retString + ", Y: " + std::to_string(yCord);
+	retString = retString + ", TP: " + std::to_string(trainPresent) + "]\n";
 	retString = retString + "BLOCK STATS: \n";
 	retString = retString + "\t passengers: " + std::to_string(passengers);
 	retString = retString + "\t direction: " + direction;
