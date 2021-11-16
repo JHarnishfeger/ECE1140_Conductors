@@ -1,4 +1,3 @@
-Sample Track input textfile
 line,type,direction,length,grade,temperature,height,speedLimit,suggestedSpeed
 25
 green,station,north,10,15,45,5,50,50

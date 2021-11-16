@@ -8,6 +8,7 @@
 #include "Block.h"
 using std::vector;
 using std::string;
+using std::fstream;
 
 //Track class
 class Track{
@@ -49,6 +50,7 @@ class Track{
 		bool fixCircuit(string,int);
 		bool fixPower(string,int);
 		string toString();
+		string toStringDetailed();
 		unsigned int encodeData();
 		void decodeData(unsigned int);
 };

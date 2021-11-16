@@ -115,6 +115,9 @@ class Block{
 		void setTrainPresent(bool);
 		bool getTrainPresent();
 		void toggleTrainPresent();
+		//toString
+		string toString();
+		string toStringDetailed();
 };
 //End Block class
 #endif

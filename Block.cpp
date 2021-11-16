@@ -461,5 +461,46 @@ bool Block::getTrainPresent(){
 void Block::toggleTrainPresent(){
 	trainPresent = ~trainPresent;
 }
-
+//Params: None
+//Returns: string
+//Desc: Returns a formatted string representation of the block
+string Block::toString(){
+	string retString = "";
+	retString = retString + "[" + std::to_string(id);
+	retString = retString + "," + branch;
+	retString = retString + "," + type;
+	retString = retString + ", X: " + std::to_string(xCord);
+	retString = retString + ", Y: " + std::to_string(yCord) + "]\n";
+	return retString;
+}
+//Params: None
+//Returns: string
+//Desc: Returns a detailed formatted string representation of the block
+string Block::toStringDetailed(){
+	string retString = "";
+	retString = retString + "[" + std::to_string(id);
+	retString = retString + "," + branch;
+	retString = retString + "," + type;
+	retString = retString + ", X: " + std::to_string(xCord);
+	retString = retString + ", Y: " + std::to_string(yCord) + "]\n";
+	retString = retString + "BLOCK STATS: \n";
+	retString = retString + "\t passengers: " + std::to_string(passengers);
+	retString = retString + "\t direction: " + direction;
+	retString = retString + "\t length: " + std::to_string(length) + "\n";
+	retString = retString + "\t grade: " + std::to_string(grade);
+	retString = retString + "\t height: " + std::to_string(height);
+	retString = retString + "\t temperature: " + std::to_string(temperature) + "\n";
+	retString = retString + "\t speedLimit: " + std::to_string(speedLimit);
+	retString = retString + "\t suggestedSpeed: " + std::to_string(suggestedSpeed);
+	retString = retString + "\n BlOCK STATUS: \n";
+	retString = retString + "\t railStatus: " + std::to_string(railStatus);
+	retString = retString + "\t circuitStatus: " + std::to_string(circuitStatus);
+	retString = retString + "\t powerStatus: " + std::to_string(powerStatus) + "\n";
+	retString = retString + "\t heaterStatus: " + std::to_string(heaterStatus);
+	retString = retString + "\t crossingStatus: " + std::to_string(crossingStatus);
+	retString = retString + "\t switchStatus: " + std::to_string(switchStatus) + "\n";
+	retString = retString + "\t trainPresent: " + std::to_string(trainPresent);
+	retString = retString + "\n\n";
+	return retString;
+}
 

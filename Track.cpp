@@ -252,7 +252,36 @@ vector<Block*> Track::filterBySwitchStatus(string line, bool status){
 //Desc: loads data from a text file into the greenLine and redLine attributes as a vector<Block*>
 //Notes: returns true if successful, false otherwise
 bool Track::loadTrack(string filename){
-	//WIP
+	std::ifstream inputFile;
+	inputFile.open(filename);
+	
+	string header, size, line, type, direction, length, grade, temperature,
+	height, speedLimit, suggestedSpeed;
+	int fileSize = 0;
+	
+	getline(inputFile, header);
+	getline(inputFile, size);
+	fileSize = stoi(size);
+	for(int i = 0; i < fileSize; i++){
+		getline(inputFile, line, ',');
+		getline(inputFile, type, ',');
+		getline(inputFile, direction, ',');
+		getline(inputFile, length, ',');
+		getline(inputFile, grade, ',');
+		getline(inputFile, temperature, ',');
+		getline(inputFile, height, ',');
+		getline(inputFile, speedLimit, ',');
+		getline(inputFile, suggestedSpeed);
+		if(line == "green"){
+			greenLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
+			stod(height), stod(speedLimit), stod(suggestedSpeed)));
+		}
+		if(line == "red"){
+			redLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
+			stod(height), stod(speedLimit), stod(suggestedSpeed)));
+		}
+	}
+	inputFile.close();
 	return false;
 }
 //Params: string,int
@@ -332,6 +361,29 @@ bool Track::fixPower(string line, int id){
 //Desc: returns a formatted string representation of the track
 string Track::toString(){
 	string retString = "";
-	//WIP
+	retString = retString + "GREEN LINE: \n";
+	for(unsigned int g = 0; g < greenLine.size(); g++){
+		retString = retString + greenLine.at(g)->toString();
+	}
+	retString = retString + "\n RED LINE: \n";
+	for(unsigned int r = 0; r < redLine.size(); r++){
+		retString = retString + redLine.at(r)->toString();
+	}
 	return retString;
 }
+//Params: None
+//Returns: string
+//Desc: returns a detailed formatted string representation of the track
+string Track::toStringDetailed(){
+	string retString = "";
+	retString = retString + "GREEN LINE: \n";
+	for(unsigned int g = 0; g < greenLine.size(); g++){
+		retString = retString + greenLine.at(g)->toStringDetailed();
+	}
+	retString = retString + "\n RED LINE: \n";
+	for(unsigned int r = 0; r < redLine.size(); r++){
+		retString = retString + redLine.at(r)->toStringDetailed();
+	}
+	return retString;
+}
+
