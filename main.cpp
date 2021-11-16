@@ -1,11 +1,15 @@
-#include "swtcinterface.h"
+#include "train.h"
 
 #include <QApplication>
+#include <chrono>
+#include <thread>
 
 int main(int argc, char *argv[])
 {
+//    using namespace std::this_thread;
+//    using namepsace std::chrono;
+
     QApplication a(argc, argv);
-    SWTCInterface w;
-    w.show();
+
     return a.exec();
 }
