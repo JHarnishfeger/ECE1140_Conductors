@@ -9,4 +9,6 @@ struct WayStruct
     double suggestedSpeed;
     std::vector<Authority> auth;
     std::vector<Block> sector;
-}
+};
+
+#endif

@@ -20,6 +20,7 @@ public:
     void initialize(Wayside&,int);
     void fillLists();
     Wayside *way;
+    void update();
 private slots:
     void on_SwitchList_itemClicked(QListWidgetItem *item);
 

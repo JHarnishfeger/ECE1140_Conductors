@@ -2,17 +2,15 @@
 
 SWTrackController::SWTrackController()
 {
-    suggestedSpeed = 0;
-    authority = 0;
+    //suggestedSpeed = 0;
     manualMode = 0;
 }
 
-void SWTrackController::initialize(vector<Block> red, vector<Block> green, double s, double a, bool m)
+void SWTrackController::initialize(vector<Block> red, vector<Block> green, bool m)
 {
     redLine = red;
     greenLine = green;
-    setSuggestedSpeed(s);
-    setAuthority(a);
+    //setSuggestedSpeed(s);
     setMode(m);
     for(int i=0;i<redLine.size();i++)
     {
@@ -20,7 +18,7 @@ void SWTrackController::initialize(vector<Block> red, vector<Block> green, doubl
             swich.push_back(redLine[i]);
         else if(redLine[i].getType()=="crossing")
             crossing.push_back(redLine[i]);
-        else if(redLine[i].getBrokenRail())
+        else if(redLine[i].getRailStatus())
             brokenRail.push_back(redLine[i]);
     }
     for(int i=0;i<greenLine.size();i++)
@@ -29,18 +27,18 @@ void SWTrackController::initialize(vector<Block> red, vector<Block> green, doubl
             swich.push_back(greenLine[i]);
         else if(greenLine[i].getType()=="crossing")
             crossing.push_back(greenLine[i]);
-        else if(greenLine[i].getBrokenRail())
+        else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
     }
+    wayPtr = new vector<WayStruct>;
 }
 
-SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int num, double s, double a, bool m)
+SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int num, bool m)
 {
     redLine = red;
     greenLine = green;
     createWaysides(num);
-    setSuggestedSpeed(s);
-    setAuthority(a);
+    //setSuggestedSpeed(s);
     setMode(m);
     for(int i=0;i<redLine.size();i++)
     {
@@ -48,7 +46,7 @@ SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int
             swich.push_back(redLine[i]);
         else if(redLine[i].getType()=="crossing")
             crossing.push_back(redLine[i]);
-        else if(redLine[i].getBrokenRail())
+        else if(redLine[i].getRailStatus())
             brokenRail.push_back(redLine[i]);
     }
     for(int i=0;i<greenLine.size();i++)
@@ -57,9 +55,10 @@ SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int
             swich.push_back(greenLine[i]);
         else if(greenLine[i].getType()=="crossing")
             crossing.push_back(greenLine[i]);
-        else if(greenLine[i].getBrokenRail())
+        else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
     }
+    wayPtr = new vector<WayStruct>;
 }
 
 void SWTrackController::sanityCheck()
@@ -77,14 +76,23 @@ void SWTrackController::sanityCheck()
         for(int j=0;j<waysides[i].crossing.size();j++)
             std::cout << waysides[i].crossing[j].getId() << ", ";
         std::cout << std::endl << "BROKEN RAILS: " << waysides[i].getBrokenRails().size() << std::endl;
-        std::cout << "SPEED: " << waysides[i].getSuggestedSpeed() << std::endl;
-        std::cout << "AUTHORITY: " << waysides[i].getAuthority() << std::endl << std::endl;
+        //std::cout << "SPEED: " << waysides[i].getSuggestedSpeed() << std::endl;
+        //std::cout << "AUTHORITY: " << waysides[i].getAuthority() << std::endl << std::endl;
     }
 }
 
 vector<Block> SWTrackController::getHWTrack()
 {
     return hwTrack;
+}
+
+void SWTrackController::update()
+{
+    for(int i=0;i<waysides.size();i++)
+    {
+        waysides[i].update();
+        (*wayPtr)[i] = waysides[i].wayStr;
+    }
 }
 
 void SWTrackController::plcCheck()
@@ -108,43 +116,43 @@ void SWTrackController::plcCheck()
                         break;
                     if(check)
                     {
-                        if(redLine[j].getSwitch()!=waysides[i].sector[j-displace].getSwitch())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+                        if(redLine[j].getSwitchStatus()!=waysides[i].sector[j-displace].getSwitchStatus())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
                         {
                             alerts.push_back("SWITCH " + std::to_string(redLine[j].getId()) + " TOGGLED");
-                            redLine[j].setSwitch(waysides[i].sector[j-displace].getSwitch());
+                            redLine[j].setSwitchStatus(waysides[i].sector[j-displace].getSwitchStatus());
                             for(int k=0;k<swich.size();k++) //Update switch vector
                             {
                                 if(swich[k].getId()==redLine[j].getId()&&swich[k].getLine()==redLine[j].getLine())
                                 {
-                                    swich[k].setSwitch(redLine[j].getSwitch());
+                                    swich[k].setSwitchStatus(redLine[j].getSwitchStatus());
                                     break;
                                 }
                             }
 
                         }
-                        else if(redLine[j].getCrossing()!=waysides[i].sector[j-displace].getCrossing())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
+                        else if(redLine[j].getCrossingStatus()!=waysides[i].sector[j-displace].getCrossingStatus())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
                         {
                             alerts.push_back("CROSSING " + std::to_string(redLine[j].getId()) + " TOGGLED");
-                            redLine[j].setCrossing(waysides[i].sector[j-displace].getCrossing());
+                            redLine[j].setCrossingStatus(waysides[i].sector[j-displace].getCrossingStatus());
                             for(int k=0;k<crossing.size();k++) //Update crossing vector
                             {
                                 if(crossing[k].getId()==redLine[j].getId()&&crossing[k].getLine()==redLine[j].getLine())
                                 {
-                                    crossing[k].setCrossing(redLine[j].getCrossing());
+                                    crossing[k].setCrossingStatus(redLine[j].getCrossingStatus());
                                     break;
                                 }
                             }
                         }
-                        else if(redLine[j].getBrokenRail()!=waysides[i].sector[j-displace].getBrokenRail())//IF RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
+                        else if(redLine[j].getRailStatus()!=waysides[i].sector[j-displace].getRailStatus())//IF RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
                         {
                             alerts.push_back("RAIL " + std::to_string(redLine[j].getId()) + " BROKEN");
-                            redLine[j].setBrokenRail(waysides[i].sector[j-displace].getBrokenRail());
+                            redLine[j].setRailStatus(waysides[i].sector[j-displace].getRailStatus());
                             bool found=0;
                             for(int k=0;k<brokenRail.size();k++)
                             {
                                 if(brokenRail[k].getId()==redLine[j].getId()&&brokenRail[k].getLine()==redLine[j].getLine())
                                 {
-                                    brokenRail[k].setBrokenRail(redLine[j].getBrokenRail());
+                                    brokenRail[k].setRailStatus(redLine[j].getRailStatus());
                                     found = 1;
                                 }
                             }
@@ -167,42 +175,42 @@ void SWTrackController::plcCheck()
                         break;
                     if(check)
                     {
-                        if(greenLine[j].getSwitch()!=waysides[i].sector[j-displace].getSwitch())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+                        if(greenLine[j].getSwitchStatus()!=waysides[i].sector[j-displace].getSwitchStatus())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
                         {
                             alerts.push_back("SWITCH " + std::to_string(greenLine[j].getId()) + " TOGGLED");
-                            greenLine[j].setSwitch(waysides[i].sector[j-displace].getSwitch());
+                            greenLine[j].setSwitchStatus(waysides[i].sector[j-displace].getSwitchStatus());
                             for(int k=0;k<swich.size();k++) //Update switch vector
                             {
                                 if(swich[k].getId()==greenLine[j].getId()&&swich[k].getLine()==greenLine[j].getLine())
                                 {
-                                    swich[k].setSwitch(greenLine[j].getSwitch());
+                                    swich[k].setSwitchStatus(greenLine[j].getSwitchStatus());
                                     break;
                                 }
                             }
                         }
-                        if(greenLine[j].getCrossing()!=waysides[i].sector[j-displace].getCrossing())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
+                        if(greenLine[j].getCrossingStatus()!=waysides[i].sector[j-displace].getCrossingStatus())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
                         {
                             alerts.push_back("CROSSING " + std::to_string(greenLine[j].getId()) + " TOGGLED");
-                            greenLine[j].setCrossing(waysides[i].sector[j-displace].getCrossing());
+                            greenLine[j].setCrossingStatus(waysides[i].sector[j-displace].getCrossingStatus());
                             for(int k=0;k<crossing.size();k++) //Update crossing vector
                             {
                                 if(crossing[k].getId()==greenLine[j].getId()&&crossing[k].getLine()==greenLine[j].getLine())
                                 {
-                                    crossing[k].setCrossing(greenLine[j].getCrossing());
+                                    crossing[k].setCrossingStatus(greenLine[j].getCrossingStatus());
                                     break;
                                 }
                             }
                         }
-                        if(greenLine[j].getBrokenRail()!=waysides[i].sector[j-displace].getBrokenRail())
+                        if(greenLine[j].getRailStatus()!=waysides[i].sector[j-displace].getRailStatus())
                         {
                             alerts.push_back("RAIL " + std::to_string(greenLine[j].getId()) + " BROKEN");
-                            greenLine[j].setBrokenRail(waysides[i].sector[j-displace].getBrokenRail());
+                            greenLine[j].setRailStatus(waysides[i].sector[j-displace].getRailStatus());
                             bool found=0;
                             for(int k=0;k<brokenRail.size();k++) //Update broken rail vector
                             {
                                 if(brokenRail[k].getId()==greenLine[j].getId()&&brokenRail[k].getLine()==greenLine[j].getLine())
                                 {
-                                    brokenRail[k].setBrokenRail(greenLine[j].getBrokenRail());
+                                    brokenRail[k].setRailStatus(greenLine[j].getRailStatus());
                                     found = 1;
                                 }
                             }
@@ -235,43 +243,43 @@ void SWTrackController::updateFromWaysides()
                     break;
                 if(check)
                 {
-                    if(redLine[j].getSwitch()!=waysides[i].sector[j-displace].getSwitch())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+                    if(redLine[j].getSwitchStatus()!=waysides[i].sector[j-displace].getSwitchStatus())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
                     {
                         alerts.push_back("SWITCH " + std::to_string(redLine[j].getId()) + " TOGGLED");
-                        redLine[j].setSwitch(waysides[i].sector[j-displace].getSwitch());
+                        redLine[j].setSwitchStatus(waysides[i].sector[j-displace].getSwitchStatus());
                         for(int k=0;k<swich.size();k++) //Update switch vector
                         {
                             if(swich[k].getId()==redLine[j].getId()&&swich[k].getLine()==redLine[j].getLine())
                             {
-                                swich[k].setSwitch(redLine[j].getSwitch());
+                                swich[k].setSwitchStatus(redLine[j].getSwitchStatus());
                                 break;
                             }
                         }
 
                     }
-                    else if(redLine[j].getCrossing()!=waysides[i].sector[j-displace].getCrossing())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
+                    else if(redLine[j].getCrossingStatus()!=waysides[i].sector[j-displace].getCrossingStatus())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
                     {
                         alerts.push_back("CROSSING " + std::to_string(redLine[j].getId()) + " TOGGLED");
-                        redLine[j].setCrossing(waysides[i].sector[j-displace].getCrossing());
+                        redLine[j].setCrossingStatus(waysides[i].sector[j-displace].getCrossingStatus());
                         for(int k=0;k<crossing.size();k++) //Update crossing vector
                         {
                             if(crossing[k].getId()==redLine[j].getId()&&crossing[k].getLine()==redLine[j].getLine())
                             {
-                                crossing[k].setCrossing(redLine[j].getCrossing());
+                                crossing[k].setCrossingStatus(redLine[j].getCrossingStatus());
                                 break;
                             }
                         }
                     }
-                    else if(redLine[j].getBrokenRail()!=waysides[i].sector[j-displace].getBrokenRail())//IF RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
+                    else if(redLine[j].getRailStatus()!=waysides[i].sector[j-displace].getRailStatus())//IF RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
                     {
                         alerts.push_back("RAIL " + std::to_string(redLine[j].getId()) + " BROKEN");
-                        redLine[j].setBrokenRail(waysides[i].sector[j-displace].getBrokenRail());
+                        redLine[j].setRailStatus(waysides[i].sector[j-displace].getRailStatus());
                         bool found=0;
                         for(int k=0;k<brokenRail.size();k++)
                         {
                             if(brokenRail[k].getId()==redLine[j].getId()&&brokenRail[k].getLine()==redLine[j].getLine())
                             {
-                                brokenRail[k].setBrokenRail(redLine[j].getBrokenRail());
+                                brokenRail[k].setRailStatus(redLine[j].getRailStatus());
                                 found = 1;
                             }
                         }
@@ -294,42 +302,42 @@ void SWTrackController::updateFromWaysides()
                     break;
                 if(check)
                 {
-                    if(greenLine[j].getSwitch()!=waysides[i].sector[j-displace].getSwitch())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+                    if(greenLine[j].getSwitchStatus()!=waysides[i].sector[j-displace].getSwitchStatus())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
                     {
                         alerts.push_back("SWITCH " + std::to_string(greenLine[j].getId()) + " TOGGLED");
-                        greenLine[j].setSwitch(waysides[i].sector[j-displace].getSwitch());
+                        greenLine[j].setSwitchStatus(waysides[i].sector[j-displace].getSwitchStatus());
                         for(int k=0;k<swich.size();k++) //Update switch vector
                         {
                             if(swich[k].getId()==greenLine[j].getId()&&swich[k].getLine()==greenLine[j].getLine())
                             {
-                                swich[k].setSwitch(greenLine[j].getSwitch());
+                                swich[k].setSwitchStatus(greenLine[j].getSwitchStatus());
                                 break;
                             }
                         }
                     }
-                    if(greenLine[j].getCrossing()!=waysides[i].sector[j-displace].getCrossing())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
+                    if(greenLine[j].getCrossingStatus()!=waysides[i].sector[j-displace].getCrossingStatus())//IF CROSSING IS DIFFERENT THAN LOCAL VALUE
                     {
                         alerts.push_back("CROSSING " + std::to_string(greenLine[j].getId()) + " TOGGLED");
-                        greenLine[j].setCrossing(waysides[i].sector[j-displace].getCrossing());
+                        greenLine[j].setCrossingStatus(waysides[i].sector[j-displace].getCrossingStatus());
                         for(int k=0;k<crossing.size();k++) //Update crossing vector
                         {
                             if(crossing[k].getId()==greenLine[j].getId()&&crossing[k].getLine()==greenLine[j].getLine())
                             {
-                                crossing[k].setCrossing(greenLine[j].getCrossing());
+                                crossing[k].setCrossingStatus(greenLine[j].getCrossingStatus());
                                 break;
                             }
                         }
                     }
-                    if(greenLine[j].getBrokenRail()!=waysides[i].sector[j-displace].getBrokenRail())
+                    if(greenLine[j].getRailStatus()!=waysides[i].sector[j-displace].getRailStatus())
                     {
                         alerts.push_back("RAIL " + std::to_string(greenLine[j].getId()) + " BROKEN");
-                        greenLine[j].setBrokenRail(waysides[i].sector[j-displace].getBrokenRail());
+                        greenLine[j].setRailStatus(waysides[i].sector[j-displace].getRailStatus());
                         bool found=0;
                         for(int k=0;k<brokenRail.size();k++) //Update broken rail vector
                         {
                             if(brokenRail[k].getId()==greenLine[j].getId()&&brokenRail[k].getLine()==greenLine[j].getLine())
                             {
-                                brokenRail[k].setBrokenRail(greenLine[j].getBrokenRail());
+                                brokenRail[k].setRailStatus(greenLine[j].getRailStatus());
                                 found = 1;
                             }
                         }
@@ -339,18 +347,18 @@ void SWTrackController::updateFromWaysides()
                 }
             }
         }
-    wayPtr = &waysides;
+    //wayPtr = &waysides;
 }
 
 void SWTrackController::updateWaysides()
 {
     for(int i=0;i<waysides.size();i++)
     {
-        waysides[i].setSuggestedSpeed(suggestedSpeed);
-        waysides[i].setAuthority(authority);
+        //waysides[i].setSuggestedSpeed(suggestedSpeed);
+        //waysides[i].setAuthority(authority);
         waysides[i].setMode(manualMode);
     }
-    wayPtr = &waysides;
+    //wayPtr = &waysides;
     getTrackOccupancy();
 }
 
@@ -361,6 +369,7 @@ void SWTrackController::createWaysides(int waysideNum)
     int trackSize = redLine.size() + greenLine.size(); //Finding most effective way to set waysides
     int redWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(redLine.size()) / trackSize);
     int greenWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(greenLine.size()) / trackSize);
+    std::cout << "RED: " << redWaysideNum << ", GREEN: " << greenWaysideNum << std::endl;
     while(waysideNum>(redWaysideNum+greenWaysideNum))
     {
         if(redLine.size()>greenLine.size())
@@ -375,6 +384,7 @@ void SWTrackController::createWaysides(int waysideNum)
         else
             greenWaysideNum--;
     }
+    std::cout << "RED: " << redWaysideNum << ", GREEN: " << greenWaysideNum << std::endl;
     waysideNum = redWaysideNum + greenWaysideNum;
     std::cout << "Wayside Number Calculated" << std::endl;
 
@@ -382,42 +392,65 @@ void SWTrackController::createWaysides(int waysideNum)
     int greenWaysideSectorSize = greenLine.size() / greenWaysideNum;
 
     int nextSector = redWaysideSectorSize;
+    if(nextSector>redLine.size()-1)
+        nextSector = redLine.size()-1;
     vector<Block> sector;
     for(int i=0;i<redLine.size();i++)
     {
-        if(i<nextSector&&i!=redLine.size()-1)
+        //std::cout << i << std::endl;
+        if(i<nextSector)
         {
             sector.push_back(redLine[i]);
         }
         else
         {
+            //std::cout << "Pushing" << std::endl;
             sector.push_back(redLine[i]);
             Wayside newOne(sector,0);
             waysides.push_back(newOne);
             waysides[i].setID(++id);
             sector.clear();
             nextSector += redWaysideSectorSize;
+            if(nextSector>redLine.size()-1)
+                nextSector = redLine.size()-1;
         }
     }
     std::cout << "Redline Waysides Done" << std::endl;
     nextSector = greenWaysideSectorSize;
+    if(nextSector>greenLine.size()-1)
+        nextSector = greenLine.size()-1;
     for(int i=0;i<greenLine.size();i++)
     {
-        if(i<nextSector&&i!=greenLine.size()-1)
+        //std::cout << i << std::endl;
+        if(i<nextSector)
         {
             sector.push_back(greenLine[i]);
         }
         else
         {
+            //std::cout << "Pushing" << std::endl;
             sector.push_back(greenLine[i]);
             Wayside newOne(sector,1);
             waysides.push_back(newOne);
             waysides[i].setID(++id);
             sector.clear();
             nextSector += greenWaysideSectorSize;
+            if(nextSector>greenLine.size()-1)
+                nextSector = greenLine.size()-1;
         }
     }
     std::cout << "Greenline Waysides Done" << std::endl;
+    std::cout << "Waysides: " << waysides.size() << std::endl;
+    for(int i=0;i<waysides.size();i++)
+    {
+        //std::cout << i << std::endl;
+        waysides[i].wayStrInit();
+        //std::cout << waysides[i].wayStr.suggestedSpeed << std::endl;
+        //std::cout << waysides[i].wayStr.id << std::endl;
+        //std::cout << waysides[i].wayStr.sector.size() << std::endl;
+        //std::cout << waysides[i].wayStr.auth.size() << std::endl;
+        wayPtr->push_back(waysides[i].wayStr);
+    }
     /*for(int i=0;i<waysides.size();i++)
     {
         std::cout << std::endl << "SANITY CHECK" << std::endl;
@@ -443,7 +476,7 @@ vector<Block> SWTrackController::setHardwareWayside(int id)
     return waysides[id-1].sector;
 }
 
-double SWTrackController::getSuggestedSpeed()
+/*double SWTrackController::getSuggestedSpeed()
 {
     return suggestedSpeed;
 }
@@ -464,9 +497,9 @@ void SWTrackController::setCommandedSpeed(double sp)
 {
     commandedSpeed = sp;
     updateWaysides();
-}
+}*/
 
-double SWTrackController::getAuthority()
+/*double SWTrackController::getAuthority()
 {
     return authority;
 }
@@ -475,7 +508,7 @@ void SWTrackController::setAuthority(double au)
 {
     authority = au;
     updateWaysides();
-}
+}*/
 
 bool SWTrackController::getMode()
 {
@@ -630,7 +663,7 @@ bool SWTrackController::switchTrack(Block swt)
                     for(int k=0;k<swich.size();k++)
                     {
                         if(swich[k].getId()==swt.getId()&&swich[k].getLine()==swt.getLine())
-                            swich[k].setSwitch(waysides[i].sector[j].getSwitch());
+                            swich[k].setSwitchStatus(waysides[i].sector[j].getSwitchStatus());
                     }
                     i = waysides.size();
                     found = 1;
@@ -660,7 +693,7 @@ bool SWTrackController::toggleCrossing(Block crs)
                     for(int k=0;k<crossing.size();k++)
                     {
                         if(crossing[k].getId()==crs.getId()&&crossing[k].getLine()==crs.getLine())
-                            crossing[k].setCrossing(waysides[i].sector[j].getCrossing());
+                            crossing[k].setCrossingStatus(waysides[i].sector[j].getCrossingStatus());
                     }
                     i = waysides.size();
                     found = 1;
@@ -690,8 +723,8 @@ void SWTrackController::getTrackOccupancy()
 
 void SWTrackController::testValues()
 {
-    std::cout << "Speed: " << suggestedSpeed << std::endl;
-    std::cout << "Authority: " << authority << std::endl;
+    //std::cout << "Speed: " << suggestedSpeed << std::endl;
+    //std::cout << "Authority: " << authority << std::endl;
     std::cout << "Mode: " << manualMode << std::endl;
     std::cout << "# of Waysides: " << waysides.size() << std::endl;
     for(int i=0;i<waysides.size();i++)
@@ -706,14 +739,14 @@ void SWTrackController::testValues()
     std::cout << std::endl << std::endl << "RED LINE TRAIN POSITIONS: ";
     for(int i=0;i<trackOccupancy.size();i++)
     {
-        if(trackOccupancy[i].getLine()=='r')
+        if(trackOccupancy[i].getLine()=="r")
             std::cout << trackOccupancy[i].getId() << ", ";
     }
 
     std::cout << std::endl << "GREEN LINE TRAIN POSITIONS: ";
     for(int i=0;i<trackOccupancy.size();i++)
     {
-        if(trackOccupancy[i].getLine()=='g')
+        if(trackOccupancy[i].getLine()=="g")
             std::cout << trackOccupancy[i].getId() << ", ";
     }
 
@@ -722,7 +755,7 @@ void SWTrackController::testValues()
     {
         for(int j=0;j<waysides[i].swich.size();j++)
         {
-            std::cout << waysides[i].swich[j].getId() << "(" << waysides[i].swich[j].getSwitch() << "), ";
+            std::cout << waysides[i].swich[j].getId() << "(" << waysides[i].swich[j].getSwitchStatus() << "), ";
         }
     }
 
@@ -731,7 +764,7 @@ void SWTrackController::testValues()
     {
         for(int j=0;j<waysides[i].crossing.size();j++)
         {
-            std::cout << waysides[i].crossing[j].getId() << "(" << waysides[i].crossing[j].getCrossing() << "), ";
+            std::cout << waysides[i].crossing[j].getId() << "(" << waysides[i].crossing[j].getCrossingStatus() << "), ";
         }
     }
 
@@ -748,25 +781,6 @@ void SWTrackController::testValues()
         {
             std::cout << waysides[j].getBrokenRails()[i].getId() << ", ";
         }
-
-    std::cout << std::endl << std::endl << "--WAYPTR--" << std::endl;
-    std::cout << std::endl << std::endl << "SWITCHES: ";
-    for(int i=0;i<wayPtr->size();i++)
-    {
-        for(int j=0;j<(*wayPtr)[i].swich.size();j++)
-        {
-            std::cout << (*wayPtr)[i].swich[j].getId() << "(" << (*wayPtr)[i].swich[j].getSwitch() << "), ";
-        }
-    }
-
-    std::cout << std::endl << "CROSSINGS: ";
-    for(int i=0;i<wayPtr->size();i++)
-    {
-        for(int j=0;j<(*wayPtr)[i].crossing.size();j++)
-        {
-            std::cout << (*wayPtr)[i].crossing[j].getId() << "(" << (*wayPtr)[i].crossing[j].getCrossing() << "), ";
-        }
-    }
 
     std::cout << std::endl << std::endl;
 }

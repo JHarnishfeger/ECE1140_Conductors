@@ -9,29 +9,31 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     hwMade = 0;
     selected = 0;
     ui->setupUi(this);
-    Block a('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block b('g','a',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block c('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block d('g','a',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,true,false,false,false,false); //Occ
-    Block e('g','a',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block f('g','a',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block g('g','b',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block h('g','b',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block i('g','b',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block j('g','b',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block k('g','b',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block l('g','b',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,true,false,false,false,false);
-    Block m('g','b',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block n('r','c',"rail",2.0,true,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block o('r','c',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block p('r','c',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block q('r','c',"crossing",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block r('r','c',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block s('r','c',"switch",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
-    Block t('r','c',"rail",2.0,false,5.0,25.0,30.0,'e',32.0,0,1.0,false,false,false,false,false);
+    Block a(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block b(10,"g","a","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block c(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block d(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block e(10,"g","b","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block f(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block g(10,"g","b","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block h(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block i(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block j(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block k(10,"g","c","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block l(10,"g","d","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block m(10,"g","d","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block n(10,"r","d","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block o(10,"r","d","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block p(10,"r","e","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block q(10,"r","e","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block r(10,"r","e","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block s(10,"r","f","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+    Block t(10,"r","f","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+
+
     vector<Block> green{a,b,c,d,e,f,g,h,i,j,k,l,m};
     vector<Block> red{n,o,p,q,r,s,t};
-    tc.initialize(red,green,0,0,0);
+    tc.initialize(red,green,0);
     //fillLists();
 }
 
