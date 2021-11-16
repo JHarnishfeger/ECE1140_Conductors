@@ -33,10 +33,9 @@ class Block{
 	bool powerFailure;
     bool crossingActivated;
     bool switchPosition;
-    bool closedForMaintenence;
   public:
     Block();
-    Block(char, char, string, double, bool, double, double, double, char, double, int, double, bool, bool, bool, bool, bool, bool);
+    Block(char, char, string, double, bool, double, double, double, char, double, int, double, bool, bool, bool, bool, bool);
 	int getCount() const;
     void setLine(char);
     char getLine();
@@ -74,8 +73,6 @@ class Block{
     bool getCrossing();
     void setSwitch(bool);
     bool getSwitch();
-    bool getClosedForMaintenence();
-    void setClosedForMaintenece(bool c);
 	void toConsole();
 };
 // End Block class

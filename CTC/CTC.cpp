@@ -62,7 +62,7 @@ void CTC::update(int current_time){
 void CTC::setTrackMaintenence(int blockId, bool isBroken){
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->setClosedForMaintenece(isBroken);
+        return waysideManager.setBlockClosedForMaintenence(blockId, isBroken);
     }
 }
 
@@ -99,9 +99,20 @@ void CTC::dispatchTrain(CTCSchedule schedule){
     //Get the route
     
     //Right now, all trains come from yard
+    int destinationBlock = 40; //A block id in Branch I
     std::list<std::string> route = track.getBranchRoute("YARD", "I");
     
     //Send Authorities to each wayside queue
+    std::list<Authority> authorities;
+    for(auto itr = route.begin(); itr != route.end(); itr++){
+        if(*itr == route.back()){
+            authorities.push_back(Authority{*itr, destinationBlock});
+        }else{
+            authorities.push_back(Authority{*itr, -1});
+        }
+    }
+
+    waysideManager.addNewRouteToQueues(authorities);
 }
 
 /*
@@ -119,7 +130,7 @@ double CTC::getSuggestedSpeed(){
 bool CTC::getTrackMaintenence(int blockId){
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->getClosedForMaintenence();
+        return waysideManager.getBlockClosedForMaintenence(blockId);
     }else{
         return false;
     }

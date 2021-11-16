@@ -35,6 +35,8 @@ set(PROJECT_SOURCES
         WayStruct.h
         WaysideManager.h
         WaysideManager.cpp
+        string_utils.cpp
+        string_utils.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

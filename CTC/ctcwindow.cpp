@@ -22,32 +22,24 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
         ui->comboBox->addItem("Switch on Block " + QString::number(s), s);
     }
 
-    //Graphics setup
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setScene(scene);
+    trackMap = new TrackMap(this->ui->graphicsView);
+    ui->graphicsView->setScene(trackMap->getScene());
 
-    QBrush greenBrush(Qt::green);
-    QBrush yellowBrush(Qt::yellow);
-    QPen blackPen(Qt::black);
-    blackPen.setWidth(2);
-
-    testRect = new QGraphicsRectItem*[26];
-    for(int i = 0; i < 26; i++){
-        testRect[i] = scene->addRect(-250+10*i, 0, 10, 10, blackPen, greenBrush);
-    }
-    testText = scene->addText("This view will display a graphical map of the track.\nEach box represents a track block.\nColors will represent various block states.");
-    testText->setPos(-250, -75);
+    std::list<std::string> fakeOccupiedList;
+    fakeOccupiedList.push_back("F");
+    fakeOccupiedList.push_back("I");
+    fakeOccupiedList.push_back("Q");
+    trackMap->setOccupiedBranches(fakeOccupiedList);
 }
 
 CTCWindow::~CTCWindow()
 {
-    delete ui;
-    delete[] testRect;
-    delete testText;
+    delete trackMap;
 }
 
 void CTCWindow::update(){
     ctc.update(0);
+    trackMap->setOccupiedBranches(ctc.getBranchesWithTrainsPresent());
 }
 
 void CTCWindow::on_button_chooseSchedule_clicked()
@@ -55,9 +47,8 @@ void CTCWindow::on_button_chooseSchedule_clicked()
     QString filepath = QFileDialog::getOpenFileName(this, "Open Schedule File");
 
     std::string s = "Opening Schedule file " + filepath.toStdString() + "\n";
-    for(int i = 0; i < 10; i++){
-        //ctc.addSchedule(CTCSchedule(i, i, (double)i));
-    }
+    ctc.loadSchedule(filepath.toStdString());
+
     s += ctc.displaySchedule();
     ui->textBrowser_schedule->setText(QString::fromStdString(s));
 }

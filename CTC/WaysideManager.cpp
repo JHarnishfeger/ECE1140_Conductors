@@ -48,3 +48,52 @@ std::list<std::string> WaysideManager::getBranchesWithTrainsPresent(){
     }
     return list;
 }
+
+bool WaysideManager::getBlockClosedForMaintenence(int blockId){
+    for(int i : greenMaintenence){
+        if(blockId == i){
+            return true;
+        }
+    }
+    return false;
+}
+
+void WaysideManager::setBlockClosedForMaintenence(int blockId, bool maintenence){
+    if(maintenence){
+        if(!getBlockClosedForMaintenence(blockId)){
+            //Add to list
+            greenMaintenence.push_back(blockId);
+        }
+    }else{
+        if(getBlockClosedForMaintenence(blockId)){
+            //Remove from list
+            for(auto itr = greenMaintenence.begin(); itr != greenMaintenence.end(); ++itr){
+                if(*itr == blockId){
+                    greenMaintenence.erase(itr);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void WaysideManager::setAuthority(Authority authority){
+    for(WayStruct* w : waysides){
+        bool includedInbranch = false;
+        std::vector<Block>& sector = w->sector;
+        for(int i = 0; i < sector.size(); i++){
+            if(track->getBranchOfBlock(sector[i].getId()) == authority.branch){
+                includedInbranch = true;
+            }
+        }
+        if(includedInbranch){
+            w->auth.push_back(authority);
+        }
+    }
+}
+
+void WaysideManager::addNewRouteToQueues(std::list<Authority> route){
+    for(Authority authority : route){
+        setAuthority(authority);
+    }
+}

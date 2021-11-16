@@ -30,6 +30,12 @@ class WaysideManager{
 		
 		//Add the authorities for a new route to the queue
 		void addNewRouteToQueues(std::list<Authority> route);
+
+        bool getBlockClosedForMaintenence(int blockId);
+
+        void setBlockClosedForMaintenence(int blockId, bool maintenence);
+
+        void setAuthority(Authority authority);
 	
 	private:
 	
@@ -43,6 +49,9 @@ class WaysideManager{
 		std::unordered_map<int, std::queue<Authority>> authorityQueues;
 
         TrackNodes* track;
+
+        std::list<int> redMaintenence; //Blocks closed for maintenence on the red line
+        std::list<int> greenMaintenence; //Blocks closed for maintenence on the green line
 };
 
 #endif

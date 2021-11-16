@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "CTC.hpp"
 #include <QGraphicsScene>
+#include "TrackMap.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CTCWindow; }
@@ -41,8 +42,6 @@ private:
     Ui::CTCWindow *ui;
     CTC ctc;
 
-    QGraphicsScene *scene;
-    QGraphicsRectItem **testRect; //This is just to test the graphics for now
-    QGraphicsTextItem *testText; //This is just to test the graphics for now
+    TrackMap* trackMap;
 };
 #endif // CTCWINDOW_H

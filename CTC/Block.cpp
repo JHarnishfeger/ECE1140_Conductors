@@ -26,8 +26,7 @@ Block::Block(){
 	brokenCircuit = false;
 	powerFailure = false;
 	crossingActivated = false;
-	switchPosition = false;
-	closedForMaintenence = false;
+    switchPosition = false;
 }
 
 //Method Block(char line, char branch, string type, double length, bool trainPresent, double grade, double suggestedSpeed, double speedLimit, char direction, double temperature, int beacons, double height, bool brokenRail, bool brokenCircuit, bool powerFailure)
@@ -35,7 +34,7 @@ Block::Block(){
 //Returns: None
 //Desc: creates a Block with inputted values;
 Block::Block(char lineIN, char branchIN, string typeIN, double lengthIN, bool trainPresentIN, double gradeIN, double suggestedSpeedIN, double speedLimitIN, char directionIN,
-double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool brokenCircuitIN, bool powerFailureIN, bool crossingActivatedIN, bool switchPositionIN, bool closedForMaintenenceIN){
+double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool brokenCircuitIN, bool powerFailureIN, bool crossingActivatedIN, bool switchPositionIN){
 	line = lineIN;
 	branch = branchIN;
 	type = typeIN;
@@ -54,8 +53,7 @@ double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool br
 	brokenCircuit = brokenCircuitIN;
 	powerFailure = powerFailureIN;
 	crossingActivated = crossingActivatedIN;
-	switchPosition = switchPositionIN;
-    closedForMaintenence = closedForMaintenenceIN;
+    switchPosition = switchPositionIN;
 }
 
 //Method: getCount()
@@ -348,14 +346,6 @@ void Block::setSwitch(bool s){
 
 bool Block::getSwitch(){
 	return switchPosition;
-}
-
-bool Block::getClosedForMaintenence(){
-	return closedForMaintenence;
-}
-
-void Block::setClosedForMaintenece(bool c){
-	closedForMaintenence = c;
 }
 
 //Method: toConsole()
