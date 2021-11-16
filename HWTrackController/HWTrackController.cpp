@@ -1,11 +1,17 @@
 #include"HWTrackController.h"
 
-HWTrackController::HWTrackController(vector<Block> as){
+HWTrackController::HWTrackController(){
+  WayStruPtr = new WayStruct;
+}
+void HWTrackController::initializeHW(vector<Block> as){
   setBlocks(as);
   creatWayside();
 }
 void HWTrackController::setBlocks(vector<Block> assiTrack){
   assignedTrack = assiTrack;
+}
+HWTrackController::~HWTrackController(){
+  delete WayStruPtr;
 }
 
 void HWTrackController::creatWayside(){
@@ -17,7 +23,7 @@ Wayside* HWTrackController::getWayside(){
   return WaysideHWptr;
 }
 
-void HWTrackController::setSuggestedSpeed(vector<double> ss){
+void HWTrackController::setSuggestedSpeed(double ss){
   WaysideHWptr->setSuggestedSpeed(ss);
   /*
   vector<double> zeze = WaysideHWptr->getSuggestedSpeed();
@@ -35,7 +41,7 @@ void HWTrackController::setSuggestedSpeed(vector<double> ss){
   */
 }
 
-vector<double> HWTrackController::getCommandedSpeed(){
+double HWTrackController::getCommandedSpeed(){
   /*
   vector<double> zeze = WaysideHWptr->getCommandedSpeed();
   int size0 = zeze.size();
@@ -47,11 +53,11 @@ vector<double> HWTrackController::getCommandedSpeed(){
   return WaysideHWptr->getCommandedSpeed();
 }
 
-void HWTrackController::setAuthority(vector<double> aut){
+void HWTrackController::setAuthority(vector<Authority> aut){
   WaysideHWptr->setAuthority(aut);
 }
 
-vector<double> HWTrackController::getAuthority(){
+vector<Authority> HWTrackController::getAuthority(){
   return WaysideHWptr->getAuthority();
 }
 
@@ -62,11 +68,40 @@ int HWTrackController::getTrackSize(){
 
 void HWTrackController::setControlMode(bool m){
   manualControlMode = m;
+  WaysideHWptr->setMode(m);
 }
 
 void HWTrackController::selectBlock_Manual(int id){
-  string comm = std::to_string(id);
+  //string comm = std::to_string(id);
 //  cout << comm << endl;
-  writeToArdu(comm);
+  WaysideHW.sendToArduino(id);
 }
+
+void HWTrackController::updateTrack(){
+  int size = getTrackSize();
+  for(int i = 0; i< size; i++){
+    double sug = WaysideHW.getSuggestedSpeed();
+    assignedTrack[i].setSuggestedSpeed(sug);
+    vector<bool> trackSide = WaysideHW.getBlockSwitchPosition();
+    assignedTrack[i].setSwitch(trackSide[i]);
+    vector<bool> crossingS = WaysideHW.getBlockCrossingState();
+    assignedTrack[i].setCrossing(crossingS[i]);
+    vector<bool> occu = WaysideHW.getBlockOccupancy();
+    assignedTrack[i].setTrainPresent(occu[i]);
+    vector<bool> brok = WaysideHW.getBrokenRail();
+    assignedTrack[i].setBrokenCircuit(brok[i]);
+  }
+}
+
+void HWTrackController::updateFromWayStruc(){
+  double ss = WayStruPtr->suggestedSpeed;
+  vector<Authority> aut = WayStruPtr->auth;
+  setSuggestedSpeed(ss);
+  setAuthority(aut);
+}
+
+void HWTrackController::updateToWayStruc(){
+  WayStruPtr->sector = assignedTrack;
+}
+
 //importPLC();

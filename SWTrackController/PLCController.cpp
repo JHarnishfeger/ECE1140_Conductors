@@ -5,13 +5,12 @@ PLCController::PLCController()
     pos = 0;
 }
 
-PLCController::PLCController(vector<Block> tr, vector<Block> occ)
+PLCController::PLCController(vector<Block> tr)
 {
     pos = 0;
     track = tr;
-    occupancy = occ;
     bool flag = 0;
-    for(int i=0;i<occupancy.size();i++)
+    /*for(int i=0;i<occupancy.size();i++)
     {
         for(int j=0;j<branchOccupancy.size();j++)
         {
@@ -21,19 +20,27 @@ PLCController::PLCController(vector<Block> tr, vector<Block> occ)
         if(!flag)
             branchOccupancy.push_back(occupancy[i].getBranch());
         flag = 0;
-    }
+    }*/
+    bool auCheck;
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
         SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
         CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
-        SW.push_back(track[i].getSwitch()); //SWITCH POSITION
-        CR.push_back(track[i].getCrossing()); //CROSSING POSITION
-        BR.push_back(track[i].getBrokenRail()); //BROKEN RAIL
+        SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
+        CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
+        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0);
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        auCheck = 0;
+        for(int j=0;j<auth.size();j++)
+        {
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
+                auCheck = 1;
+        }
+        AU.push_back(auCheck);
     }
 }
 
@@ -59,87 +66,21 @@ string PLCController::getFilename()
     return filename;
 }
 
-bool PLCController::branchOccupied(Block b)
-{
-    for(int i=0;i<branchOccupancy.size();i++)
-        if(b.getBranch()==branchOccupancy[i])
-            return 1;
-    return 0;
-}
-
-bool PLCController::checkTrack(vector<Block> tr)
-{
-    track = tr;
-    bool flag=0;
-    bool switchValid;
-    bool branchValid;
-    while(1==1)
-    {
-        if(checkRails())
-        {
-            track[pos].setBrokenRail(true);
-            flag = 1;
-        }
-        if(track[pos].getType()=="switch")
-        {
-            switchValid = !track[pos].getTrainPresent();
-            branchValid = !branchOccupied(track[pos+1]);
-            if(checkSwitches(switchValid,branchValid))
-            {
-                switchTrack();
-                flag = 1;
-            }
-        }
-        else if(track[pos].getType()=="crossing")
-        {
-            branchValid = !branchOccupied(track[pos]);
-            if(checkCrossings(branchValid))
-            {
-                toggleCrossing();
-                flag = 1;
-            }
-        }
-        if(pos<track.size()-1)
-            ++pos;
-        else
-        {
-            pos = 0;
-            break;
-        }
-    }
-    return flag;
-}
-
-bool PLCController::checkSwitches(bool sw, bool br) //Uses PLC program to check for switches to be switched, returns 1 on appplicable block. Part of checkTrack().
-{
-    if(br)
-        return 0;
-    else if(sw)
-        return 1;
-}
-bool PLCController::checkRails() //Checks for broken rails, returns 1 on applicable block. Part of checkTrack().
-{
-    return track[pos].getBrokenRail();
-}
-bool PLCController::checkCrossings(bool cr) //Uses PLC program to check for railroad crossings that need to be activated, returns 1 on applicable block. Part of checkTrack().
-{
-    return !cr;
-}
-
 bool PLCController::switchTrack()
 {
-    track[pos].setSwitch(!track[pos].getSwitch());
-    return track[pos].getSwitch();
+    track[pos].setSwitchStatus(!track[pos].getSwitchStatus());
+    return track[pos].getSwitchStatus();
 }
 
 bool PLCController::toggleCrossing()
 {
-    track[pos].setCrossing(!track[pos].getCrossing());
-    return track[pos].getCrossing();
+    track[pos].setCrossingStatus(!track[pos].getCrossingStatus());
+    return track[pos].getCrossingStatus();
 }
 
 void PLCController::importPLC(string file)
 {
+    bool auCheck;
     filename = file;
     TR.clear();
     SL.clear();
@@ -151,18 +92,26 @@ void PLCController::importPLC(string file)
     SR.clear();
     ST.clear();
     SA.clear();
+    AU.clear();
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
         SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
         CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
-        SW.push_back(track[i].getSwitch()); //SWITCH POSITION
-        CR.push_back(track[i].getCrossing()); //CROSSING POSITION
-        BR.push_back(track[i].getBrokenRail()); //BROKEN RAIL
+        SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
+        CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
+        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        auCheck = 0;
+        for(int j=0;j<auth.size();j++)
+        {
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
+                auCheck = 1;
+        }
+        AU.push_back(auCheck);
     }
 }
 
@@ -207,6 +156,7 @@ bool PLCController::runPLC()
         }
         else if(command=="OPP"&&inTask)
         {
+            //std::cout << line << std::endl;
             arg = "";
             opp = "";
             value = 0;
@@ -680,6 +630,7 @@ bool PLCController::runPLC()
             //std::cout << std::endl;
 
             inOpp = value;
+            //std::cout << "VALUE: " << value << std::endl;
             //if(inOpp) //TESTING
             //    std::cout << "Hit!" << std::endl;
         }
@@ -1006,15 +957,47 @@ bool PLCController::runPLC()
                     }
                 }
             }
+            else if(dataTarget=="AU")
+            {
+                if(stretch==2)
+                {
+                    for(int j=0;j<AU.size();j++)
+                        AU[j] = value;
+                }
+                else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<AU.size())
+                    AU[pos+posOffset] = value;
+                else if(stretch==1)
+                {
+                    for(int j=pos+posOffset;j<AU.size();j++)
+                    {
+                        if(pos+posOffset>=0)
+                            AU[j] = value;
+                        if(SL[j]==1)
+                            break;
+                    }
+                }
+                else if(stretch==-1)
+                {
+                    for(int j=pos+posOffset;j>=0;j--)
+                    {
+                        if(SL[j]==1)
+                            break;
+                        if(pos+posOffset<AU.size())
+                            AU[j] = value;
+                    }
+                }
+            }
         }
         else if(command[0]=='#')
             continue;
     }
+    plc.close();
     return 1;
 }
 
 void PLCController::execute()
 {
+    bool auCheck;
     TR.clear();
     SL.clear();
     CL.clear();
@@ -1025,19 +1008,51 @@ void PLCController::execute()
     SR.clear();
     ST.clear();
     SA.clear();
+    AU.clear();
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
         SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
         CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
-        SW.push_back(track[i].getSwitch()); //SWITCH POSITION
-        CR.push_back(track[i].getCrossing()); //CROSSING POSITION
-        BR.push_back(track[i].getBrokenRail()); //BROKEN RAIL
+        SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
+        CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
+        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        auCheck = 0;
+        for(int j=0;j<auth.size();j++)
+        {
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
+                auCheck = 1;
+        }
+        AU.push_back(auCheck);
     }
+    checkVecs.clear();
+    checkVecs.push_back(TR);
+    checkVecs.push_back(SL);
+    checkVecs.push_back(CL);
+    checkVecs.push_back(SW);
+    checkVecs.push_back(CR);
+    checkVecs.push_back(BR);
+    checkVecs.push_back(SS);
+    checkVecs.push_back(SR);
+    checkVecs.push_back(ST);
+    checkVecs.push_back(SA);
+    checkVecs.push_back(AU);
+    oldVecs.clear();
+    oldVecs.push_back(TR);
+    oldVecs.push_back(SL);
+    oldVecs.push_back(CL);
+    oldVecs.push_back(SW);
+    oldVecs.push_back(CR);
+    oldVecs.push_back(BR);
+    oldVecs.push_back(SS);
+    oldVecs.push_back(SR);
+    oldVecs.push_back(ST);
+    oldVecs.push_back(SA);
+    oldVecs.push_back(AU);
 
     std::cout << "TR Values      : ";
     for(int i=0;i<TR.size();i++)
@@ -1069,6 +1084,9 @@ void PLCController::execute()
     std::cout << std::endl << "SA Values      : ";
     for(int i=0;i<SA.size();i++)
         std::cout << SA[i] << " ";
+    std::cout << std::endl << "AU Values      : ";
+    for(int i=0;i<AU.size();i++)
+        std::cout << AU[i] << " ";
     std::cout << std::endl << std::endl;
 
     for(pos=0;pos<TR.size();pos++)
@@ -1107,10 +1125,13 @@ void PLCController::execute()
     std::cout << std::endl << "Final SA Values: ";
     for(int i=0;i<SA.size();i++)
         std::cout << SA[i] << " ";
+    std::cout << std::endl << "Final AU Values: ";
+    for(int i=0;i<AU.size();i++)
+        std::cout << AU[i] << " ";
     std::cout << std::endl << std::endl;
 }
 
-void PLCController::runPLCOnce()
+/*void PLCController::runPLCOnce()
 {
     TR.clear();
     SL.clear();
@@ -1127,9 +1148,9 @@ void PLCController::runPLCOnce()
         TR.push_back(track[i].getTrainPresent()); //TRAIN
         SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
         CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
-        SW.push_back(track[i].getSwitch()); //SWITCH POSITION
-        CR.push_back(track[i].getCrossing()); //CROSSING POSITION
-        BR.push_back(track[i].getBrokenRail()); //BROKEN RAIL
+        SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
+        CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
+        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
@@ -1201,4 +1222,346 @@ void PLCController::runPLCOnce()
     for(int i=0;i<SA.size();i++)
         std::cout << SA[i] << " ";
     std::cout << std::endl << std::endl;
+}*/
+
+bool PLCController::verifyPLC()
+{
+    bool correct=1;
+    for(pos=0;pos<TR.size();pos++)
+    {
+        std::ifstream plc(filename);
+        string line;
+        string command;
+        string arg;
+        string dataTarget;
+        string posTarget;
+        int posOffset;
+        vector<string> args;
+        int index;
+        bool value=0;
+        bool inOpp=0;
+        bool inTask=0;
+        bool error=0;
+        bool allArgs=0;
+        bool negate=0;
+        int stretch = 0;
+        vector<bool> argVals;
+        string opp;
+        vector<string> opps;
+        while(std::getline(plc,line))
+        {
+            //std::cout << line << std::endl;
+            command = "";
+            stretch = 0;
+            stringstream lineParse(line);
+            lineParse >> command;
+            if(command=="TASK")
+            {
+                inTask = 1;
+            }
+            else if(command=="ENDTASK")
+            {
+                inTask = 0;
+            }
+            else if(command=="OPP"&&inTask)
+            {
+                //std::cout << line << std::endl;
+                arg = "";
+                opp = "";
+                value = 0;
+                allArgs = 0;
+                argVals.clear();
+                args.clear();
+                opps.clear();
+
+                for(int i=0;i<10;i++)
+                {
+                    arg = "";
+                    error = 0;
+                    lineParse >> arg; //READING ARGUMENT <-- ISSUE: The program continues reading in the last word rather than "" when empty
+                    if(arg=="")
+                        break;
+                    //std::cout << arg[0] << ", " << arg.back() << std::endl;
+                    if(arg[0]!='('||arg.back()!=')')
+                    {
+                        error = 1;
+                        break;
+                    }
+                    else
+                    {
+                        arg.erase(0,1);
+                        arg.pop_back();
+                        args.push_back(arg);
+                    }
+                    lineParse >> opp;
+                    if(opp=="")
+                        break;
+                    opps.push_back(opp);
+                }
+                if(error)
+                {
+                    std::cout << "An error occurred." << std::endl;
+                    return 0;
+                }
+                //std::cout << "Num of args: " << args.size() << std::endl;
+                for(int i=0;i<args.size();i++) //Computing values for arguments
+                {
+                    negate = 0;
+                    stretch = 0;
+                    if(args[i][0]=='!')
+                    {
+                        negate = 1;
+                        args[i].erase(0,1);
+                    }
+                    if(args[i]!="1"&&args[i]!="0")
+                    {
+                        dataTarget = args[i].substr(0,2);
+                        args[i].erase(0,2);
+                        if(args[i].back()=='+')
+                        {
+                            stretch = 1;
+                            args[i].pop_back();
+                        }
+                        else if(args[i].back()=='-')
+                        {
+                            stretch = -1;
+                            args[i].pop_back();
+                        }
+                        posTarget = args[i];
+                        if(posTarget!="")
+                            posOffset = std::stoi(posTarget);
+                        else
+                        {
+                            stretch = 2;
+                            posOffset = 0;
+                        }
+                    }
+                    else
+                        stretch = 2;
+                    //std::cout << "Here, right?" << std::endl;
+                    //std::cout << "Stretch " << stretch << std::endl;
+
+                    if(dataTarget=="TR")
+                        index = 0;
+                    else if(dataTarget=="SL")
+                        index = 1;
+                    else if(dataTarget=="CL")
+                        index = 2;
+                    else if(dataTarget=="SW")
+                        index = 3;
+                    else if(dataTarget=="CR")
+                        index = 4;
+                    else if(dataTarget=="BR")
+                        index = 5;
+                    else if(dataTarget=="SS")
+                        index = 6;
+                    else if(dataTarget=="SR")
+                        index = 7;
+                    else if(dataTarget=="ST")
+                        index = 8;
+                    else if(dataTarget=="SA")
+                        index = 9;
+                    else if(dataTarget=="AU")
+                        index = 10;
+
+                    if(stretch==2)
+                    {
+                        argVals.push_back(0);
+                        for(int j=0;j<checkVecs[index].size();j++)
+                                argVals[i] = argVals[i] || checkVecs[index][j];
+                    }
+                    else if(stretch==0)
+                    {
+                        if(pos+posOffset>=0&&pos+posOffset<checkVecs[index].size())
+                            argVals.push_back(checkVecs[index][pos+posOffset]);
+                        else
+                            argVals.push_back(0);
+                    }
+                    else if(stretch==1)
+                    {
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j<checkVecs[index].size();j++)
+                        {
+                            if(pos+posOffset<checkVecs[index].size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || checkVecs[index][j];
+                            if(checkVecs[1][j]==1&&index!=1)
+                                break;
+                        }
+                    }
+                    else if(stretch==-1)
+                    {
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j>=0;j--)
+                        {
+                            if(checkVecs[1][j]==1&&index!=1)
+                                break;
+                            if(pos+posOffset<checkVecs[index].size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || checkVecs[index][j];
+                        }
+                    }
+
+                    if(negate)
+                        argVals[i] = !argVals[i];
+                }
+                value = argVals[0];
+                //std::cout << "Vals: " << argVals[0];
+                for(int i=1;i<argVals.size();i++)
+                {
+                    //std::cout << " " << argVals[i];
+                    if(opps[i-1]=="&")
+                        value = value && argVals[i];
+                    else if(opps[i-1]=="|")
+                        value = value || argVals[i];
+                }
+                //std::cout << std::endl;
+                inOpp = value;
+                //std::cout << "CHECK VALUE: " << value << std::endl;
+                //if(inOpp) //TESTING
+                //    std::cout << "Hit!" << std::endl;
+            }
+            if(command=="OUT"&&inTask&&inOpp)
+            {
+                //std::cout << "we in" << std::endl;
+                lineParse >> arg;
+                lineParse >> value;
+
+                //std::cout << "Arg: " << arg << ", Val: " << value << std::endl;
+                dataTarget = arg.substr(0,2);
+                arg.erase(0,2);
+
+                if(arg[arg.size()-1]=='+')
+                {
+                    stretch = 1;
+                    arg.pop_back();
+                }
+                else if(arg[arg.size()-1]=='-')
+                {
+                    stretch = -1;
+                    arg.pop_back();
+                }
+
+                posTarget = arg;
+                if(posTarget!="")
+                    posOffset = std::stoi(posTarget);
+                else
+                    stretch = 2;
+
+                if(dataTarget=="TR")
+                    index = 0;
+                else if(dataTarget=="SL")
+                    index = 1;
+                else if(dataTarget=="CL")
+                    index = 2;
+                else if(dataTarget=="SW")
+                    index = 3;
+                else if(dataTarget=="CR")
+                    index = 4;
+                else if(dataTarget=="BR")
+                    index = 5;
+                else if(dataTarget=="SS")
+                    index = 6;
+                else if(dataTarget=="SR")
+                    index = 7;
+                else if(dataTarget=="ST")
+                    index = 8;
+                else if(dataTarget=="SA")
+                    index = 9;
+                else if(dataTarget=="AU")
+                    index = 10;
+
+                if(stretch==2)
+                {
+                    for(int j=0;j<checkVecs[index].size();j++)
+                        checkVecs[index][j] = value;
+                }
+                else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<checkVecs[index].size())
+                    checkVecs[index][pos+posOffset] = value;
+                else if(stretch==1)
+                {
+                    for(int j=pos+posOffset;j<checkVecs[index].size();j++)
+                    {
+                        if(pos+posOffset>=0)
+                            checkVecs[index][j] = value;
+                        if(checkVecs[1][j]==1&&index!=1)
+                            break;
+                    }
+                }
+                else if(stretch==-1)
+                {
+                    for(int j=pos+posOffset;j>=0;j--)
+                    {
+                        if(checkVecs[1][j]==1&&index!=1)
+                            break;
+                        if(pos+posOffset<checkVecs[index].size())
+                            checkVecs[index][j] = value;
+                    }
+                }
+            }
+            else if(command[0]=='#')
+                continue;
+        }
+        plc.close();
+    }
+    std::cout << "Check TR Values: ";
+    for(int i=0;i<checkVecs[0].size();i++)
+        std::cout << checkVecs[0][i] << " ";
+    std::cout << std::endl << "Check SL Values: ";
+    for(int i=0;i<checkVecs[1].size();i++)
+        std::cout << checkVecs[1][i] << " ";
+    std::cout << std::endl << "Check SW Values: ";
+    for(int i=0;i<checkVecs[3].size();i++)
+        std::cout << checkVecs[3][i] << " ";
+    std::cout << std::endl << "Check CL Values: ";
+    for(int i=0;i<checkVecs[2].size();i++)
+        std::cout << checkVecs[2][i] << " ";
+    std::cout << std::endl << "Check CR Values: ";
+    for(int i=0;i<checkVecs[4].size();i++)
+        std::cout << checkVecs[4][i] << " ";
+    std::cout << std::endl << "Check BR Values: ";
+    for(int i=0;i<checkVecs[5].size();i++)
+        std::cout << checkVecs[5][i] << " ";
+    std::cout << std::endl << "Check SS Values: ";
+    for(int i=0;i<checkVecs[6].size();i++)
+        std::cout << checkVecs[6][i] << " ";
+    std::cout << std::endl << "Check SR Values: ";
+    for(int i=0;i<checkVecs[7].size();i++)
+        std::cout << checkVecs[7][i] << " ";
+    std::cout << std::endl << "Check ST Values: ";
+    for(int i=0;i<checkVecs[8].size();i++)
+        std::cout << checkVecs[8][i] << " ";
+    std::cout << std::endl << "Check SA Values: ";
+    for(int i=0;i<checkVecs[9].size();i++)
+        std::cout << checkVecs[9][i] << " ";
+    std::cout << std::endl << "Check AU Values: ";
+    for(int i=0;i<checkVecs[10].size();i++)
+        std::cout << checkVecs[10][i] << " ";
+    std::cout << std::endl << std::endl;
+
+    correct = correct && (checkVecs[0]==TR);
+    correct = correct && (checkVecs[1]==SL);
+    correct = correct && (checkVecs[2]==CL);
+    correct = correct && (checkVecs[3]==SW);
+    correct = correct && (checkVecs[4]==CR);
+    correct = correct && (checkVecs[5]==BR);
+    correct = correct && (checkVecs[6]==SS);
+    correct = correct && (checkVecs[7]==SR);
+    correct = correct && (checkVecs[8]==ST);
+    correct = correct && (checkVecs[9]==SA);
+    correct = correct && (checkVecs[10]==AU);
+    std::cout << "VALID: " << correct << std::endl;
+    if(!correct)
+    {
+        TR = oldVecs[0];
+        SL = oldVecs[1];
+        CL = oldVecs[2];
+        SW = oldVecs[3];
+        CR = oldVecs[4];
+        BR = oldVecs[5];
+        SS = oldVecs[6];
+        SR = oldVecs[7];
+        ST = oldVecs[8];
+        SA = oldVecs[9];
+        AU = oldVecs[10];
+    }
+    return correct;
 }

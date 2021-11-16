@@ -3,11 +3,12 @@
 
 #include<iostream>
 #include<vector>
-#include"Wayside.cpp"
+#include"Wayside_HW.h"
 
 class HWTrackController{
 
 private:
+  WayStruct *WayStruPtr;
   Wayside *WaysideHWptr;
   Wayside WaysideHW;
   vector<Block> assignedTrack;
@@ -16,15 +17,19 @@ private:
   bool manualControlMode; //0:auto, 1: manual
 public:
   HWTrackController();
-  HWTrackController(vector<Block>);
+  ~HWTrackController();
+  void initializeHW(vector<Block>);
   Wayside* getWayside();
-  void setSuggestedSpeed(vector<double>);
-  vector<double> getCommandedSpeed();
-  void setAuthority(vector<double>);
-  vector<double> getAuthority();
+  void setSuggestedSpeed(double);
+  double getCommandedSpeed();
+  void setAuthority(vector<Authority>);
+  vector<Authority> getAuthority();
   int getTrackSize();
   void setControlMode(bool);
   void selectBlock_Manual(int);
+  void updateTrack();
+  void updateFromWayStruc();
+  void updateToWayStruc();
   //importPLC();
 };
 

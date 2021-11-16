@@ -9,9 +9,9 @@ void receiveSetup() {
 
 void receive() {
   // put your main code here, to run repeatedly:
-  lcd.setCursor(0,0);
+  lcd.setCursor(1,1);
   lcd.print("  Block:  ");
-  lcd.setCursor(12,0);
+  lcd.setCursor(12,1);
   if(Serial.available() > 0){
     String info;
     info = Serial.readStringUntil('\n');

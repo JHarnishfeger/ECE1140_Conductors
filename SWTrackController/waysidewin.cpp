@@ -37,13 +37,13 @@ void WaysideWin::fillLists()
     string holder;
     for(int i=0;i<way->swich.size();i++)
     {
-        title = QString::fromStdString("Block " + std::to_string(way->swich[i].getId()) + " (" + std::to_string(way->swich[i].getSwitch()) + ")");
+        title = QString::fromStdString("Block " + std::to_string(way->swich[i].getId()) + " (" + std::to_string(way->swich[i].getSwitchStatus()) + ")");
         ui->SwitchList->addItem(title);
     }
 
     for(int i=0;i<way->crossing.size();i++)
     {
-        title = QString::fromStdString("Block " + std::to_string(way->crossing[i].getId()) + " (" + std::to_string(way->crossing[i].getCrossing()) + ")");
+        title = QString::fromStdString("Block " + std::to_string(way->crossing[i].getId()) + " (" + std::to_string(way->crossing[i].getCrossingStatus()) + ")");
         ui->CrossingList->addItem(title);
     }
 
@@ -69,6 +69,12 @@ void WaysideWin::fillLists()
     {
         ui->AlertList->addItem(QString::fromStdString(way->getAlerts()[i]));
     }
+}
+
+void WaysideWin::update()
+{
+    way->update();
+    fillLists();
 }
 
 void WaysideWin::on_SwitchList_itemClicked(QListWidgetItem *item)
@@ -101,7 +107,7 @@ void WaysideWin::on_SwitchLeft_clicked()
         {
             if(way->sector[i].getId()==id)
             {
-                way->sector[i].setSwitch(0);
+                way->sector[i].setSwitchStatus(0);
                 break;
             }
         }
@@ -119,7 +125,7 @@ void WaysideWin::on_SwitchRight_clicked()
         {
             if(way->sector[i].getId()==id)
             {
-                way->sector[i].setSwitch(1);
+                way->sector[i].setSwitchStatus(1);
                 break;
             }
         }
@@ -132,7 +138,7 @@ void WaysideWin::on_SwitchRight_clicked()
 void WaysideWin::on_ImportPLC_clicked()
 {
     string filename;
-    filename = "C:\\Users\\justi\\Desktop\\Files\\Fall 2021\\Train Class\\Controller\\TrackController\\" + ui->PLCFile->text().toStdString();
+    filename = "C:\\Users\\justi\\Desktop\\Files\\Fall 2021\\Train Class\\Controller\\TrackController\\" + ui->PLCFile->text().toStdString() + ".txt";
     way->plc.importPLC(filename);
     std::cout << "RUNNING " << way->plc.getFilename() << std::endl;
     way->detectTrack();
@@ -148,7 +154,7 @@ void WaysideWin::on_CrossingOn_clicked()
         {
             if(way->sector[i].getId()==id)
             {
-                way->sector[i].setCrossing(1);
+                way->sector[i].setCrossingStatus(1);
                 break;
             }
         }
@@ -166,7 +172,7 @@ void WaysideWin::on_CrossingOff_clicked()
         {
             if(way->sector[i].getId()==id)
             {
-                way->sector[i].setCrossing(0);
+                way->sector[i].setCrossingStatus(0);
                 break;
             }
         }

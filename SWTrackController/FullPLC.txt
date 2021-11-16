@@ -4,7 +4,7 @@ OUT SW0 1
 ENDTASK
 
 TASK Safety_Switch
-OPP (TR0+) & (SL0) & (!TR0)
+OPP (TR1+) & (SL0) & (!TR0)
 OUT SW0 1
 ENDTASK
 
@@ -13,9 +13,14 @@ OPP (TR0-) & (CL0)
 OUT CR0 1
 ENDTASK
 
+TASK Deactivate_Crossing
+OPP (!TR0-) & (CL0)
+OUT CR0 0
+ENDTASK
+
 TASK Check_Speed
 OPP (SS0)
-OUT SR0 1
+OUT SR 1
 ENDTASK
 
 TASK Rail_Broken_Brake
@@ -23,7 +28,22 @@ OPP (BR0+)
 OUT ST0 1
 ENDTASK
 
-TASK Stop_For_Station
-OPP (SA1) | (SA2) | (SA3)
+TASK Rail_Fixed
+OPP (!BR0+)
+OUT ST0 0
+ENDTASK
+
+#TASK Stop_For_Station
+OPP (SA1) | (SA2)
 OUT ST0 1
+ENDTASK
+
+TASK Collision_Protection
+OPP (TR1) | (TR2) & (TR0)
+OUT ST0 1
+ENDTASK
+
+TASK Revert_Protection
+OPP (!TR1) & (!TR2) & (TR0)
+OUT ST0 0
 ENDTASK
