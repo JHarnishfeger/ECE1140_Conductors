@@ -32,6 +32,7 @@ public:
     vector<Block> maintenance; //Holds the block number of any blocks undergoing maintenance
     vector<Block> trackOccupancy; //Vector of all blocks that have a train on them
     vector<Block> hwTrack;
+    int hwWay;
     vector<string> alerts; //Vector of alerts
     //double getSuggestedSpeed(); //Returns current suggested speed (imperial units)
     //void setSuggestedSpeed(double); //Sets current suggested speed (imperial units)

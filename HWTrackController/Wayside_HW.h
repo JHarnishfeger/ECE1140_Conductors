@@ -13,7 +13,7 @@ using namespace std;
 
 
 
-class Wayside{
+class Wayside_HW{
   private:
     string line;
     bool manualMode; // 1: manualMode, 0: auto mode

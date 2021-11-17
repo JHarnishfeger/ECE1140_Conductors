@@ -10,6 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     Block.cpp \
+    CTC/CTC.cpp \
+    CTC/ScheduleManager.cpp \
+    CTC/TrackMap.cpp \
+    CTC/TrackNodes.cpp \
+    CTC/WaysideManager.cpp \
+    CTC/ctcwindow.cpp \
+    CTC/string_utils.cpp \
     PLCController.cpp \
     SWTrackController.cpp \
     Wayside.cpp \
@@ -18,14 +25,26 @@ SOURCES += \
     waysidewin.cpp
 
 HEADERS += \
+    Authority.h \
     Block.h \
+    CTC/Branch.h \
+    CTC/CTC.hpp \
+    CTC/Node.hpp \
+    CTC/ScheduleManager.h \
+    CTC/TrackMap.hpp \
+    CTC/TrackNodes.h \
+    CTC/WaysideManager.h \
+    CTC/ctcwindow.h \
+    CTC/string_utils.hpp \
     PLCController.h \
     SWTrackController.h \
+    WayStruct.h \
     Wayside.h \
     swtcinterface.h \
     waysidewin.h
 
 FORMS += \
+    CTC/ctcwindow.ui \
     swtcinterface.ui \
     waysidewin.ui
 

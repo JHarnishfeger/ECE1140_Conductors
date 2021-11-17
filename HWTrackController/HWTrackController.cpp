@@ -19,7 +19,7 @@ void HWTrackController::creatWayside(){
   WaysideHWptr = &WaysideHW;
 }
 
-Wayside* HWTrackController::getWayside(){
+Wayside_HW* HWTrackController::getWayside(){
   return WaysideHWptr;
 }
 

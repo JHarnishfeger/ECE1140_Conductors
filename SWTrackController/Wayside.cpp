@@ -95,7 +95,8 @@ void Wayside::updateNoPLC()
 bool Wayside::detectTrack()
 {
     bool found=0;
-    runPLC();
+    if(!runPLC())
+        alerts.push_back("PLC output was incorrect. Track was not changed.");
     for(int i=0;i<sector.size();i++)
     {
         for(int j=0;j<swich.size();j++)
@@ -321,13 +322,15 @@ void Wayside::importPLC(string filename)
     plc.importPLC(filename);
 }
 
-void Wayside::runPLC()
+bool Wayside::runPLC()
 {
+    bool correct;
     plc.auth = authority;
     plc.track = sector;
     plc.execute();
-    plc.verifyPLC();
+    correct = plc.verifyPLC();
     updateFromPLC();
+    return correct;
 }
 
 /*void Wayside::runPLCOnce(int p)

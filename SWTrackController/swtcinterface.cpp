@@ -30,7 +30,6 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     Block s(10,"r","f","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
     Block t(10,"r","f","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
 
-
     vector<Block> green{a,b,c,d,e,f,g,h,i,j,k,l,m};
     vector<Block> red{n,o,p,q,r,s,t};
     tc.initialize(red,green,0);
@@ -45,6 +44,12 @@ SWTCInterface::~SWTCInterface()
 vector<Block> SWTCInterface::getHWTrack()
 {
     return hwTrack;
+}
+
+void SWTCInterface::update()
+{
+    for(int i=0;i<wui.size();i++)
+        wui[i]->update();
 }
 
 void SWTCInterface::on_CreateWaysides_clicked()
@@ -71,6 +76,7 @@ void SWTCInterface::on_CreateWaysides_clicked()
         {
             WaysideWin *win = new WaysideWin;
             wui.append(win);
+            tc.waysides[i].setID(i+1);
             wui[i]->initialize(tc.waysides[i],i+1);
             wui[i]->show();
         }
@@ -90,10 +96,23 @@ void SWTCInterface::on_DesignateHWWayside_clicked()
                 {
                     tc.hwTrack.push_back(wui[i]->way->sector[j]);
                     hwTrack.push_back(wui[i]->way->sector[j]);
+                    tc.hwWay = i;
                 }
                 wui[i]->close();
             }
         }
+        //vector<WayStruct> swWayPtr;
+        tc.wayPtr->clear();
+        for(int i=0;i<tc.waysides.size();i++)
+        {
+            if(i!=tc.hwWay)
+            {
+                tc.wayPtr->push_back(tc.waysides[i].wayStr);
+            }
+        }
+        //tc.wayPtr = &swWayPtr;
+        WayStruct hWay = tc.waysides[tc.hwWay].wayStr;
+        //CTCWindow ctcTest(tc.wayPtr,&hWay);
     }
 }
 

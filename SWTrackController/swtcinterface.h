@@ -9,6 +9,7 @@
 using std::vector;
 #include "SWTrackController.h"
 #include "waysidewin.h"
+//#include "CTC/ctcwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SWTCInterface; }
@@ -23,6 +24,7 @@ public:
     ~SWTCInterface();
     void fillLists();
     vector<Block> getHWTrack();
+    void update();
 private slots:
     void on_CreateWaysides_clicked();
 

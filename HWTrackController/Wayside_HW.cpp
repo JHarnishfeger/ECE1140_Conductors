@@ -60,7 +60,7 @@ int char_to_int(char c){
 */
 
 
-void Wayside::initWayside(vector<Block> track){
+void Wayside_HW::initWayside(vector<Block> track){
   sector = track;
   PLCController p(track);
   hwPLC = p;
@@ -90,32 +90,32 @@ void Wayside::initWayside(vector<Block> track){
   }
 }
 
-int Wayside::getTrackSize(){
+int Wayside_HW::getTrackSize(){
   //cout << trackSize << endl;
   return trackSize;
 }
 
-string Wayside::getLine(){
+string Wayside_HW::getLine(){
   return line;
 }
 
-vector<int> Wayside::getId(){
+vector<int> Wayside_HW::getId(){
   return blockIDs;
 }
 
-void Wayside::setMode(bool m){
+void Wayside_HW::setMode(bool m){
   manualMode = m;
 }
 
-bool Wayside::getMode(){
+bool Wayside_HW::getMode(){
   return manualMode;
 }
 
-void Wayside::sendToArduino(int s){
+void Wayside_HW::sendToArduino(int s){
   string c = to_string(s);
   writeToArdu(c);
 }
-void Wayside::receiveFromArduino(){
+void Wayside_HW::receiveFromArduino(){
   receiveFromArdu();
   string id, id0;
   char tSwicth, crossing;
@@ -170,67 +170,67 @@ void Wayside::receiveFromArduino(){
 
 //void updateWayside();
 
-void Wayside::calculateCommandedSpeed(){
+void Wayside_HW::calculateCommandedSpeed(){
 
     commandedSpeed = suggestedSpeed - 1.1;
 
 }
 
-void Wayside::setSuggestedSpeed(double sugg){
+void Wayside_HW::setSuggestedSpeed(double sugg){
 
     suggestedSpeed = sugg;
 
 }
 
-double Wayside::getSuggestedSpeed(){
+double Wayside_HW::getSuggestedSpeed(){
   return suggestedSpeed;
 }
 
-double Wayside::getCommandedSpeed(){
+double Wayside_HW::getCommandedSpeed(){
   calculateCommandedSpeed();
   return commandedSpeed;
 }
 
-void Wayside::setAuthority(vector<Authority> au){
+void Wayside_HW::setAuthority(vector<Authority> au){
   int size = au.size();
   for(int i = 0; i < size; i++){
     authority[i] = au[i];
   }
 }
 
-vector<Authority> Wayside::getAuthority(){
+vector<Authority> Wayside_HW::getAuthority(){
   return authority;
 }
 
-vector<bool> Wayside::getBlockSwitchPosition(){
+vector<bool> Wayside_HW::getBlockSwitchPosition(){
   return blockSwitchPosition;
 }
 
-vector<bool> Wayside::getBlockCrossingState(){
+vector<bool> Wayside_HW::getBlockCrossingState(){
   return blockCrossingState;
 }
 
-vector<bool> Wayside::getBrokenRail(){
+vector<bool> Wayside_HW::getBrokenRail(){
   return brokenRail;
 }
 
-void Wayside::setBlockOccupancy(vector<bool> occ){
+void Wayside_HW::setBlockOccupancy(vector<bool> occ){
   int size = occ.size();
   for(int i = 0; i < size; i++){
     blockOccupany[i] = occ[i];
   }
 }
-vector<bool> Wayside::getBlockOccupancy(){
+vector<bool> Wayside_HW::getBlockOccupancy(){
   return blockOccupany;
 }
 
 //void runPLC();
 
-void Wayside::setMaintenanceMode(bool m){
+void Wayside_HW::setMaintenanceMode(bool m){
   maintenanceMode = m;
 }
 
-bool Wayside::getMaintenanceMode(){
+bool Wayside_HW::getMaintenanceMode(){
   return maintenanceMode;
 }
 /*
@@ -239,6 +239,6 @@ bool Wayside::ifArduConnected(){
 }
 */
 
-bool Wayside::ifHWConnected(){
+bool Wayside_HW::ifHWConnected(){
     return ifArduConnected();
 }

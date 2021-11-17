@@ -22,6 +22,7 @@ PLCController::PLCController(vector<Block> tr)
         flag = 0;
     }*/
     bool auCheck;
+    bool auNext;
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
@@ -39,8 +40,18 @@ PLCController::PLCController(vector<Block> tr)
         {
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
+            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch)
+            {
+                if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
+                    auNext = 0;
+                else
+                    auNext = 1;
+            }
+            else
+                auNext = 0;
         }
         AU.push_back(auCheck);
+        NB.push_back(auNext);
     }
 }
 
@@ -82,17 +93,7 @@ void PLCController::importPLC(string file)
 {
     bool auCheck;
     filename = file;
-    TR.clear();
-    SL.clear();
-    CL.clear();
-    SW.clear();
-    CR.clear();
-    BR.clear();
-    SS.clear();
-    SR.clear();
-    ST.clear();
-    SA.clear();
-    AU.clear();
+    bool auNext;
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
@@ -103,15 +104,25 @@ void PLCController::importPLC(string file)
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
-        ST.push_back(0); //STOP
+        ST.push_back(0);
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
         auCheck = 0;
         for(int j=0;j<auth.size();j++)
         {
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
+            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch)
+            {
+                if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
+                    auNext = 0;
+                else
+                    auNext = 1;
+            }
+            else
+                auNext = 0;
         }
         AU.push_back(auCheck);
+        NB.push_back(auNext);
     }
 }
 
@@ -998,6 +1009,7 @@ bool PLCController::runPLC()
 void PLCController::execute()
 {
     bool auCheck;
+    bool auNext;
     TR.clear();
     SL.clear();
     CL.clear();
@@ -1009,6 +1021,7 @@ void PLCController::execute()
     ST.clear();
     SA.clear();
     AU.clear();
+    NB.clear();
     for(int i=0;i<track.size();i++)
     {
         TR.push_back(track[i].getTrainPresent()); //TRAIN
@@ -1019,15 +1032,25 @@ void PLCController::execute()
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
-        ST.push_back(0); //STOP
+        ST.push_back(0);
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
         auCheck = 0;
         for(int j=0;j<auth.size();j++)
         {
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
+            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch)
+            {
+                if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
+                    auNext = 0;
+                else
+                    auNext = 1;
+            }
+            else
+                auNext = 0;
         }
         AU.push_back(auCheck);
+        NB.push_back(auNext);
     }
     checkVecs.clear();
     checkVecs.push_back(TR);
@@ -1041,6 +1064,7 @@ void PLCController::execute()
     checkVecs.push_back(ST);
     checkVecs.push_back(SA);
     checkVecs.push_back(AU);
+    checkVecs.push_back(NB);
     oldVecs.clear();
     oldVecs.push_back(TR);
     oldVecs.push_back(SL);
@@ -1053,6 +1077,7 @@ void PLCController::execute()
     oldVecs.push_back(ST);
     oldVecs.push_back(SA);
     oldVecs.push_back(AU);
+    oldVecs.push_back(NB);
 
     std::cout << "TR Values      : ";
     for(int i=0;i<TR.size();i++)
@@ -1087,6 +1112,9 @@ void PLCController::execute()
     std::cout << std::endl << "AU Values      : ";
     for(int i=0;i<AU.size();i++)
         std::cout << AU[i] << " ";
+    std::cout << std::endl << "NB Values      : ";
+    for(int i=0;i<NB.size();i++)
+        std::cout << NB[i] << " ";
     std::cout << std::endl << std::endl;
 
     for(pos=0;pos<TR.size();pos++)
@@ -1128,6 +1156,9 @@ void PLCController::execute()
     std::cout << std::endl << "Final AU Values: ";
     for(int i=0;i<AU.size();i++)
         std::cout << AU[i] << " ";
+    std::cout << std::endl << "Final NB Values: ";
+    for(int i=0;i<NB.size();i++)
+        std::cout << NB[i] << " ";
     std::cout << std::endl << std::endl;
 }
 
@@ -1363,6 +1394,8 @@ bool PLCController::verifyPLC()
                         index = 9;
                     else if(dataTarget=="AU")
                         index = 10;
+                    else if(dataTarget=="NB")
+                        index = 11;
 
                     if(stretch==2)
                     {
@@ -1468,6 +1501,8 @@ bool PLCController::verifyPLC()
                     index = 9;
                 else if(dataTarget=="AU")
                     index = 10;
+                else if(dataTarget=="NB")
+                    index = 11;
 
                 if(stretch==2)
                 {
@@ -1535,6 +1570,9 @@ bool PLCController::verifyPLC()
     std::cout << std::endl << "Check AU Values: ";
     for(int i=0;i<checkVecs[10].size();i++)
         std::cout << checkVecs[10][i] << " ";
+    std::cout << std::endl << "Check NB Values: ";
+    for(int i=0;i<checkVecs[11].size();i++)
+        std::cout << checkVecs[11][i] << " ";
     std::cout << std::endl << std::endl;
 
     correct = correct && (checkVecs[0]==TR);
@@ -1548,6 +1586,7 @@ bool PLCController::verifyPLC()
     correct = correct && (checkVecs[8]==ST);
     correct = correct && (checkVecs[9]==SA);
     correct = correct && (checkVecs[10]==AU);
+    correct = correct && (checkVecs[11]==NB);
     std::cout << "VALID: " << correct << std::endl;
     if(!correct)
     {
@@ -1562,6 +1601,7 @@ bool PLCController::verifyPLC()
         ST = oldVecs[8];
         SA = oldVecs[9];
         AU = oldVecs[10];
+        NB = oldVecs[11];
     }
     return correct;
 }
