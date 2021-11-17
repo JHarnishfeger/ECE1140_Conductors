@@ -2,7 +2,7 @@
 #define WAYSTRUCT_H
 #include"Authority.h"
 #include <vector>
-
+#include "Block.h"
 struct WayStruct
 {
     int id;

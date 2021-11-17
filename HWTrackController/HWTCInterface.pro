@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     Block.cpp \
     HWTrackController.cpp \
+    PLCController.cpp \
     SerialPort.cpp \
     Wayside_HW.cpp \
     main.cpp \
@@ -20,6 +21,7 @@ HEADERS += \
     Authority.h \
     Block.h \
     HWTrackController.h \
+    PLCController.h \
     SerialPort.h \
     WayStruct.h \
     Wayside_HW.h \

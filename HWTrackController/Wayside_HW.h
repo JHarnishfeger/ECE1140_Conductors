@@ -4,18 +4,18 @@
 #include<iostream>
 #include<vector>
 #include<string>
-#include"Block.h"
+//#include"Block.h"
 #include<stdlib.h>
 //#include"serialCommunication.h"
 #include"WayStruct.h"
-
+#include"PLCController.h"
 using namespace std;
 
 
 
 class Wayside{
   private:
-    char line;
+    string line;
     bool manualMode; // 1: manualMode, 0: auto mode
     vector<int> blockIDs;
     int trackSize; //# blocks
@@ -34,10 +34,12 @@ class Wayside{
 
     //PLC plc;
   public:
+    vector<Block> sector;
+    PLCController hwPLC;
     void initWayside(vector<Block>); //Initialize Wayside
     int getTrackSize();
     vector<int> getId();
-    char getLine();
+    string getLine();
     void setMode(bool); //Set manual/auto mode
     bool getMode();
     void sendToArduino(int);

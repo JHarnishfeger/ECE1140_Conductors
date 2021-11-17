@@ -83,13 +83,13 @@ void HWTrackController::updateTrack(){
     double sug = WaysideHW.getSuggestedSpeed();
     assignedTrack[i].setSuggestedSpeed(sug);
     vector<bool> trackSide = WaysideHW.getBlockSwitchPosition();
-    assignedTrack[i].setSwitch(trackSide[i]);
+    assignedTrack[i].setSwitchStatus(trackSide[i]);
     vector<bool> crossingS = WaysideHW.getBlockCrossingState();
-    assignedTrack[i].setCrossing(crossingS[i]);
+    assignedTrack[i].setCrossingStatus(crossingS[i]);
     vector<bool> occu = WaysideHW.getBlockOccupancy();
     assignedTrack[i].setTrainPresent(occu[i]);
     vector<bool> brok = WaysideHW.getBrokenRail();
-    assignedTrack[i].setBrokenCircuit(brok[i]);
+    assignedTrack[i].setRailStatus(brok[i]);
   }
 }
 

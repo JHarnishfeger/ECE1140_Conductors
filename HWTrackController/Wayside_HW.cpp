@@ -30,6 +30,7 @@ void receiveFromArdu(){
 
 }
 
+/*
 int char_to_int(char c){
   int re = -1;
   if(c == '0'){
@@ -56,10 +57,13 @@ int char_to_int(char c){
   return re;
 }
 
-
+*/
 
 
 void Wayside::initWayside(vector<Block> track){
+  sector = track;
+  PLCController p(track);
+  hwPLC = p;
 
   line = track[0].getLine();
 
@@ -74,13 +78,13 @@ void Wayside::initWayside(vector<Block> track){
   for(int i = 0; i < trackSize; i++){
     int id = track[i].getId();
     blockIDs.push_back(id);
-    bool po = track[i].getSwitch();
+    bool po = track[i].getSwitchStatus();
     blockSwitchPosition.push_back(po);
-    bool cro = track[i].getCrossing();
+    bool cro = track[i].getCrossingStatus();
     blockCrossingState.push_back(cro);
     bool pre =track[i].getTrainPresent();
     blockOccupany.push_back(pre);
-    bool bro = track[i].getBrokenRail();
+    bool bro = track[i].getRailStatus();
     brokenRail.push_back(bro);
 
   }
@@ -91,7 +95,7 @@ int Wayside::getTrackSize(){
   return trackSize;
 }
 
-char Wayside::getLine(){
+string Wayside::getLine(){
   return line;
 }
 
@@ -113,23 +117,33 @@ void Wayside::sendToArduino(int s){
 }
 void Wayside::receiveFromArduino(){
   receiveFromArdu();
-  char id, tSwicth, crossing;
+  string id, id0;
+  char tSwicth, crossing;
   string temp = output;
   string out = "";
   int outSize = temp.size();
   //cout <<"output = "<< output << endl;
 
-  for (int i = 3;i < outSize; i++){
+  /*
+  for(int i = 0; i < temp.size(); i++){
+      cout << "temp=" << temp[i] << endl;
+  }*/
+
+  for (int i = 4;i < outSize; i++){
     if(output[i] != '\n')
     out = out + output[i];
   }
-
-  id = out[0];
-  tSwicth = out[1];
-  crossing = out[2];
+  //cout <<"out = "<< out << endl;
+  id0 = out;
+  id0.pop_back();
+  id0.pop_back();
+  id = id0;
+  //cout << "id=" << id << endl;
+  tSwicth = out[2];
+  crossing = out[3];
   int idd;
   bool tSwicthh, crossingg;
-  idd = char_to_int(id);
+  idd = stoi(id);
   if(tSwicth=='0'){
     tSwicthh = 0;
   }else if(tSwicth=='1'){

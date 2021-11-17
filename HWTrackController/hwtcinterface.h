@@ -5,6 +5,7 @@
 #include "HWTrackController.h"
 #include <QListWidget>
 //#include <QChar>
+#include <QDebug>
 QT_BEGIN_NAMESPACE
 namespace Ui { class HWTCInterface; }
 QT_END_NAMESPACE
