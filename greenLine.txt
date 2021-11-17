@@ -11,7 +11,7 @@ green,c,8,100,0,45,rail,17,south
 green,c,9,100,-5,45,station;edgebrook,12,south
 green,c,10,100,-4.5,45,rail,7.5,east
 green,c,11,100,-4,45,rail,3.5,east
-green,c,12,100,-3,45,switch(13;1),0.5,east
+green,c,12,100,-3,45,switch(13:1),0.5,east
 green,d,13,150,0,70,rail,0.5,west
 green,d,14,150,0,70,rail,0.5,west
 green,d,15,150,0,70,rail,0.5,west

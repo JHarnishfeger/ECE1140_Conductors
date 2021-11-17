@@ -40,10 +40,11 @@ class Block{
 		bool crossingStatus;
 		bool switchStatus;
 		bool trainPresent;
+		uint32_t encodedData;
 	public:
 		//Constructors:
 		Block();
-		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool);
+		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t);
 		Block(string,string,int,double,double,double,string,double,double,string);
 		//Attributes:
 		//passengers
@@ -125,9 +126,9 @@ class Block{
 		void setTrainPresent(bool);
 		bool getTrainPresent();
 		void toggleTrainPresent();
-		//encoder
-		uint32_t encodeData();
-		void decodeData(uint32_t);
+		//encoding
+		void encodeData();
+		uint32_t getEncodedData();
 		//toStrings
 		string toString();
 		string toStringDetailed();

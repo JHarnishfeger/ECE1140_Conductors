@@ -40,7 +40,7 @@ Block::Block(){
 
 //Full input constructor
 Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, string stationNameIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
-double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN){
+double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN, uint32_t encodedDataIN){
 	passengers = passengersIN;
 	id = instanceCounter;
 	instanceCounter++;
@@ -68,6 +68,7 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 	crossingStatus = crossingStatusIN;
 	switchStatus = switchStatusIN;
 	trainPresent = trainPresentIN;
+	encodedData = encodedDataIN;
 }
 //Functional constructor
 Block::Block(string lineIN, string branchIN, int idIN, double lengthIN, double gradeIN, double speedLimitIN, 
@@ -124,6 +125,7 @@ string typeIN, double heightIN, double suggestedSpeedIN, string directionIN){
 	crossingStatus = false;
 	switchStatus = true;
 	trainPresent = false;
+	encodeData();
 }
 
 //Attributes:
@@ -527,11 +529,11 @@ void Block::toggleTrainPresent(){
 //Params: None
 //Returns: uint32_t
 //Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
-uint32_t Block::encodeData(){
+void Block::encodeData(){
 	uint32_t retUint = 0;
 	
 	string incomingStation = "";
-	int stationCode;
+	int stationCode, stationNheadlight;
 	
 	//Station encoder
 	if(incomingStation == "shadyside"){
@@ -580,10 +582,13 @@ uint32_t Block::encodeData(){
 		stationCode = 31;
 	}
 	
+	if(type == "underground"){
+		stationNheadlight = 1;
+	}
 	
-	
-	
-	return retUint;
+	stationNheadlight ++;
+	stationCode++;
+	encodedData = retUint;
 }
 //Params: None
 //Returns: string

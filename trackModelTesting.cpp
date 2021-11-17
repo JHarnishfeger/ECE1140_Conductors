@@ -32,7 +32,7 @@ int main(){
 	cout << Branches << endl;*/
 	
 	srand(time(NULL));
-	Track t1("greenLine.txt", 45.0);
+	Track t1("greenLine2.txt", 45.0);
 	cout << t1.toString() << endl;
 	cout << "\n END toString()------------------------------------------ \n" << endl;
 	cout << t1.toStringDetailed();
