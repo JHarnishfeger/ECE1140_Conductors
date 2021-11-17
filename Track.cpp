@@ -262,31 +262,36 @@ bool Track::loadTrack(string filename){
 	std::ifstream inputFile;
 	inputFile.open(filename);
 	
-	string header, size, line, type, direction, length, grade, temperature,
-	height, speedLimit;
-	int fileSize = 0;
-	
-	getline(inputFile, header);
-	getline(inputFile, size);
-	std::stringstream ss(size);
-	ss >> fileSize;
+	string header, fsize, line, branch, id, length, grade, speedLimit, 
+	type, height, direction;
+	int fileSize;
+	getline(inputFile,header);
+	getline(inputFile,fsize);
+	std::stringstream ss1(fsize);
+	ss1 >> fileSize;
 	for(int i = 0; i < fileSize; i++){
 		getline(inputFile, line, ',');
-		getline(inputFile, type, ',');
-		getline(inputFile, direction, ',');
+		getline(inputFile, branch, ',');
+		getline(inputFile, id, ',');
 		getline(inputFile, length, ',');
 		getline(inputFile, grade, ',');
-		getline(inputFile, temperature, ',');
+		getline(inputFile, speedLimit, ',');
+		getline(inputFile, type, ',');
 		getline(inputFile, height, ',');
-		getline(inputFile, speedLimit);
+		getline(inputFile, direction);
 		if(line == "green"){
-			greenLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
-			stod(height), stod(speedLimit), suggSpeed));
+			std::stringstream ss2(id);
+			int idgreen = 0;
+			ss2 >> idgreen;
+			greenLine.push_back(new Block(line,branch,idgreen,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
 		}
 		if(line == "red"){
-			redLine.push_back(new Block(line, type, direction, stod(length), stod(grade), stod(temperature),
-			stod(height), stod(speedLimit), suggSpeed));
+			std::stringstream ss3(id);
+			int idred = 0;
+			ss3 >> idred;
+			redLine.push_back(new Block(line,branch,idred,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
 		}
+		//Fix Branches?
 	}
 	inputFile.close();
 	return false;
@@ -393,15 +398,5 @@ string Track::toStringDetailed(){
 	}
 	return retString;
 }
-//Params: None
-//Returns: uint32_t
-//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
-uint32_t Track::encodeData(){
-	uint32_t retUint = 0;
-	
-	
-	
-	
-	return retUint;
-}
+
 

@@ -5,16 +5,16 @@
 #include <iostream>
 #include <time.h>
 #include <string>
+#include <sstream>
 using std::string;
 
 //Block class
 class Block{
 	private:
 		static int instanceCounter;	
-		static int branchIndex;
 		static double xCordTotal;
 		static double yCordTotal;
-		static string branchesList;
+		static double totalDistance;
 		int passengers;
 		int id;
 		string line;
@@ -31,6 +31,7 @@ class Block{
 		double temperature;
 		double speedLimit;
 		double suggestedSpeed;
+		double TDBegin;
 		bool authority;
 		bool railStatus;
 		bool circuitStatus;
@@ -43,7 +44,7 @@ class Block{
 		//Constructors:
 		Block();
 		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool);
-		Block(string,string,string,double,double,double,double,double,double);
+		Block(string,string,int,double,double,double,string,double,double,string);
 		//Attributes:
 		//passengers
 		void setPassengers(int);
@@ -124,7 +125,10 @@ class Block{
 		void setTrainPresent(bool);
 		bool getTrainPresent();
 		void toggleTrainPresent();
-		//toString
+		//encoder
+		uint32_t encodeData();
+		void decodeData(uint32_t);
+		//toStrings
 		string toString();
 		string toStringDetailed();
 };

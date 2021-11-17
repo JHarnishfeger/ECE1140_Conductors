@@ -50,10 +50,9 @@ class Track{
 		bool fixRail(string,int);
 		bool fixCircuit(string,int);
 		bool fixPower(string,int);
+		//toStrings
 		string toString();
 		string toStringDetailed();
-		uint32_t encodeData();
-		void decodeData(uint32_t);
 };
 //End Track class
 #endif

@@ -2,10 +2,9 @@
 
 //Init statics
 int Block::instanceCounter = 0;
-string Block::branchesList = "abcdefghijklmnopqrstuvwxyz";
-int Block::branchIndex = 0;
 double Block::xCordTotal = 0.0;
 double Block::yCordTotal = 0.0;
+double Block::totalDistance = 0.0;
 
 //Constructors:
 //Default constructor
@@ -20,6 +19,8 @@ Block::Block(){
 	nextBranches = "bc";
 	stationName = "";
 	length = 10.0;
+	TDBegin = totalDistance;
+	totalDistance = totalDistance + length;
 	xCord = 0.0;
 	yCord = 0.0;
 	grade = 1.0;
@@ -50,6 +51,8 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 	nextBranches = nextBranchesIN;
 	stationName = stationNameIN;
 	length = lengthIN;
+	TDBegin = totalDistance;
+	totalDistance = totalDistance + length;
 	xCord = xCordIN;
 	yCord = yCordIN;
 	grade = gradeIN;
@@ -67,32 +70,34 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 	trainPresent = trainPresentIN;
 }
 //Functional constructor
-Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
-double speedLimitIN, double suggestedSpeedIN){
-	srand(time(NULL));
-	id = instanceCounter;
+Block::Block(string lineIN, string branchIN, int idIN, double lengthIN, double gradeIN, double speedLimitIN, 
+string typeIN, double heightIN, double suggestedSpeedIN, string directionIN){
 	instanceCounter++;
-	line = lineIN;
-	branch = branchesList[branchIndex];
-	type = typeIN;
-	direction = directionIN;
-	if(type.substr(0,2) == "st"){
-		stationName = type.substr(8,type.size()-8);
-		type = type.substr(0,7);
-	}
-	if(type == "switch"){
-		nextBranches = branchesList.substr(branchIndex,2);
-		branchIndex++;
+	if(typeIN.substr(0,2) == "st"){
+		type = typeIN.substr(0,7);
+		stationName = typeIN.substr(8,typeIN.size()-8);
+	}else if(typeIN.substr(0,2) == "sw"){
+		type = typeIN.substr(0,6);
+		string branchParse = typeIN.substr(6,typeIN.size()-6); //(#:#)
+		string branch1(typeIN.substr(7,typeIN.find(":")-7));
+		string branch2(typeIN.substr(( typeIN.find(":") + 1 ),( typeIN.size() - 2 ) - typeIN.find(":")));
+		nextBranches = branch1 + "," + branch2; 
 	}else{
-		nextBranches = "";
+		type = typeIN;
 	}
 	if(type == "station"){
-		stationName = 
+		srand(time(NULL));
 		passengers = rand() % 100 + 1;
 	}else{
 		passengers = 0;
 	}
+	line = lineIN;
+	id = idIN;
+	branch = branchIN;
+	direction = directionIN;
 	length = lengthIN;
+	TDBegin = totalDistance;
+	totalDistance = totalDistance + length;
 	xCord = xCordTotal;
 	yCord = yCordTotal;
 	if(direction == "north"){
@@ -101,19 +106,21 @@ double speedLimitIN, double suggestedSpeedIN){
 		xCordTotal = xCordTotal + length;
 	}else if(direction == "south"){
 		yCordTotal = yCordTotal - length;
-	}else{
+	}else if(direction == "west"){
 		xCordTotal = xCordTotal - length;
+	}else{
+		//no change
 	}
 	grade = gradeIN;
 	height = heightIN;
-	temperature = temperatureIN;
+	temperature = 40.0;
 	speedLimit = speedLimitIN;
 	suggestedSpeed = suggestedSpeedIN;
 	authority = false;
 	railStatus = true;
 	circuitStatus = true;
 	powerStatus = true;
-	heaterStatus = true;
+	heaterStatus = false;
 	crossingStatus = false;
 	switchStatus = true;
 	trainPresent = false;
@@ -342,6 +349,7 @@ double Block::getSuggestedSpeed(){
 	return suggestedSpeed;
 }
 //authority ------------------------------------------------------------
+//Notes: bool true = train has authority false = true has no authority
 //Params: bool
 //Returns None
 //Desc: sets the value of the attribute authority = to inputted bool
@@ -362,7 +370,7 @@ void Block::toggleAuthority(){
 }
 
 //railStatus -----------------------------------------------------------
-//Notes: bool true == no rail failures bool false = rail failure
+//Notes: bool true = no rail failures bool false = rail failure
 //Params: bool
 //Returns: None
 //Desc: sets the value of the attribute railStatus = to inputted bool
@@ -431,6 +439,11 @@ void Block::togglePowerStatus(){
 //Desc: sets the value of the attribute heaterStatus = to inputted bool
 void Block::setHeaterStatus(bool heaterStatusIN){
 	heaterStatus = heaterStatusIN;
+	if(heaterStatus == true){
+		temperature = 50.0;
+	}else{
+		temperature = 40.0;
+	}
 }
 //Params: None
 //Returns: bool 
@@ -443,6 +456,11 @@ bool Block::getHeaterStatus(){
 //Desc: toggles the bool value of the attribute heaterStatus
 void Block::toggleHeaterStatus(){
 	heaterStatus = !(heaterStatus);
+	if(heaterStatus == true){
+		temperature = 50.0;
+	}else{
+		temperature = 40.0;
+	}
 }
 
 //crossingStatus -------------------------------------------------------
@@ -507,6 +525,67 @@ void Block::toggleTrainPresent(){
 	trainPresent = !(trainPresent);
 }
 //Params: None
+//Returns: uint32_t
+//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
+uint32_t Block::encodeData(){
+	uint32_t retUint = 0;
+	
+	string incomingStation = "";
+	int stationCode;
+	
+	//Station encoder
+	if(incomingStation == "shadyside"){
+		stationCode = 1;
+	}else if(incomingStation == "herron_ave"){
+		stationCode = 2;
+	}else if(incomingStation == "swissville"){
+		stationCode = 3;
+	}else if(incomingStation == "penn_station"){
+		stationCode = 4;
+	}else if(incomingStation == "steel_plaza"){
+		stationCode = 5;
+	}else if(incomingStation == "first_ave"){
+		stationCode = 6;
+	}else if(incomingStation == "station_square"){
+		stationCode = 7;
+	}else if(incomingStation == "south_hills_junction"){
+		stationCode = 8;
+	}else if(incomingStation == "pioneer"){
+		stationCode = 9;
+	}else if(incomingStation == "edgebrook"){
+		stationCode = 10;
+	}else if(incomingStation == "whited"){
+		stationCode = 11;
+	}else if(incomingStation == "south_bank"){
+		stationCode = 12;
+	}else if(incomingStation == "central"){
+		stationCode = 13;
+	}else if(incomingStation == "inglewood"){
+		stationCode = 14;
+	}else if(incomingStation == "overbrook"){
+		stationCode = 15;
+	}else if(incomingStation == "glenbury"){
+		stationCode = 16;
+	}else if(incomingStation == "dormont"){
+		stationCode = 17;
+	}else if(incomingStation == "mt_lebanon"){
+		stationCode = 18;
+	}else if(incomingStation == "poplar"){
+		stationCode = 19;
+	}else if(incomingStation == "castle_shannon"){
+		stationCode = 20;
+	}else if(incomingStation == "yard"){
+		stationCode = 21;
+	}else{
+		stationCode = 31;
+	}
+	
+	
+	
+	
+	return retUint;
+}
+//Params: None
 //Returns: string
 //Desc: Returns a formatted string representation of the block
 string Block::toString(){
@@ -516,6 +595,7 @@ string Block::toString(){
 	retString = retString + "," + type;
 	retString = retString + ", X: " + std::to_string(xCord);
 	retString = retString + ", Y: " + std::to_string(yCord);
+	retString = retString + ", TDBegin: " + std::to_string(TDBegin);
 	retString = retString + ", TP: " + std::to_string(trainPresent) + "]\n";
 	return retString;
 }
@@ -529,16 +609,19 @@ string Block::toStringDetailed(){
 	retString = retString + "," + type;
 	retString = retString + ", X: " + std::to_string(xCord);
 	retString = retString + ", Y: " + std::to_string(yCord);
+	retString = retString + ", TDBegin: " + std::to_string(TDBegin);
 	retString = retString + ", TP: " + std::to_string(trainPresent) + "]\n";
 	retString = retString + "BLOCK STATS: \n";
 	retString = retString + "\t passengers: " + std::to_string(passengers);
 	retString = retString + "\t direction: " + direction;
+	retString = retString + "\t nextBranches: " + nextBranches;
 	retString = retString + "\t length: " + std::to_string(length) + "\n";
 	retString = retString + "\t grade: " + std::to_string(grade);
 	retString = retString + "\t height: " + std::to_string(height);
 	retString = retString + "\t temperature: " + std::to_string(temperature) + "\n";
 	retString = retString + "\t speedLimit: " + std::to_string(speedLimit);
 	retString = retString + "\t suggestedSpeed: " + std::to_string(suggestedSpeed);
+	retString = retString + "\t totalDistance: " + std::to_string(totalDistance);
 	retString = retString + "\n BlOCK STATUS: \n";
 	retString = retString + "\t railStatus: " + std::to_string(railStatus);
 	retString = retString + "\t circuitStatus: " + std::to_string(circuitStatus);
