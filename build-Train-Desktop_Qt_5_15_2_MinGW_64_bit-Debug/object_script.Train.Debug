@@ -1,0 +1,10 @@
+debug/serialport.o
+debug/traincontroller.o
+debug/hwtrainui.o
+debug/main.o
+debug/trainmodel.o
+debug/trainui.o
+debug/moc_serialport.o
+debug/moc_traincontroller.o
+debug/moc_hwtrainui.o
+debug/moc_trainui.o

@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../../TrainModel/trainui.h"
+#include "../../../HWTrainController/TrainModel/trainui.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
