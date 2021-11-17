@@ -5,7 +5,7 @@ TrackMap::TrackMap(QObject* parent){
     //Graphics setup
     scene = new QGraphicsScene(parent);
 
-    background = new QPixmap("../CTC/track.png");
+    background = new QPixmap("track.png"); //Put track.png in the same directory as the executable please! Otherwise it won't load
     backgroundItem = scene->addPixmap(*background);
 
     int bgW = background->size().width();
