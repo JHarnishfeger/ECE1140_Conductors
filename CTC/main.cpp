@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
         std::vector<Block> sector;
         for(int j = 0; j < 10; j++){
             sector.push_back(Block());
-            sector[j].setId(10*i+j);
             sector[j].setTrainPresent(false);
         }
         std::vector<Authority> authorities;
@@ -29,7 +28,6 @@ int main(int argc, char *argv[])
     std::vector<Block> sector;
     for(int j = 0; j < 11; j++){
         sector.push_back(Block());
-        sector[j].setId(140+j);
         sector[j].setTrainPresent(true);
     }
     std::vector<Authority> authorities;
@@ -39,7 +37,6 @@ int main(int argc, char *argv[])
     hw_controller.sector = sector;
     hw_controller.auth = authorities;
     hw_controller.suggestedSpeed = 0;
-
 
     CTCWindow w(&sw_controller, &hw_controller);
     w.show();

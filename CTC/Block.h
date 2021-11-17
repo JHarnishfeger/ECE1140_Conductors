@@ -8,72 +8,123 @@
 #include <vector>
 #include <string>
 using std::string;
-using std::cout;
-using std::endl;
 
-//Block Class:
+//Block class
 class Block{
-  private:
-    static int count;
-    char line;
-	string branch;
-    string type;
-    double length;
-    bool trainPresent;
-    int id;
-    double grade;
-    double suggestedSpeed;
-    double speedLimit;
-    char direction;
-    double temperature;
-    int beacons;
-    double height;
-	bool brokenRail;
-	bool brokenCircuit;
-	bool powerFailure;
-    bool crossingActivated;
-    bool switchPosition;
-  public:
-    Block();
-    Block(char, char, string, double, bool, double, double, double, char, double, int, double, bool, bool, bool, bool, bool);
-	int getCount() const;
-    void setLine(char);
-    char getLine();
-	void setBranch(string);
-	string getBranch();
-    void setType(string);
-    string getType();
-    void setLength(double);
-    double getLength();
-    void setTrainPresent(bool);
-    bool getTrainPresent();
-    void setId(int);
-    int getId();
-	void setGrade(double);
-	double getGrade();
-	void setSuggestedSpeed(double);
-	double getSuggestedSpeed();
-	void setSpeedLimit(double);
-	double getSpeedLimit();
-	void setDirection(char);
-	char getDirection();
-	void setTemperature(double);
-	double getTemperature();
-	void setBeacons(int);
-	int getBeacons();
-	void setHeight(double);
-	double getHeight();
-	void setBrokenRail(bool);
-	bool getBrokenRail();
-	void setBrokenCircuit(bool);
-	bool getBrokenCircuit();
-	void setPowerFailure(bool);
-	bool getPowerFailure();
-    void setCrossing(bool);
-    bool getCrossing();
-    void setSwitch(bool);
-    bool getSwitch();
-	void toConsole();
+	private:
+		static int instanceCounter;
+		static int branchIndex;
+		static double xCordTotal;
+		static double yCordTotal;
+		static string branchesList;
+		int passengers;
+		int id;
+		string line;
+		string branch;
+		string type;
+		string direction;
+		string nextBranches;
+		double length;
+		double xCord;
+		double yCord;
+		double grade;
+		double height;
+		double temperature;
+		double speedLimit;
+		double suggestedSpeed;
+		bool authority;
+		bool railStatus;
+		bool circuitStatus;
+		bool powerStatus;
+		bool heaterStatus;
+		bool crossingStatus;
+		bool switchStatus;
+		bool trainPresent;
+	public:
+		//Constructors:
+		Block();
+		Block(int,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool);
+		Block(string,string,string,double,double,double,double,double,double);
+		//Attributes:
+		//passengers
+		void setPassengers(int);
+		int getPassengers();
+		//id
+		int getId();
+		//line
+		void setLine(string);
+		string getLine();
+		//branch
+		void setBranch(string);
+		string getBranch();
+		//type
+		void setType(string);
+		string getType();
+		//direction
+		void setDirection(string);
+		string getDirection();
+		//nextBranches
+		void setNextBranches(string);
+		string getNextBranches();
+		//authority?
+		//length
+		void setLength(double);
+		double getLength();
+		//xCord
+		void setXCord(double);
+		double getXCord();
+		//yCord
+		void setYCord(double);
+		double getYCord();
+		//grade
+		void setGrade(double);
+		double getGrade();
+		//height
+		void setHeight(double);
+		double getHeight();
+		//temperature
+		void setTemperature(double);
+		double getTemperature();
+		//speedLimit
+		void setSpeedLimit(double);
+		double getSpeedLimit();
+		//suggestedSpeed
+		void setSuggestedSpeed(double);
+		double getSuggestedSpeed();
+        //authority
+        void setAuthority(bool);
+        bool getAuthority();
+		//railStatus
+		void setRailStatus(bool);
+		bool getRailStatus();
+		void toggleRailStatus();
+		//circuitStatus
+		void setCircuitStatus(bool);
+		bool getCircuitStatus();
+		void toggleCircuitStatus();
+		//powerStatus
+		void setPowerStatus(bool);
+		bool getPowerStatus();
+		void togglePowerStatus();
+		//heaterStatus
+		void setHeaterStatus(bool);
+		bool getHeaterStatus();
+		void toggleHeaterStatus();
+		//crossingStatus
+		void setCrossingStatus(bool);
+		bool getCrossingStatus();
+		void toggleCrossingStatus();
+		//switchStatus
+		void setSwitchStatus(bool);
+		bool getSwitchStatus();
+		void toggleSwitchStatus();
+		//trainPresent
+		void setTrainPresent(bool);
+		bool getTrainPresent();
+		void toggleTrainPresent();
+		//toString
+		string toString();
+		string toStringDetailed();
 };
 // End Block class
 

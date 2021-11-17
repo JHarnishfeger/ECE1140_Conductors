@@ -2,9 +2,13 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
-#include <WaysideManager.h>
+#include "WaysideManager.h"
 
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
+
+    if(sw_waystructs == nullptr || hw_waystruct == nullptr){
+        std::cout << "CTC: WayStructs are being recieved as null!\n";
+    }
 
 	//Give the waystructs to WaysideManager
 	std::list<WayStruct*> waystructs;
@@ -78,7 +82,7 @@ void CTC::setTrackSwitch(int blockId, bool direction){
     //THIS IMPLEMENTATION IS WRONG. CTC NEEDS TO USE AUTHORITY TO FLIP SWITCHES.
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->setSwitch(direction);
+        block->setSwitchStatus(direction);
     }
 }
 
@@ -167,7 +171,7 @@ bool CTC::getBlockDirection(int blockId){
     //THIS IS OK, unlike the setSwitch() implementation
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->getSwitch();
+        return block->getSwitchStatus();
     }else{
         return false;
     }
