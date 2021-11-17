@@ -106,9 +106,9 @@ void CTC::dispatchTrain(CTCSchedule schedule){
     std::list<Authority> authorities;
     for(auto itr = route.begin(); itr != route.end(); itr++){
         if(*itr == route.back()){
-            authorities.push_back(Authority{*itr, destinationBlock});
+            authorities.push_back(Authority{*itr, "", destinationBlock});
         }else{
-            authorities.push_back(Authority{*itr, -1});
+            authorities.push_back(Authority{*itr, *(itr+1) ,-1});
         }
     }
 
