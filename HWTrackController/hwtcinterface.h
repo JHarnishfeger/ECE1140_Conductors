@@ -19,10 +19,7 @@ public:
     HWTCInterface(QWidget *parent = nullptr);
     ~HWTCInterface();
     void setHWTrack(vector<Block>);
-    void setHWMode(bool);
-    void addBlocksToUI();
-    void updateSwitchToUI(int);
-    void updateCrossingToUI(int);
+
 
 private slots:
     void on_pushButton_clicked();
@@ -46,5 +43,9 @@ private:
     bool hwMode;
     bool brokenRailDetected;
     int blockSelected;
+    void setHWMode(bool);
+    void addBlocksToUI();
+    void updateSwitchToUI(int);
+    void updateCrossingToUI(int);
 };
 #endif // HWTCINTERFACE_H
