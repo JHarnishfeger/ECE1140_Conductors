@@ -79,7 +79,7 @@ Node<Branch>* TrackNodes::findNodeByName(std::string name, bool useGreen){
 		else if(name == "F"){name = "F0";}
 		else if(name == "N"){name = "N0";}
 		
-		for(int i = 0; i < green.size(); i++){
+        for(unsigned int i = 0; i < green.size(); i++){
 			Node<Branch>* node = &green[i];
 			if(node->getValue().name == name){
 					return node;

@@ -63,7 +63,7 @@ void ScheduleManager::loadSchedule(std::string filepath){
             int destination = stations.at(stationName);
             int time = std::stoi(*(itr++));
             addSchedule(CTCSchedule(train, destination, time));
-        }catch(std::exception){
+        }catch(std::exception& e){
             std::cout << "Could not parse schedule " + filepath << std::endl;
         }
    	}

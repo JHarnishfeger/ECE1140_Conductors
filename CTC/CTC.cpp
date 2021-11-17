@@ -9,7 +9,7 @@ CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
 	//Give the waystructs to WaysideManager
 	std::list<WayStruct*> waystructs;
     if(sw_waystructs != nullptr && hw_waystruct != nullptr){
-        for(int i = 0; i < sw_waystructs->size(); i++){
+        for(unsigned int i = 0; i < sw_waystructs->size(); i++){
             waystructs.push_back(&(*sw_waystructs)[i]);
         }
         waystructs.push_back(hw_waystruct);

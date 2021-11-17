@@ -8,9 +8,6 @@ TrackMap::TrackMap(QObject* parent){
     background = new QPixmap("track.png"); //Put track.png in the same directory as the executable please! Otherwise it won't load
     backgroundItem = scene->addPixmap(*background);
 
-    int bgW = background->size().width();
-    int bgH = background->size().height();
-
     QBrush greenBrush(Qt::green);
     QBrush yellowBrush(Qt::yellow);
     QPen blackPen(Qt::black);
