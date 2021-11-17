@@ -133,7 +133,7 @@ class Block{
 		string toString();
 		string toStringDetailed();
 		//helpers for integration
-		string stationApproaching(string);
+		string stationApproaching(string,double);
 };
 //End Block class
 #endif

@@ -532,7 +532,8 @@ void Block::toggleTrainPresent(){
 void Block::encodeData(){
 	uint32_t retUint = 0;
 	
-	string incomingStation = "";
+	string incomingStation = stationApproaching("green", TDBegin);
+	bool incStation, headlight;
 	int stationCode, stationNheadlight;
 	
 	//Station encoder
@@ -583,11 +584,28 @@ void Block::encodeData(){
 	}
 	
 	if(type == "underground"){
+		headlight = true;
+	}else{
+		headlight = false;
+	}
+	if(incomingStation == ""){
+		incStation = false;
+	}else{
+		incStation = true;
+	}
+	
+	if((headlight == true) & (incStation == true)){
+		stationNheadlight = 4;
+	}else if((headlight == false) & (incStation == true)){
+		stationNheadlight = 3;
+	}else if((headlight == true) & (incStation == false)){
+		stationNheadlight = 2;
+	}else{
 		stationNheadlight = 1;
 	}
 	
-	stationNheadlight ++;
-	stationCode++;
+	
+	
 	encodedData = retUint;
 }
 //Params: None
@@ -664,8 +682,30 @@ string stationApproaching(string line, double distance){
 			return "castle_shannon";
 		}else if(distance >= 7936.6 && distance < 8236.6){
 			return "mt_lebanon";
-		}else if(distance >= 1250.0 && distance < 1350.0){
-			return "dormont";
+		}else if(distance >= 10543.6 && distance < 10593.6){
+			return "inglewood";
+		}else if(distance >= 10993.6 && distance < 11043.6){
+			return "central";
+		}else if(distance >= 12602.6 && distance < 12902.6){
+			return "whited";
+		}else if(distance >= 13802.6 && distance < 13952.6){
+			return "misc";
+		}else if(distance >= 14702.6 && distance < 14802.6){
+			return "edgebrook";
+		}else if(distance >= 15402.6 && distance < 15502.6){
+			return "pioneer";
+		}else if(distance >= 16052.6 && distance < 16202.6){
+			return "misc";
+		}else if(distance >= 17201.6 && distance < 17402.6){
+			return "whited";
+		}else if(distance >= 18502.6 && distance < 18552.6){
+			return "south_bank";
+		}else if(distance >= 18902.6 && distance < 18952.6){
+			return "central";
+		}else if(distance >= 19352.6 && distance < 19402.6){
+			return "inglewood";
+		}else if(distance >= 19802.6 && distance < 19852.6){
+			return "overbrook";
 		}else{
 			return "";
 		}
