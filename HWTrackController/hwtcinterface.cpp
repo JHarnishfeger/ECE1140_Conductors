@@ -46,17 +46,9 @@ HWTCInterface::HWTCInterface(QWidget *parent)
         //Block b33(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
         vector<Block> tk{b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,
                     b19,b20,b21,b22,b23,b24,b25,b26,b27,b28,b29,b30,b31,b32};
-        setHWTrack(tk);
-        hwtc.initializeHW(hwTrack);
-        hwWaysidePtr = hwtc.getWayside();
-        bool hwConnect = hwWaysidePtr->ifHWConnected();
-        if(hwConnect){
-            ui->HWConnection->setChecked(true);
-        }else{
-            ui->HWConnection->setChecked(false);
-        }
 
-        addBlocksToUI();
+
+        setHWTrack(tk);
 
 
 
@@ -69,6 +61,16 @@ HWTCInterface::~HWTCInterface()
 
 void HWTCInterface::setHWTrack(vector<Block> tk){
     hwTrack = tk;
+    hwtc.initializeHW(hwTrack);
+    hwWaysidePtr = hwtc.getWayside();
+    bool hwConnect = hwWaysidePtr->ifHWConnected();
+    if(hwConnect){
+        ui->HWConnection->setChecked(true);
+    }else{
+        ui->HWConnection->setChecked(false);
+    }
+
+    addBlocksToUI();
 }
 
 void HWTCInterface::setHWMode(bool m){
