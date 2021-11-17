@@ -45,6 +45,7 @@ double SWTrainController::calculatePower(){
     //Check if need to stop at a station
     atStation();
     train->setPower(power_command);
+    return power_command;
 }
 
 
