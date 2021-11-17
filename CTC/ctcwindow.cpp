@@ -19,17 +19,19 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
     //TODO: Add switch list to drop-down here
     std::list<int> switches = ctc.getSwitches();
     for(int s : switches){
-        ui->comboBox->addItem("Switch on Block " + QString::number(s), s);
+        ui->comboBox->addItem("Switch on Block " + QString::number(s), QVariant(s));
     }
 
     trackMap = new TrackMap(this->ui->graphicsView);
     ui->graphicsView->setScene(trackMap->getScene());
 
+    /*
     std::list<std::string> fakeOccupiedList;
     fakeOccupiedList.push_back("F");
     fakeOccupiedList.push_back("I");
     fakeOccupiedList.push_back("Q");
     trackMap->setOccupiedBranches(fakeOccupiedList);
+    */
 }
 
 CTCWindow::~CTCWindow()
@@ -92,7 +94,7 @@ void CTCWindow::on_lineEdit_selectBlock_returnPressed()
         }else{
             throw std::logic_error("Block is not valid.");
         }
-    }catch(std::exception e){
+    }catch(std::exception& e){
         ui->textBrowser_blockPropertiesId->setText("");
         ui->textBrowser_blockPropertiesMaintenence->setText("");
         ui->textBrowser_blockPropertiesTrainPresent->setText("");
@@ -120,7 +122,7 @@ void CTCWindow::on_pushButton_openCloseForMaintenecnce_clicked()
         }else{
             ui->textBrowser_blockPropertiesMaintenence->setText("Open");
         }
-    }catch(std::exception){
+    }catch(std::exception& e){
 
     }
 }
@@ -140,7 +142,7 @@ void CTCWindow::on_pushButton_dispatchTrain_clicked()
         trainNo = ui->label_manualDispatchtrain->text().toStdString();
         destinationBlockId = std::stoi(ui->label_manualDispatchTo->text().toStdString());
         destinationTime = std::stoi(ui->label_manualDispatchToTime->text().toStdString());
-    }catch(std::exception){
+    }catch(std::exception& e){
         return;
     }
     //string, int, int
@@ -148,14 +150,15 @@ void CTCWindow::on_pushButton_dispatchTrain_clicked()
 }
 
 
-void CTCWindow::on_comboBox_activated(int index)
+void CTCWindow::on_comboBox_activated()
 {
-    int blockId = ui->comboBox->currentData().Int;
+    std::string label = ui->comboBox->currentText().toStdString();
+    int blockId = std::stoi(label.substr(label.size()-2, 2));
     ui->textBrowser_switchId->setText(QString::fromStdString(std::to_string(blockId)));
 
-    char direction = ctc.getBlockDirection(blockId);
+    bool direction = ctc.getBlockDirection(blockId);
     QString directionText;
-    if(direction == 'e'){
+    if(direction == false){
         directionText = "Normal";
     }else{
         directionText = "Reverse";
@@ -166,12 +169,14 @@ void CTCWindow::on_comboBox_activated(int index)
 
 void CTCWindow::on_pushButton_openCloseSwitch_clicked()
 {
-    int blockId = ui->comboBox->currentData().Int;
-    char direction = ctc.getBlockDirection(blockId);
-    if(direction == 'e'){
-        ctc.setTrackSwitch(blockId, 'w');
+    std::string label = ui->comboBox->currentText().toStdString();
+    int blockId = std::stoi(label.substr(label.size()-2, 2));
+
+    bool direction = ctc.getBlockDirection(blockId);
+    if(direction == false){
+        ctc.setTrackSwitch(blockId, true);
     }else{
-        ctc.setTrackSwitch(blockId, 'e');
+        ctc.setTrackSwitch(blockId, false);
     }
-    on_comboBox_activated(ui->comboBox->currentIndex());
+    on_comboBox_activated();
 }

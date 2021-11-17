@@ -17,10 +17,9 @@ class CTCWindow : public QMainWindow
 public:
     CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct, QWidget *parent = nullptr);
     ~CTCWindow();
+    void update();
 
 private slots:
-
-    void update();
 
     void on_button_chooseSchedule_clicked();
 
@@ -34,7 +33,7 @@ private slots:
 
     void on_pushButton_dispatchTrain_clicked();
 
-    void on_comboBox_activated(int index);
+    void on_comboBox_activated();
 
     void on_pushButton_openCloseSwitch_clicked();
 

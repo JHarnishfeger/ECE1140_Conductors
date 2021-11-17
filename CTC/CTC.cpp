@@ -70,9 +70,10 @@ void CTC::setTrackMaintenence(int blockId, bool isBroken){
  * Set a single block switch to a given direction (See Block.cpp)
  */
 void CTC::setTrackSwitch(int blockId, bool direction){
+    //THIS IMPLEMENTATION IS WRONG. CTC NEEDS TO USE AUTHORITY TO FLIP SWITCHES.
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->setTrainPresent(direction);
+        return block->setSwitch(direction);
     }
 }
 
@@ -99,10 +100,10 @@ void CTC::dispatchTrain(CTCSchedule schedule){
     //Get the route
     
     //Right now, all trains come from yard
-    int destinationBlock = 40; //A block id in Branch I
-    std::list<std::string> route = track.getBranchRoute("YARD", "I");
+    int destinationBlock = schedule.destination;
+    std::list<std::string> route = track.getBranchRoute("YARD", track.getBranchOfBlock(schedule.destination));
     
-    //Send Authorities to each wayside queue
+    //Send Authorities to each wayside
     std::list<Authority> authorities;
     for(auto itr = route.begin(); itr != route.end(); itr++){
         if(*itr == route.back()){
@@ -155,6 +156,7 @@ bool CTC::getBlockHasTrainPresent(int blockId){
  * Get the direction property of a Block
  */
 bool CTC::getBlockDirection(int blockId){
+    //THIS IS OK, unlike the setSwitch() implementation
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
         return block->getSwitch();
