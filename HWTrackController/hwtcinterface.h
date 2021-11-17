@@ -38,7 +38,7 @@ private slots:
 private:
     Ui::HWTCInterface *ui;
     HWTrackController hwtc;
-    Wayside *hwWaysidePtr;
+    Wayside_HW *hwWaysidePtr;
     vector<Block> hwTrack;
     bool hwMode;
     bool brokenRailDetected;
