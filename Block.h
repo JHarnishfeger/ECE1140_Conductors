@@ -132,6 +132,8 @@ class Block{
 		//toStrings
 		string toString();
 		string toStringDetailed();
+		//helpers for integration
+		string stationApproaching(string);
 };
 //End Block class
 #endif

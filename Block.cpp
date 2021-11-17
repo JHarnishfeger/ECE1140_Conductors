@@ -598,6 +598,10 @@ string Block::toString(){
 	retString = retString + "[" + std::to_string(id);
 	retString = retString + "," + branch;
 	retString = retString + "," + type;
+	if(type == "station"){
+		retString = retString + ":" + stationName;
+	}
+	retString = retString + ", L: " + std::to_string(length);
 	retString = retString + ", X: " + std::to_string(xCord);
 	retString = retString + ", Y: " + std::to_string(yCord);
 	retString = retString + ", TDBegin: " + std::to_string(TDBegin);
@@ -612,6 +616,10 @@ string Block::toStringDetailed(){
 	retString = retString + "[" + std::to_string(id);
 	retString = retString + "," + branch;
 	retString = retString + "," + type;
+	if(type == "station"){
+		retString = retString + ":" + stationName;
+	}
+	retString = retString + ", L: " + std::to_string(length);
 	retString = retString + ", X: " + std::to_string(xCord);
 	retString = retString + ", Y: " + std::to_string(yCord);
 	retString = retString + ", TDBegin: " + std::to_string(TDBegin);
@@ -623,6 +631,7 @@ string Block::toStringDetailed(){
 	retString = retString + "\t length: " + std::to_string(length) + "\n";
 	retString = retString + "\t grade: " + std::to_string(grade);
 	retString = retString + "\t height: " + std::to_string(height);
+	retString = retString + "\t stationName: " + stationName;
 	retString = retString + "\t temperature: " + std::to_string(temperature) + "\n";
 	retString = retString + "\t speedLimit: " + std::to_string(speedLimit);
 	retString = retString + "\t suggestedSpeed: " + std::to_string(suggestedSpeed);
@@ -638,4 +647,32 @@ string Block::toStringDetailed(){
 	retString = retString + "\n\n";
 	return retString;
 }
-
+//Params: string
+//Returns: string
+//Desc: reads inputted line and distance traveled, then returns upcoming station if applicable
+string stationApproaching(string line, double distance){
+	if(line == "green"){
+		if(distance > 250.0 && distance < 450.0){
+			return "glenbury";
+		}else if(distance >= 1250.0 && distance < 1350.0){
+			return "dormont";
+		}else if(distance >= 1650.0 && distance < 1950.0){
+			return "mt_lebanon";
+		}else if(distance >= 4536.6 && distance < 4636.6){
+			return "poplar";
+		}else if(distance >= 5161.6 && distance < 5236.6){
+			return "castle_shannon";
+		}else if(distance >= 7936.6 && distance < 8236.6){
+			return "mt_lebanon";
+		}else if(distance >= 1250.0 && distance < 1350.0){
+			return "dormont";
+		}else{
+			return "";
+		}
+	}else if(line == "red"){
+		return "";
+	}else{
+		return "";
+	}
+	return "";
+}

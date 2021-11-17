@@ -79,7 +79,7 @@ green,w,128,50,0,20,underground,0.5,west
 green,w,129,50,0,20,underground,0.5,west
 green,w,130,50,0,20,underground,0.5,west
 green,w,131,50,0,20,underground,0.5,west
-green,w,132,50,0,20,#REF!,0.5,west
+green,w,132,50,0,20,station;inglewood,0.5,west
 green,w,133,50,0,20,underground,0.5,west
 green,w,134,50,0,20,underground,0.5,west
 green,w,135,50,0,20,underground,0.5,west
@@ -88,7 +88,7 @@ green,w,137,50,0,20,underground,0.5,west
 green,w,138,50,0,20,underground,0.5,west
 green,w,139,50,0,20,underground,0.5,west
 green,w,140,50,0,20,underground,0.5,west
-green,w,141,50,0,20,#REF!,0.5,west
+green,w,141,50,0,20,station;central,0.5,west
 green,w,142,50,0,20,underground,0.5,west
 green,w,143,50,0,20,underground,0.5,west
 green,x,144,50,0,20,rail,0.5,west
