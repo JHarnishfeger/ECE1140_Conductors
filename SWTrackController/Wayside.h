@@ -8,9 +8,7 @@
 #include <math.h>
 using std::vector;
 //#include "Block.cpp"
-#include "Block.h"
 #include "PLCController.h"
-#include "Authority.h"
 #include "WayStruct.h"
 //#include "PLCController.cpp"
 
@@ -59,7 +57,7 @@ public:
     bool toggleCrossing(Block&); //Toggles a crossing
     vector<Block> getTrackOccupancy(); //Fetches track occupancy over sector
     void importPLC(string);
-    void runPLC();
+    bool runPLC();
     //void runPLCOnce(int);
     bool updateFromPLC();
     void wayStrInit();

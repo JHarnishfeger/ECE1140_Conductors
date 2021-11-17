@@ -34,6 +34,7 @@ public:
     vector<bool> ST; //Binary string representing blocks that the commanded speed should be 0 (1 = Set 0, 0 = Keep)
     vector<bool> SA; //Binary string representing station location (1 = Station, 0 = Not Station)
     vector<bool> AU; //Binary string representing authority (1 = Auth on Block, 2 = No Auth on Block)
+    vector<bool> NB; //Binary string representing next branch to be taken (0 = Switch Pos 0, 1 = Switch Pos 1)
     vector<vector<bool>> checkVecs;
     vector<vector<bool>> oldVecs;
     vector<Block> track; //All blocks controlled by wayside, in order to create boolean vectors

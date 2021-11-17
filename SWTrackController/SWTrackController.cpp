@@ -4,10 +4,12 @@ SWTrackController::SWTrackController()
 {
     //suggestedSpeed = 0;
     manualMode = 0;
+    hwWay = -1;
 }
 
 void SWTrackController::initialize(vector<Block> red, vector<Block> green, bool m)
 {
+    hwWay = -1;
     redLine = red;
     greenLine = green;
     //setSuggestedSpeed(s);
@@ -35,6 +37,7 @@ void SWTrackController::initialize(vector<Block> red, vector<Block> green, bool 
 
 SWTrackController::SWTrackController(vector<Block> red, vector<Block> green, int num, bool m)
 {
+    hwWay = -1;
     redLine = red;
     greenLine = green;
     createWaysides(num);
@@ -90,8 +93,11 @@ void SWTrackController::update()
 {
     for(int i=0;i<waysides.size();i++)
     {
-        waysides[i].update();
-        (*wayPtr)[i] = waysides[i].wayStr;
+        if(i!=hwWay)
+        {
+            waysides[i].update();
+            (*wayPtr)[i] = waysides[i].wayStr;
+        }
     }
 }
 
@@ -408,7 +414,6 @@ void SWTrackController::createWaysides(int waysideNum)
             sector.push_back(redLine[i]);
             Wayside newOne(sector,0);
             waysides.push_back(newOne);
-            waysides[i].setID(++id);
             sector.clear();
             nextSector += redWaysideSectorSize;
             if(nextSector>redLine.size()-1)
@@ -432,7 +437,6 @@ void SWTrackController::createWaysides(int waysideNum)
             sector.push_back(greenLine[i]);
             Wayside newOne(sector,1);
             waysides.push_back(newOne);
-            waysides[i].setID(++id);
             sector.clear();
             nextSector += greenWaysideSectorSize;
             if(nextSector>greenLine.size()-1)
