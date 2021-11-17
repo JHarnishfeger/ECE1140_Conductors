@@ -54,6 +54,11 @@ void CTC::update(int current_time){
     time = current_time;
 
     //TODO stuff here
+    auto nextSchedule = scheduleManager.loadNextSchedule();
+    if(mode == true && time >= nextSchedule.time && nextSchedule.train != ""){
+        dispatchTrain(nextSchedule);
+        scheduleManager.popNextSchedule();
+    }
 }
 
 /*
@@ -96,6 +101,9 @@ std::list<int> CTC::getSwitches(){
  * Dispatch a single schedule
  */
 void CTC::dispatchTrain(CTCSchedule schedule){
+    std::cout << "Dispatched train " << schedule.train << " to block " <<
+                 schedule.destination << " at time " << time << std::endl;
+
     //TODO
     //Get the route
     
