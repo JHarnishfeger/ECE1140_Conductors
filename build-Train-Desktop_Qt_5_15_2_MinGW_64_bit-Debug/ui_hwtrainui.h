@@ -108,9 +108,9 @@ public:
     {
         HWTrainUI->setWindowTitle(QCoreApplication::translate("HWTrainUI", "MainWindow", nullptr));
         Kp->setText(QCoreApplication::translate("HWTrainUI", "Kp", nullptr));
-        KiText->setText(QCoreApplication::translate("HWTrainUI", "1000", nullptr));
+        KiText->setText(QCoreApplication::translate("HWTrainUI", "01000", nullptr));
         Engineer->setText(QCoreApplication::translate("HWTrainUI", "<html><head/><body><p><span style=\" font-size:36pt; font-weight:600;\">Engineer UI</span></p></body></html>", nullptr));
-        KpText->setText(QCoreApplication::translate("HWTrainUI", "1000", nullptr));
+        KpText->setText(QCoreApplication::translate("HWTrainUI", "01000", nullptr));
         enterButton->setText(QCoreApplication::translate("HWTrainUI", "Enter", nullptr));
         Ki->setText(QCoreApplication::translate("HWTrainUI", "Ki", nullptr));
         connectButton->setText(QCoreApplication::translate("HWTrainUI", "Connect", nullptr));
