@@ -94,8 +94,8 @@ public:
     bool getBrakeFailure();
     void setLeftDoors(bool ld);
     void setRightDoors(bool rd);
-    void setInternalLights(bool il);
-    void setExternalLights(bool el);
+    void setInteriorLights(bool il);
+    void setExteriorLights(bool el);
     void setServiceBreaks(bool sb);
     void setEmergencyBreaks(bool eb);
 

@@ -43,7 +43,7 @@ void TrainControllerMainWindow::updates()
         qDebug() << "Serial Port Not Connected...";
     }
 
-    setUtilities()
+    setUtilities();
     setPower();
 }
 
