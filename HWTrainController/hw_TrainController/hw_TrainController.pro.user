@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 5.0.2, 2021-11-29T11:21:27. -->
+<!-- Written by QtCreator 5.0.2, 2021-11-29T12:15:15. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -240,9 +240,8 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">hw_TrainController2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/Ethan/Documents/GitHub/HWTrainController/HWTrainController/hw_TrainController/hw_TrainController.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Ethan/Documents/GitHub/HWTrainController/HWTrainController/hw_TrainController/hw_TrainController.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/Ethan/Documents/GitHub/ECE1140_Conductors/HWTrainController/hw_TrainController/hw_TrainController.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Ethan/Documents/GitHub/ECE1140_Conductors/HWTrainController/hw_TrainController/hw_TrainController.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
