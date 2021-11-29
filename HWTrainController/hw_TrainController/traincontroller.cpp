@@ -31,96 +31,27 @@ void TrainController::decodeData(QString inputData)
 
     if(decodedData.length() >= 10 && decodedData.length() <= 18)
     {
-        if(decodedData.substr(0,1) == "1")
-        {
-            setLeftDoors(true);
-            leftDoors = true;
-            train->setLeftDoor(leftDoors);
-        }
-        else
-        {
-            leftDoors = false;
-            train->setLeftDoor(leftDoors);
-        }
+        if(decodedData.substr(0,1) == "1")  setLeftDoors(1);
+        else    setLeftDoors(0);
+        if(decodedData.substr(1,1) == "1")  setRightDoors(1);
+        else    setRightDoors(0);
+        if(decodedData.substr(2,1) == "1")  setInteriorLights(1);
+        else    setInteriorLights(0);
+        if(decodedData.substr(3,1) == "1")  setExteriorLights(1);
+        else    setExteriorLights(0);
+        if(decodedData.substr(4,1) == "1")  setServiceBreaks(1);
+        else    setServiceBreaks(0);
+        if(decodedData.substr(5,1) == "1")  setEmergencyBreaks(1);
+        else    setEmergencyBreaks(0);
+        if(decodedData.substr(6,1) == "1")  setServiceBreaks(1);
+        else    setServiceBreaks(0);
+        if(decodedData.substr(7,1) == "1")  mode = "automatic";
+        else    mode = "manual";
 
-        if(decodedData.substr(1,1) == "1")
-        {
-            rightDoors = true;
-            train->setRightDoor(rightDoors);
-        }
-        else
-        {
-            rightDoors = false;
-            train->setRightDoor(rightDoors);
-        }
-
-        if(decodedData.substr(2,1) == "1")
-        {
-            interiorLights = true;
-            train->setInteriorLights(interiorLights);
-        }
-        else
-        {
-            interiorLights = false;
-            train->setInteriorLights(interiorLights);
-        }
-
-        if(decodedData.substr(3,1) == "1")
-        {
-            exteriorLights = true;
-            train->setExteriorLights(exteriorLights);
-        }
-        else
-        {
-            exteriorLights = false;
-            train->setExteriorLights(exteriorLights);
-        }
-
-        if(decodedData.substr(4,1) == "1")
-        {
-            serviceBreak = true;
-            train->setBrakes(serviceBreak);
-        }
-        else
-        {
-            serviceBreak = false;
-            train->setBrakes(serviceBreak);
-        }
-
-        if(decodedData.substr(5,1) == "1")
-        {
-            eBreak = true;
-            train->setEbrakes(eBreak);
-        }
-        else
-        {
-            eBreak = false;
-            train->setEbrakes(eBreak);
-        }
-
-        if(decodedData.substr(6,1) == "1")
-        {
-            passengerBreak = true;
-            train->setBrakes(passengerBreak);
-        }
-        else
-        {
-            passengerBreak = false;
-            train->setBrakes(passengerBreak);
-        }
-
-        if(decodedData.substr(7,1) == "1")
-        {
-            mode = "automatic";
-        }
-        else
-        {
-            mode = "manual";
-        }
+        commandedPower = QString::fromStdString(decodedData.substr(8));
 
         atStation();
 
-        commandedPower = QString::fromStdString(decodedData.substr(8));
         train->setPower(commandedPower.toDouble());
     }
 
@@ -161,6 +92,7 @@ QByteArray TrainController::encodeData()
     else if(nextStation == "Poplar")                stationCode = "10010";
     else if(nextStation == "Castle Shannon")        stationCode = "10011";
     else if(nextStation == "Yard")                  stationCode = "11111";
+    else if(nextStation == "None")                  stationCode = "10100";
 
     QByteArray output = "";
 
@@ -247,8 +179,9 @@ void TrainController::atStation()
     QString temp_pow = commandedPower;
 
     //set power to zero if station is on the block
-    if ((at_station == true) && !(currentSpeed == 0.0) && !(serviceBreak))
+    if ((at_station == true) && !(getCurrentSpeed() == 0.0) && !(serviceBreak))
     {
+        //qDebug() << "At station";
         commandedPower = "00.00";
         setServiceBreaks(1);
     }
@@ -261,18 +194,24 @@ void TrainController::atStation()
     //When the train stopped at a station, check timer if 60s passed (test when flipped with code belowe and see if timing error)
     if (at_station == true && just_stopped == true){
         //if (systemClock->currentTime() >= stationTimerEnd){ // train has been stopped for 60sec
-            //Sleep(5000);//Sleep timer for first demo, will have to use the commented out code once we are able to use the same timer
+            //qDebug() << "Stopped...";
+            Sleep(10000);//Sleep timer for first demo, will have to use the commented out code once we are able to use the same timer
+
             commandedPower = temp_pow; // keep power command as non-zero
             //close doors
             setLeftDoors(0);
             setRightDoors(0);
             setServiceBreaks(0);
             train->updatePassengers();
+
         //}
+            //qDebug() << "Leaving";
+            just_stopped = false;
     }
 
     //When train just stopped, set a flag and start a timer
-    if (at_station == true && currentSpeed == 0.0 && just_stopped == false){
+    if (at_station == true && getCurrentSpeed() == 0.0 && just_stopped == false){
+//        qDebug() << "Just Stopped";
         just_stopped = true;
         //stationTimerStart = systemClock->currentTime();
         //stationTimerEnd = stationTimerStart.addSecs(60);
@@ -333,17 +272,18 @@ void TrainController::decodeBeacon()
 
     if(incomingCode == 1){//No station and no headlights
       at_station=false;
-      setExternalLights(false);
+      setExteriorLights(false);
     }else if(incomingCode == 2){//No station and headlights
         at_station=false;
-        setExternalLights(true);
+        setExteriorLights(true);
     }else if(incomingCode == 3){//Station and no headlights
         at_station=true;
-        setExternalLights(false);
+        setExteriorLights(false);
     }else if(incomingCode == 4){//Station and headlights
         at_station=true;
-        setExternalLights(true);
+        setExteriorLights(true);
     }
+
 }
 
 void TrainController::double2string()
@@ -425,37 +365,37 @@ QString TrainController::getMode()
 
 bool TrainController::getLeftDoors()
 {
-    return leftDoors;
+    return train->getLeftDoor();
 }
 
 bool TrainController::getRightDoors()
 {
-    return rightDoors;
+    return train->getRightDoor();
 }
 
 bool TrainController::getInteriorLights()
 {
-    return interiorLights;
+    return train->getInteriorLights();
 }
 
 bool TrainController::getExteriorLights()
 {
-    return exteriorLights;
+    return train->getExteriorLights();
 }
 
 bool TrainController::getServiceBreak()
 {
-    return serviceBreak;
+    return train->getBrakes();
 }
 
 bool TrainController::getEBreak()
 {
-    return eBreak;
+    return train->getEbrakes();
 }
 
 bool TrainController::getPassengerBreak()
 {
-    return passengerBreak;
+    return train->getBrakes();
 }
 
 QString TrainController::getCommandedPower()
@@ -525,12 +465,12 @@ void TrainController::setRightDoors(bool rd)
     train->setRightDoor(rd);
 }
 
-void TrainController::setInternalLights(bool il)
+void TrainController::setInteriorLights(bool il)
 {
     train->setInteriorLights(il);
 }
 
-void TrainController::setExternalLights(bool el)
+void TrainController::setExteriorLights(bool el)
 {
     train->setExteriorLights(el);
 }
