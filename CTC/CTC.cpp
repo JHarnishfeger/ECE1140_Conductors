@@ -165,6 +165,18 @@ bool CTC::getBlockHasTrainPresent(int blockId){
 }
 
 /*
+ *  Get the Throughput of a single block.
+ */
+int CTC::getBlockThroughput(int blockId){
+    Block* block = waysideManager.getBlock(blockId);
+    if(block != nullptr){
+        return block->getPassengers();
+    }else{
+        return 0;
+    }
+}
+
+/*
  * Get the direction property of a Block
  */
 bool CTC::getBlockDirection(int blockId){

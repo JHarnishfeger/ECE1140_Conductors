@@ -89,8 +89,7 @@ void CTCWindow::on_lineEdit_selectBlock_returnPressed()
             }else{
                 ui->textBrowser_blockPropertiesTrainPresent->setText("No");
             }
-
-            ui->textBrowser_blockPropertiesThroughput->setText("0");
+            ui->textBrowser_blockPropertiesThroughput->setText(QString::fromStdString(std::to_string(ctc.getBlockThroughput(blockId))));
         }else{
             throw std::logic_error("Block is not valid.");
         }
