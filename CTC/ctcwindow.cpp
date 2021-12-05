@@ -42,6 +42,11 @@ CTCWindow::~CTCWindow()
 void CTCWindow::update(){
     ctc.update(0);
     trackMap->setOccupiedBranches(ctc.getBranchesWithTrainsPresent());
+
+    //Set Schedule Window to show only current schedules
+    ui->label_upcomingSchedule->clear();
+    std::string s = ctc.displaySchedule();
+    ui->textBrowser_schedule->setText(QString::fromStdString(s));
 }
 
 void CTCWindow::on_button_chooseSchedule_clicked()

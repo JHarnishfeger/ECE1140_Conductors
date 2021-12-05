@@ -2,6 +2,7 @@
 #include <vector>
 #include "WayStruct.h"
 #include <QApplication>
+#include <QTime>
 
 struct CTCTestWaysides{
 
@@ -49,5 +50,6 @@ int main(int argc, char *argv[])
     CTCWindow w(&testWaysides.sw_controller, &testWaysides.hw_controller);
     w.show();
     w.update();
+
     return a.exec();
 }
