@@ -84,8 +84,6 @@ void trainModel::setSpeed(double inputPower){
   //Doesnt work well need to fix
   if(brakeFail == true){
       acceleration = -0.1;
-      eBrakes == false;
-      brakes == false;
       if(actualSpeed <= 0.1){
           actualSpeed = 0;
           acceleration = 0;

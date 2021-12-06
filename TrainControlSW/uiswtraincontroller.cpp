@@ -1,5 +1,6 @@
 #include "uiswtraincontroller.h"
 #include "ui_uiswtraincontroller.h"
+#include "universaltimer.h"
 #include<QDebug>
 
 UISWTrainController::UISWTrainController(QWidget *parent)
@@ -7,9 +8,6 @@ UISWTrainController::UISWTrainController(QWidget *parent)
     , ui(new Ui::UISWTrainController)
 {
     ui->setupUi(this);
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()),this,SLOT(timerInst()));
-    timer->start(1000);
 }
 
 UISWTrainController::~UISWTrainController()
@@ -21,30 +19,28 @@ UISWTrainController::~UISWTrainController()
 void UISWTrainController::timerInst()
 {
     decodeSignals();
-    swtraincontroller.calculatePower();
-    failureCheck();
+    //failureCheck();
     updateUI();
+    swtraincontroller.calculatePower();
+    swtraincontroller.failureCheck();
 }
 
-
+/*
 void UISWTrainController::failureCheck()
 {
     if(swtraincontroller.getTCFailure()){//If track circuit failure
-        prevCycleFail=1;
-        if(!swtraincontroller.getEmergencyBrake())//Enable Ebrake if not
+        if(!swtraincontroller.getEmergencyBrake()&&!swtraincontroller.getBrakeFailure())//Enable Ebrake if not
             swtraincontroller.setEmergencyBrake(1);
     }else if(swtraincontroller.getEngineFailure()){//If track engine failure
-        prevCycleFail=1;
-        if(!swtraincontroller.getEmergencyBrake())
+        if(!swtraincontroller.getEmergencyBrake()&&!swtraincontroller.getBrakeFailure())
             swtraincontroller.setEmergencyBrake(1);
     }else if(swtraincontroller.getBrakeFailure()){//If brake failure
-        prevCycleFail=1;
         swtraincontroller.setPowerCommand(0);
-    }else if(prevCycleFail){
         swtraincontroller.setEmergencyBrake(0);
+        swtraincontroller.setServiceBrake(0);
     }
 }
-
+*/
 void UISWTrainController::decodeSignals(){
     swtraincontroller.decodeBeacon();
     swtraincontroller.decodeTrackCircuit();
@@ -63,7 +59,9 @@ void UISWTrainController::updateUI()
 
 void UISWTrainController::on_driverEmergencyBrake_clicked()
 {
-    swtraincontroller.setEmergencyBrake(!swtraincontroller.getEmergencyBrake());
+    if(!swtraincontroller.getBrakeFailure()){
+        swtraincontroller.setEmergencyBrake(!swtraincontroller.getEmergencyBrake());
+    }
 }
 
 void UISWTrainController::on_leftDoors_valueChanged(int value)
@@ -92,7 +90,9 @@ void UISWTrainController::on_exteriorLights_valueChanged(int value)
 
 void UISWTrainController::on_serviceBrake_clicked()
 {
-    swtraincontroller.setServiceBrake(!swtraincontroller.getServiceBrake());
+    if(!swtraincontroller.getBrakeFailure()){
+        swtraincontroller.setServiceBrake(!swtraincontroller.getServiceBrake());
+    }
 }
 
 

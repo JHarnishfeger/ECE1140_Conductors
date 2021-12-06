@@ -19,13 +19,20 @@ double SWTrainController::calculatePower(){
     current_velocity=getCurrentVelocity();
     emergency_brake=train->getEbrakes();
 
-    if (service_brake || emergency_brake || authority<=0){ //If any brake is enables or no authority, power is cut
+    double power_redun = 0.0;
+    double uk_redun = 0;
+    double uk1_redun = uk1;
+    double ek_redun = 0;
+    double ek1_redun = ek1;
+
+    //Redundancy check 1
+    if (service_brake || emergency_brake || train->getBrakeFail() || authority<=0){ //If any brake is enables or no authority, power is cut
         power_command = 0;
     }else{
         //If in automatic mode, use commanded velocity, if in manual use setpoint velocity
-        if (mode&&(current_velocity<speed_limit))
+        if (mode&&(current_velocity<=speed_limit))
             ek  = setpoint_velocity - current_velocity;
-        else if(!mode&&(current_velocity<speed_limit))
+        else if(!mode&&(current_velocity<=speed_limit))
             ek  = commanded_velocity - current_velocity;
         else
             ek  = speed_limit - current_velocity;
@@ -38,12 +45,50 @@ double SWTrainController::calculatePower(){
         power_command = kp * ek + ki * uk;
 
         //If power calculation exceeds max power, set power command to max power
-        if(power_command > 120000)
+        if(power_command > 120000){
             power_command = 120000;
+        }
     }
 
-    //Check if need to stop at a station
-    atStation();
+
+    //Redundancy check 2
+    if (service_brake || emergency_brake || train->getBrakeFail() || authority<=0){ //If any brake is enables or no authority, power is cut
+        power_redun = 0;
+    }else{
+        //If in automatic mode, use commanded velocity, if in manual use setpoint velocity
+        if (mode&&(current_velocity<=speed_limit))
+            ek_redun  = setpoint_velocity - current_velocity;
+        else if(!mode&&(current_velocity<=speed_limit))
+            ek_redun  = commanded_velocity - current_velocity;
+        else
+            ek_redun  = speed_limit - current_velocity;
+
+        //Calculates uk and sets current error to previous error
+        uk_redun = uk1_redun + (T / 2) * (ek_redun - ek1_redun);
+        ek1_redun = ek_redun;
+
+        //Calculates power
+        power_redun = kp * ek_redun + ki * uk_redun;
+
+        //If power calculation exceeds max power, set power command to max power
+        if(power_redun > 120000)
+            power_redun = 120000;
+    }
+
+    //Redundancy check
+    if(power_command!=power_redun){
+        power_command=0.0;
+    }
+
+    //Check if need to stop at a station in automatic mode
+    if (mode){
+        atStation();
+    }
+
+//LOOK INTO FIXING WHEN CMND SPEED LOWERS TO 0, then hits - and keeps going -
+    //if(power_command<0)
+     //   train->setBrakes(1);
+
     train->setPower(power_command);
 }
 
@@ -52,23 +97,20 @@ void SWTrainController::atStation(){
     double temp_pow = power_command;
 
     //Set power to zero if station on the block
-    if (at_station == true&&!(current_velocity==0.0)&&!service_brake){//If not stopped and service brake isn't on
-        power_command = 0.0;
+    if (at_station == true&&!(current_velocity==0.0)&&!service_brake){ //If not stopped and service brake isn't on
         setServiceBrake(1);
-    }else if(at_station == true){//If stopped
-        power_command = 0.0;
     }
 
     //When the train stopped at a station, check timer if 60s passed (test when flipped with code belowe and see if timing error)
     if (at_station == true && just_stopped == true){
         //if (systemClock->currentTime() >= stationTimerEnd){ // train has been stopped for 60sec
             Sleep(5000);//Sleep timer for first demo, will have to use the commented out code once we are able to use the same timer
-            power_command = temp_pow; // keep power command as non-zero
             //close doors
             setLeftDoors(0);
             setRightDoors(0);
             setServiceBrake(0);
             train->updatePassengers();
+            setServiceBrake(0);
         //}
     }
 
@@ -87,8 +129,6 @@ void SWTrainController::atStation(){
     if (at_station == false && just_stopped == true){
         just_stopped = false;
     }
-
-    train->setPower(power_command);
 }
 
 
@@ -319,5 +359,18 @@ bool SWTrainController::getTCFailure(){
 
 bool SWTrainController::getBrakeFailure(){
     return train->getBrakeFail();
+}
+
+void SWTrainController::failureCheck(){
+    if(train->getEngineFail()){//If track circuit failure
+        if(!train->getEbrakes()&&!train->getBrakeFail())//Enable Ebrake if not
+            train->setEbrakes(1);
+    }else if(train->getSignalFail()){//If track engine failure
+        if(!train->getEbrakes()&&!(train->getBrakeFail()))//Enable Ebrake if not
+            train->setEbrakes(1);
+    }else if(train->getBrakeFail()){//If brake failure
+        train->setEbrakes(0);
+        train->setBrakes(0);
+    }
 }
 

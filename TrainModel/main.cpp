@@ -27,9 +27,6 @@ int main(int argc, char *argv[])
 
     int32_t tcData = ((((int32_t)SpeedLimit)<<16)+(((int32_t)SuggestedSpeed)<<8)+(((int32_t)FBAuthority)));
 
-
-
-
      w.mainTrain->setTCData(tcData);
      w.mainTrain->setBeaconData(beacon);
 

@@ -12,9 +12,12 @@ trainUI::trainUI(QWidget *parent)
     //timer set up and updateUI running function
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(updateTestUI()));
-    timer ->start(1000);
+
+    //Connects traincontroller to train and train timer to TC timer
     s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
     s.show();
+    connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
+    timer ->start(1000);
 }
 
 trainUI::~trainUI(){
@@ -123,7 +126,7 @@ void trainUI::updateTestUI(){
         ui->progressBar->setValue(100);
     }
     else{
-        ui->progressBar->setValue(25);
+        ui->progressBar->setValue(0);
     }
 
     //Ebrakes
@@ -131,7 +134,7 @@ void trainUI::updateTestUI(){
         ui->progressBar_2->setValue(100);
     }
     else{
-        ui->progressBar_2->setValue(25);
+        ui->progressBar_2->setValue(0);
     }
 
     //Lights
@@ -139,13 +142,13 @@ void trainUI::updateTestUI(){
         ui->progressBar_5->setValue(100);
     }
     else{
-        ui->progressBar_5->setValue(25);
+        ui->progressBar_5->setValue(0);
     }
     if (mainTrain->getExteriorLights() == true){
         ui->progressBar_6->setValue(100);
     }
     else{
-        ui->progressBar_6->setValue(25);
+        ui->progressBar_6->setValue(0);
     }
 
     //Doors
@@ -153,13 +156,13 @@ void trainUI::updateTestUI(){
         ui->progressBar_3->setValue(100);
     }
     else{
-        ui->progressBar_3->setValue(25);
+        ui->progressBar_3->setValue(0);
     }
     if (mainTrain->getRightDoor() == true){
         ui->progressBar_4->setValue(100);
     }
     else{
-        ui->progressBar_4->setValue(25);
+        ui->progressBar_4->setValue(0);
     }
 
     ui->textBrowser->setText("Train " + QString::fromStdString(std::to_string((mainTrain->getID()))));

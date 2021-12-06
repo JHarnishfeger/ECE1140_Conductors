@@ -18,6 +18,7 @@ class trainUI : public QMainWindow
     Q_OBJECT
 
 public:
+    int i=0;
 
     //main train
     trainModel *mainTrain = new trainModel;
@@ -43,8 +44,6 @@ private slots:
     void updateTestUI();
 
     //onclick functions
-    void on_Temp_Change_actionTriggered(int action);
-
     void on_Temp_Change_sliderMoved(int position);
 
     void on_BrakeFail_clicked();

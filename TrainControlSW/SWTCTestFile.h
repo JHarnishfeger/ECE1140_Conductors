@@ -1,7 +1,12 @@
+#ifndef SWTCTESTFILE_H
+#define SWTCTESTFILE_H
 #include <QtTest/QtTest>
-#include <QCoreApplication>
 #include "uiswtraincontroller.h"
+#include "SWTrainController.h"
 #include "..\TrainModel\trainModel.h"
+
+//QTEST_MAIN(SWTCTestFile)
+//#include "SWTCTestFile.moc"
 
 class SWTCTestFile: public QObject
 {
@@ -50,5 +55,4 @@ void SWTCTestFile::testEbrake(){
 }
 
 
-QTEST_MAIN(SWTCTestFile)
-//#include "SWTCTestFile.moc"
+#endif // SWTCTESTFILE_H

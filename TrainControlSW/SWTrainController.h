@@ -26,7 +26,7 @@ class SWTrainController{
         double speed_limit = 0;
         std::string incommingStation = "None";
         double commanded_velocity = 0.0;
-        double setpoint_velocity = 10.0;
+        double setpoint_velocity = 0.0;
         double current_velocity = 0.0;
 
         //Utilities variables
@@ -99,6 +99,7 @@ class SWTrainController{
         bool getEngineFailure();
         bool getTCFailure();
         bool getBrakeFailure();
+        void failureCheck();
 
 };
 

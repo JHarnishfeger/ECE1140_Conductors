@@ -19,7 +19,9 @@ public:
     UISWTrainController(QWidget *parent = nullptr);
     ~UISWTrainController();
 
-    QTimer *timer;
+public slots:
+
+    void timerInst();
 
 private slots:
 
@@ -27,9 +29,7 @@ private slots:
 
     void decodeSignals();
 
-    void failureCheck();
-
-    void timerInst();
+//    void failureCheck();
 
     void on_driverEmergencyBrake_clicked();
 
@@ -55,8 +55,9 @@ private slots:
 
 private:
     Ui::UISWTrainController *ui;
-
-    bool prevCycleFail = false;
+    double pow = 0.0;
+    double pow1 = 0.0;
+    double pow2 = 0.0;
 
 };
 #endif // UISWTRAINCONTROLLER_H
