@@ -70,6 +70,27 @@ Block* Track::searchBlock(string line, int id){
 		return NULL;
 	}
 }
+//Params: string, int
+//Returns: Block*
+//Desc:searches for a block according to inputted line and assigned id and returns it as a Block*
+Block* Track::searchBlockById(string line, int id){
+	if(line == "green"){
+		for(unsigned int g = 0; g < greenLine.size(); g++){
+			if(greenLine.at(g)->getId() == id){
+				return greenLine.at(g);
+			}
+		}
+	}else if(line == "red"){
+		for(unsigned int r = 0; r < redLine.size(); r++){
+			if(redLine.at(r)->getId() == id){
+				return redLine.at(r);
+			}
+		}
+	}else{
+		return NULL;
+	}
+	return NULL;
+}
 //Params: int,double
 //Returns: Block*
 //Desc: returns the Block* that is at the inputted distance away from the inputted Block id on the inputted line, otherwise returns NULL
@@ -284,12 +305,18 @@ bool Track::loadTrack(string filename){
 			int idgreen = 0;
 			ss2 >> idgreen;
 			greenLine.push_back(new Block(line,branch,idgreen,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
+			if(type == "station"){
+				greenLine.at(i - 1)->setBeaconPresent(true);
+			}
 		}
 		if(line == "red"){
 			std::stringstream ss3(id);
 			int idred = 0;
 			ss3 >> idred;
 			redLine.push_back(new Block(line,branch,idred,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
+			if(type == "station"){
+				redLine.at(i - 1)->setBeaconPresent(true);
+			}
 		}
 		//Fix Branches?
 	}

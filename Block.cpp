@@ -16,7 +16,7 @@ Block::Block(){
 	branch = "a";
 	type = "rail";
 	direction = "north";
-	nextBranches = "bc";
+	nextBlocks = "2,60";
 	stationName = "";
 	length = 10.0;
 	TDBegin = totalDistance;
@@ -36,11 +36,14 @@ Block::Block(){
 	crossingStatus = false;
 	switchStatus = true;
 	trainPresent = false;
+	beaconPresent = false;
+	stationSide = true;
+	encodeTrackCircuitData();
 }
 
 //Full input constructor
-Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBranchesIN, string stationNameIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
-double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN, uint32_t encodedDataIN){
+Block::Block(int passengersIN, string lineIN, string branchIN, string typeIN, string directionIN, string nextBlocksIN, string stationNameIN, double lengthIN,double xCordIN, double yCordIN, double gradeIN, double heightIN, double temperatureIN,
+double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN, bool beaconPresentIN, bool stationSideIN, uint32_t trackCircuitDataIN){
 	passengers = passengersIN;
 	id = instanceCounter;
 	instanceCounter++;
@@ -48,7 +51,7 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 	branch = branchIN;
 	type = typeIN;
 	direction = directionIN;
-	nextBranches = nextBranchesIN;
+	nextBlocks = nextBlocksIN;
 	stationName = stationNameIN;
 	length = lengthIN;
 	TDBegin = totalDistance;
@@ -68,7 +71,9 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 	crossingStatus = crossingStatusIN;
 	switchStatus = switchStatusIN;
 	trainPresent = trainPresentIN;
-	encodedData = encodedDataIN;
+	beaconPresent = beaconPresentIN;
+	stationSide = stationSideIN;
+	trackCircuitData = trackCircuitDataIN;
 }
 //Functional constructor
 Block::Block(string lineIN, string branchIN, int idIN, double lengthIN, double gradeIN, double speedLimitIN, 
@@ -82,7 +87,7 @@ string typeIN, double heightIN, double suggestedSpeedIN, string directionIN){
 		string branchParse = typeIN.substr(6,typeIN.size()-6); //(#:#)
 		string branch1(typeIN.substr(7,typeIN.find(":")-7));
 		string branch2(typeIN.substr(( typeIN.find(":") + 1 ),( typeIN.size() - 2 ) - typeIN.find(":")));
-		nextBranches = branch1 + "," + branch2; 
+		nextBlocks = branch1 + "," + branch2; 
 	}else{
 		type = typeIN;
 	}
@@ -125,7 +130,9 @@ string typeIN, double heightIN, double suggestedSpeedIN, string directionIN){
 	crossingStatus = false;
 	switchStatus = true;
 	trainPresent = false;
-	encodeData();
+	beaconPresent = false;
+	stationSide = true;
+	encodeTrackCircuitData();
 }
 
 //Attributes:
@@ -210,18 +217,18 @@ string Block::getDirection(){
 	return direction;
 }
 
-//nextBranches ---------------------------------------------------------
+//nextBlocks -----------------------------------------------------------
 //Params: string
 //Returns: None
-//Desc: sets the value of the attribute nextBranches = to inputted string
-void Block::setNextBranches(string nextBranchesIN){
-	nextBranches = nextBranchesIN;
+//Desc: sets the value of the attribute nextBlocks = to inputted string
+void Block::setNextBlocks(string nextBlocksIN){
+	nextBlocks = nextBlocksIN;
 }
 //Params: None
 //Returns: string
-//Desc: returns the value of the attribute nextBranches as a string
-string Block::getNextBranches(){
-	return nextBranches;
+//Desc: returns the value of the attribute nextBlocks as a string
+string Block::getNextBlocks(){
+	return nextBlocks;
 }
 
 //stationName ----------------------------------------------------------
@@ -526,87 +533,142 @@ bool Block::getTrainPresent(){
 void Block::toggleTrainPresent(){
 	trainPresent = !(trainPresent);
 }
+//beaconPresent --------------------------------------------------------
+//Notes: bool true = beacon is present on block false = no beacon present
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute beaconPresent = to inputted bool
+void Block::setBeaconPresent(bool beaconPresentIN){
+	beaconPresent = beaconPresentIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute beaconPresent as a bool
+bool Block::getBeaconPresent(){
+	return beaconPresent;
+}
+//stationSide ----------------------------------------------------------
+//Notes: bool true = station on left false = station on right
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute stationSide = to inputted bool
+void Block::setStationSide(bool stationSideIN){
+	stationSide = stationSideIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute stationSide as a bool
+bool Block::getStationSide(){
+	return stationSide;
+}
+//encodeData -----------------------------------------------------------
+//Params: None
+//Returns: None
+//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
+void Block::encodeTrackCircuitData(){
+	
+	uint32_t speedLimitU, suggestedSpeedU, authorityU;
+	
+	speedLimitU = (uint32_t)(speedLimit + 0.5);
+	suggestedSpeedU = (uint32_t)(suggestedSpeed + 0.5);
+	authorityU = (uint32_t)(authority + 0.5);
+	
+	trackCircuitData = ((((uint32_t)speedLimitU)<<16)+(((uint32_t)suggestedSpeedU)<<8)+(((uint32_t)authorityU)));
+}
+//Params: None
+//Returns: None
+//Dessc: encodes that that needs transfferred between modules into a decodable unsigned 16 bit integer
+void Block::encodeBeaconData(){
+	if(beaconPresent == 1){
+		
+		int stationCode, incomingCode;
+		bool headlights, stationHere;
+		
+		if(stationName == "shadyside"){
+			stationCode = 1;
+		}else if(stationName == "herron_ave"){
+			stationCode = 2;
+		}else if(stationName == "swissville"){
+			stationCode = 3;
+		}else if(stationName == "penn_station"){
+			stationCode = 4;
+		}else if(stationName == "steel_plaza"){
+			stationCode = 5;
+		}else if(stationName == "first_ave"){
+			stationCode = 6;
+		}else if(stationName == "station_square"){
+			stationCode = 7;
+		}else if(stationName == "south_hills_junction"){
+			stationCode = 8;
+		}else if(stationName == "pioneer"){
+			stationCode = 9;
+		}else if(stationName == "edgebrook"){
+			stationCode = 10;
+		}else if(stationName == "whited"){
+			stationCode = 11;
+		}else if(stationName == "south_bank"){
+			stationCode = 12;
+		}else if(stationName == "central"){
+			stationCode = 13;
+		}else if(stationName == "inglewood"){
+			stationCode = 14;
+		}else if(stationName == "overbrook"){
+			stationCode = 15;
+		}else if(stationName == "glenbury"){
+			stationCode = 16;
+		}else if(stationName == "dormont"){
+			stationCode = 17;
+		}else if(stationName == "mt_lebanon"){
+			stationCode = 18;
+		}else if(stationName == "poplar"){
+			stationCode = 19;
+		}else if(stationName == "castle_shannon"){
+			stationCode = 20;
+		}else if(type == "yard"){
+			stationCode = 21;
+		}else{
+			stationCode = 31;
+		}
+		
+		if(type == "underground"){
+			headlights = 1;
+		}else{
+			headlights = 0;
+		}
+		
+		if(type == "station"){
+			stationHere = 1;
+		}else{
+			stationHere = 0;
+		}
+		
+		if(headlights == 0 && stationHere == 0){
+			incomingCode = 1;
+		}else if(headlights == 1 && stationHere == 0){
+			incomingCode = 2;
+		}else if(headlights == 0 && stationHere == 1){
+			incomingCode = 3;
+		}else{
+			incomingCode = 4;
+		}
+		
+		beaconData = (((uint16_t)stationCode<<8)+(((uint16_t)incomingCode)));
+	
+	}else{
+		beaconData = 0;
+	}
+}
 //Params: None
 //Returns: uint32_t
-//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
-void Block::encodeData(){
-	uint32_t retUint = 0;
-	
-	string incomingStation = stationApproaching("green", TDBegin);
-	bool incStation, headlight;
-	int stationCode, stationNheadlight;
-	
-	//Station encoder
-	if(incomingStation == "shadyside"){
-		stationCode = 1;
-	}else if(incomingStation == "herron_ave"){
-		stationCode = 2;
-	}else if(incomingStation == "swissville"){
-		stationCode = 3;
-	}else if(incomingStation == "penn_station"){
-		stationCode = 4;
-	}else if(incomingStation == "steel_plaza"){
-		stationCode = 5;
-	}else if(incomingStation == "first_ave"){
-		stationCode = 6;
-	}else if(incomingStation == "station_square"){
-		stationCode = 7;
-	}else if(incomingStation == "south_hills_junction"){
-		stationCode = 8;
-	}else if(incomingStation == "pioneer"){
-		stationCode = 9;
-	}else if(incomingStation == "edgebrook"){
-		stationCode = 10;
-	}else if(incomingStation == "whited"){
-		stationCode = 11;
-	}else if(incomingStation == "south_bank"){
-		stationCode = 12;
-	}else if(incomingStation == "central"){
-		stationCode = 13;
-	}else if(incomingStation == "inglewood"){
-		stationCode = 14;
-	}else if(incomingStation == "overbrook"){
-		stationCode = 15;
-	}else if(incomingStation == "glenbury"){
-		stationCode = 16;
-	}else if(incomingStation == "dormont"){
-		stationCode = 17;
-	}else if(incomingStation == "mt_lebanon"){
-		stationCode = 18;
-	}else if(incomingStation == "poplar"){
-		stationCode = 19;
-	}else if(incomingStation == "castle_shannon"){
-		stationCode = 20;
-	}else if(incomingStation == "yard"){
-		stationCode = 21;
-	}else{
-		stationCode = 31;
-	}
-	
-	if(type == "underground"){
-		headlight = true;
-	}else{
-		headlight = false;
-	}
-	if(incomingStation == ""){
-		incStation = false;
-	}else{
-		incStation = true;
-	}
-	
-	if((headlight == true) & (incStation == true)){
-		stationNheadlight = 4;
-	}else if((headlight == false) & (incStation == true)){
-		stationNheadlight = 3;
-	}else if((headlight == true) & (incStation == false)){
-		stationNheadlight = 2;
-	}else{
-		stationNheadlight = 1;
-	}
-	
-	
-	
-	encodedData = retUint;
+//Desc: returns a unsigned 32-bit integer representation of the track circuit data
+uint32_t Block::getTrackCircuitData(){
+	return trackCircuitData;
+}
+//Params: None
+//Returns uint16_t
+//Desc: returns a unsigned 16-bit integer representation of the beacon data
+uint16_t Block::getBeaconData(){
+	return beaconData;
 }
 //Params: None
 //Returns: string
@@ -645,7 +707,7 @@ string Block::toStringDetailed(){
 	retString = retString + "BLOCK STATS: \n";
 	retString = retString + "\t passengers: " + std::to_string(passengers);
 	retString = retString + "\t direction: " + direction;
-	retString = retString + "\t nextBranches: " + nextBranches;
+	retString = retString + "\t nextBlocks: " + nextBlocks;
 	retString = retString + "\t length: " + std::to_string(length) + "\n";
 	retString = retString + "\t grade: " + std::to_string(grade);
 	retString = retString + "\t height: " + std::to_string(height);
@@ -665,54 +727,4 @@ string Block::toStringDetailed(){
 	retString = retString + "\n\n";
 	return retString;
 }
-//Params: string
-//Returns: string
-//Desc: reads inputted line and distance traveled, then returns upcoming station if applicable
-string stationApproaching(string line, double distance){
-	if(line == "green"){
-		if(distance > 250.0 && distance < 450.0){
-			return "glenbury";
-		}else if(distance >= 1250.0 && distance < 1350.0){
-			return "dormont";
-		}else if(distance >= 1650.0 && distance < 1950.0){
-			return "mt_lebanon";
-		}else if(distance >= 4536.6 && distance < 4636.6){
-			return "poplar";
-		}else if(distance >= 5161.6 && distance < 5236.6){
-			return "castle_shannon";
-		}else if(distance >= 7936.6 && distance < 8236.6){
-			return "mt_lebanon";
-		}else if(distance >= 10543.6 && distance < 10593.6){
-			return "inglewood";
-		}else if(distance >= 10993.6 && distance < 11043.6){
-			return "central";
-		}else if(distance >= 12602.6 && distance < 12902.6){
-			return "whited";
-		}else if(distance >= 13802.6 && distance < 13952.6){
-			return "misc";
-		}else if(distance >= 14702.6 && distance < 14802.6){
-			return "edgebrook";
-		}else if(distance >= 15402.6 && distance < 15502.6){
-			return "pioneer";
-		}else if(distance >= 16052.6 && distance < 16202.6){
-			return "misc";
-		}else if(distance >= 17201.6 && distance < 17402.6){
-			return "whited";
-		}else if(distance >= 18502.6 && distance < 18552.6){
-			return "south_bank";
-		}else if(distance >= 18902.6 && distance < 18952.6){
-			return "central";
-		}else if(distance >= 19352.6 && distance < 19402.6){
-			return "inglewood";
-		}else if(distance >= 19802.6 && distance < 19852.6){
-			return "overbrook";
-		}else{
-			return "";
-		}
-	}else if(line == "red"){
-		return "";
-	}else{
-		return "";
-	}
-	return "";
-}
+

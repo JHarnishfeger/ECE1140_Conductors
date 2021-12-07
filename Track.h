@@ -32,8 +32,9 @@ class Track{
 		//suggSpeed
 		void setSuggSpeed(double);
 		double getSuggSpeed();
-		//Class Functions:
+		//class functions:
 		Block* searchBlock(string,int);
+		Block* searchBlockById(string,int);
 		Block* go(string,int,double);
 		vector<Block*> filterByType(string,string);
 		vector<Block*> filterByBranch(string,string);

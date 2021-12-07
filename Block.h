@@ -21,7 +21,7 @@ class Block{
 		string branch;
 		string type;
 		string direction;
-		string nextBranches;
+		string nextBlocks;
 		string stationName;
 		double length;
 		double xCord;
@@ -40,11 +40,14 @@ class Block{
 		bool crossingStatus;
 		bool switchStatus;
 		bool trainPresent;
-		uint32_t encodedData;
+		bool beaconPresent;
+		bool stationSide;
+		uint32_t trackCircuitData;
+		uint16_t beaconData;
 	public:
 		//Constructors:
 		Block();
-		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t);
+		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t);
 		Block(string,string,int,double,double,double,string,double,double,string);
 		//Attributes:
 		//passengers
@@ -64,9 +67,9 @@ class Block{
 		//direction
 		void setDirection(string);
 		string getDirection();
-		//nextBranches
-		void setNextBranches(string);
-		string getNextBranches();
+		//nextBlocks
+		void setNextBlocks(string);
+		string getNextBlocks();
 		//stationName
 		void setStationName(string);
 		string getStationName();
@@ -126,14 +129,20 @@ class Block{
 		void setTrainPresent(bool);
 		bool getTrainPresent();
 		void toggleTrainPresent();
+		//beaconPresent
+		void setBeaconPresent(bool);
+		bool getBeaconPresent();
+		//stationSide
+		void setStationSide(bool);
+		bool getStationSide();
 		//encoding
-		void encodeData();
-		uint32_t getEncodedData();
+		void encodeTrackCircuitData();
+		void encodeBeaconData();
+		uint32_t getTrackCircuitData();
+		uint16_t getBeaconData();
 		//toStrings
 		string toString();
 		string toStringDetailed();
-		//helpers for integration
-		string stationApproaching(string,double);
 };
 //End Block class
 #endif
