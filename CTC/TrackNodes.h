@@ -21,6 +21,8 @@ public:
 
     std::string getBranchOfBlock(int blockId, bool useGreen=true);
 
+    std::list<std::string> getNextBranch(std::string branch);
+
 private:
 
 	void addNodeToGreen(std::string name, int start, int end);

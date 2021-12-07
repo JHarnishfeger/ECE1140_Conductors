@@ -1,6 +1,6 @@
 #include "TrainTracker.h"
 
-TrainTracker::TrainTracker(){
+TrainTracker::TrainTracker(TrackNodes* _track) : track(track){
 
 }
 

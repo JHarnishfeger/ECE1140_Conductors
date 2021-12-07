@@ -121,3 +121,12 @@ std::string TrackNodes::getBranchOfBlock(int blockId, bool useGreen){
     }
     return "";
 }
+
+std::list<std::string> TrackNodes::getNextBranch(std::string branch){
+    std::list<std::string> rtn;
+    auto l = findNodeByName(branch)->getChildren();
+    for(auto b : l){
+        rtn.push_back(b->getValue().name);
+    }
+    return rtn;
+}

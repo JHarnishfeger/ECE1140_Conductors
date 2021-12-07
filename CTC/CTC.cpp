@@ -4,7 +4,8 @@
 #include <sstream>
 #include "WaysideManager.h"
 
-CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
+CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) :
+trainTracker(&track){
 
     if(sw_waystructs == nullptr || hw_waystruct == nullptr){
         std::cout << "CTC: WayStructs are being recieved as null!\n";
@@ -82,7 +83,9 @@ void CTC::setTrackSwitch(int blockId, bool direction){
     //THIS IMPLEMENTATION IS WRONG. CTC NEEDS TO USE AUTHORITY TO FLIP SWITCHES.
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        block->setSwitchStatus(direction);
+        if(getTrackMaintenence(blockId) == true){
+            block->setSwitchStatus(direction);
+        }
     }
 }
 

@@ -5,6 +5,7 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
 #include "ScheduleManager.h"
+#include "TrainTracker.h"
 
 CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct, QWidget *parent)
     : QMainWindow(parent)
@@ -183,4 +184,8 @@ void CTCWindow::on_pushButton_openCloseSwitch_clicked()
 void CTCWindow::initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct){
     delete ctc;
     ctc = new CTC(sw_waystructs, hw_waystruct);
+}
+
+void CTCWindow::makeNewTrainEmit(){
+    emit makeNewTrain();
 }

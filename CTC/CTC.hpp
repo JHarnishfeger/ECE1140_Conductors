@@ -8,6 +8,7 @@
 #include "TrackNodes.h"
 #include "WaysideManager.h"
 #include "ScheduleManager.h"
+#include "TrainTracker.h"
 
 
 /*
@@ -31,6 +32,8 @@ class CTC{
         
         //Track routing system
         TrackNodes track;
+
+        TrainTracker trainTracker;
 
     public:
 
