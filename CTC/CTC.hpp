@@ -48,6 +48,7 @@ class CTC{
         bool getBlockHasTrainPresent(int blockId);
         std::list<std::string> getBranchesWithTrainsPresent();
         bool getBlockDirection(int blockId);
+        int getBlockThroughput(int blockId);
         void addSchedule(CTCSchedule _schedule);
         void loadSchedule(std::string filepath);
         bool blockExists(int blockId);

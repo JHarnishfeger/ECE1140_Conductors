@@ -49,6 +49,11 @@ CTCWindow::~CTCWindow()
 void CTCWindow::update(){
     ctc.update(0);
     trackMap->setOccupiedBranches(ctc.getBranchesWithTrainsPresent());
+
+    //Set Schedule Window to show only current schedules
+    ui->label_upcomingSchedule->clear();
+    std::string s = ctc.displaySchedule();
+    ui->textBrowser_schedule->setText(QString::fromStdString(s));
 }
 
 void CTCWindow::on_button_chooseSchedule_clicked()
@@ -96,8 +101,7 @@ void CTCWindow::on_lineEdit_selectBlock_returnPressed()
             }else{
                 ui->textBrowser_blockPropertiesTrainPresent->setText("No");
             }
-
-            ui->textBrowser_blockPropertiesThroughput->setText("0");
+            ui->textBrowser_blockPropertiesThroughput->setText(QString::fromStdString(std::to_string(ctc.getBlockThroughput(blockId))));
         }else{
             throw std::logic_error("Block is not valid.");
         }
