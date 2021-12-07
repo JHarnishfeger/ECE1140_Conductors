@@ -17,7 +17,8 @@ SOURCES += \
     WaysideManager.cpp \
     main.cpp \
     ctcwindow.cpp \
-    string_utils.cpp
+    string_utils.cpp \
+    tests.cpp
     CTC.cpp
     ScheduleManager.cpp
     TrackMap.cpp
@@ -38,7 +39,8 @@ HEADERS += \
     WayStruct.h \
     WaysideManager.h \
     ctcwindow.h \
-    string_utils.hpp
+    string_utils.hpp \
+    tests.h
     WaysideManager.h
     Branch.h
     Block.h

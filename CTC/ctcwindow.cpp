@@ -34,6 +34,13 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
     */
 }
 
+CTCWindow::CTCWindow(QWidget *parent)
+  : QMainWindow(parent)
+  , ui(new Ui::CTCWindow)
+  , ctc(nullptr, nullptr){
+
+}
+
 CTCWindow::~CTCWindow()
 {
     delete trackMap;
@@ -179,4 +186,12 @@ void CTCWindow::on_pushButton_openCloseSwitch_clicked()
         ctc.setTrackSwitch(blockId, false);
     }
     on_comboBox_activated();
+}
+
+/*
+ *  Initializes the waystructs for the CTC to use.
+ *  Do not call any other methods until the CTC has its waystructs initialized!
+ */
+void CTCWindow::initWaystructs(std::vector<WayStruct>* sw_waystruct, WayStruct* hw_waystruct){
+    ctc = CTC(sw_waystruct, hw_waystruct);
 }

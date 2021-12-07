@@ -34,7 +34,7 @@ class CTC{
 
     public:
 
-        CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
+        CTC(std::vector<WayStruct>* sw_waystructs = nullptr, WayStruct* hw_waystruct = nullptr);
         ~CTC();
         std::string displaySchedule();
         void update(int current_time);

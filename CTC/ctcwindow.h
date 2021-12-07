@@ -15,6 +15,7 @@ class CTCWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    CTCWindow(QWidget *parent = nullptr);
     CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct, QWidget *parent = nullptr);
     ~CTCWindow();
     void update();
@@ -36,6 +37,8 @@ private slots:
     void on_comboBox_activated();
 
     void on_pushButton_openCloseSwitch_clicked();
+
+    void initWaystructs(std::vector<WayStruct>* sw_waystruct, WayStruct* hw_waystruct);
 
 private:
     Ui::CTCWindow *ui;
