@@ -2,8 +2,8 @@
 #include <vector>
 #include "WayStruct.h"
 #include <QApplication>
+#include <gtest/gtest.h>
 
-/*
 TEST(FirstTest, Test){
     //These are test values, not to be used in integration
     std::vector<WayStruct> sw_controller;
@@ -40,11 +40,11 @@ TEST(FirstTest, Test){
     CTCWindow w(&sw_controller, &hw_controller);
     EXPECT_EQ(&w, &w);
 }
-*/
+
 
 int main(int argc, char *argv[])
 {
-
+    /*
     QApplication a(argc, argv);
 
     //These are test values, not to be used in integration
@@ -83,8 +83,8 @@ int main(int argc, char *argv[])
     w.show();
     w.update();
     return a.exec();
+    */
 
-
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

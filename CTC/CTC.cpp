@@ -6,6 +6,10 @@
 
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
 
+    if(sw_waystructs == nullptr || hw_waystruct == nullptr){
+        std::cout << "CTC: WayStructs are being recieved as null!\n";
+    }
+
 	//Give the waystructs to WaysideManager
 	std::list<WayStruct*> waystructs;
     if(sw_waystructs != nullptr && hw_waystruct != nullptr){
