@@ -14,6 +14,7 @@ SOURCES += \
     ScheduleManager.cpp \
     TrackMap.cpp \
     TrackNodes.cpp \
+    TrainTracker.cpp \
     WaysideManager.cpp \
     main.cpp \
     ctcwindow.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     ScheduleManager.h \
     TrackMap.hpp \
     TrackNodes.h \
+    TrainTracker.h \
     WayStruct.h \
     WaysideManager.h \
     ctcwindow.h \
