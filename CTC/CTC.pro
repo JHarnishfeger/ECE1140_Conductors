@@ -25,6 +25,7 @@ SOURCES += \
     WaysideManager.cpp
     string_utils.cpp
     string_utils.hpp
+    TrainTracker.cpp
 
 HEADERS += \
     Authority.h \
@@ -49,6 +50,7 @@ HEADERS += \
     ScheduleManager.h
     Node.hpp
     CTC.hpp
+    TrainTracker.h
 
 FORMS += \
     ctcwindow.ui
