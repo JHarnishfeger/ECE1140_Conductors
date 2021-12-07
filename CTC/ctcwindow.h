@@ -43,7 +43,7 @@ private slots:
 
 private:
     Ui::CTCWindow *ui;
-    CTC ctc;
+    CTC* ctc;
 
     TrackMap* trackMap;
 };
