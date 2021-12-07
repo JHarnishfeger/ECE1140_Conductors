@@ -15,9 +15,13 @@ class CTCWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct, QWidget *parent = nullptr);
+    CTCWindow(std::vector<WayStruct>* sw_waystructs = nullptr, WayStruct* hw_waystruct = nullptr, QWidget *parent = nullptr);
     ~CTCWindow();
     void update();
+
+public slots:
+
+    void initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
 
 private slots:
 

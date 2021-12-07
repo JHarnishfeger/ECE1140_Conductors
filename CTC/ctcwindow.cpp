@@ -180,3 +180,7 @@ void CTCWindow::on_pushButton_openCloseSwitch_clicked()
     }
     on_comboBox_activated();
 }
+
+void CTCWindow::initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct){
+    ctc = CTC(sw_waystructs, hw_waystruct);
+}

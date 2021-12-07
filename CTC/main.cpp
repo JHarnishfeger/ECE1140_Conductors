@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     hw_controller.suggestedSpeed = 0;
 
     CTCWindow w(&sw_controller, &hw_controller);
+    //w.initializeWaystructs(&sw_controller, &hw_controller);
     w.show();
     w.update();
     return a.exec();
