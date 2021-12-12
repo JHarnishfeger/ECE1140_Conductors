@@ -1,22 +1,27 @@
 #include"HWTrackController.h"
 
 HWTrackController::HWTrackController(){
-  WayStruPtr = new WayStruct;
+
 }
+
 void HWTrackController::initializeHW(vector<Block> as){
   setBlocks(as);
   creatWayside();
 }
+
 void HWTrackController::setBlocks(vector<Block> assiTrack){
   assignedTrack = assiTrack;
 }
+
 HWTrackController::~HWTrackController(){
-  delete WayStruPtr;
+
 }
 
 void HWTrackController::creatWayside(){
   WaysideHW.initWayside(assignedTrack);
   WaysideHWptr = &WaysideHW;
+  wayStrHW = WaysideHWptr->getWayStruct();
+  WayStruPtr = &wayStrHW;
 }
 
 Wayside_HW* HWTrackController::getWayside(){
@@ -25,31 +30,9 @@ Wayside_HW* HWTrackController::getWayside(){
 
 void HWTrackController::setSuggestedSpeed(double ss){
   WaysideHWptr->setSuggestedSpeed(ss);
-  /*
-  vector<double> zeze = WaysideHWptr->getSuggestedSpeed();
-  int size0 = zeze.size();
-  cout << 'i' << size0 << endl;
-  for(int i = 0; i < size0; i++){
-    cout << 'i' << zeze[i] << endl;
-  }
-  vector<double> hehe = WaysideHW.getSuggestedSpeed();
-  int size = hehe.size();
-  cout << 'h' << size << endl;
-  for(int i = 0; i < size; i++){
-    cout << 'h' << hehe[i] << endl;
-  }
-  */
 }
 
 double HWTrackController::getCommandedSpeed(){
-  /*
-  vector<double> zeze = WaysideHWptr->getCommandedSpeed();
-  int size0 = zeze.size();
-  cout << 'i' << size0 << endl;
-  for(int i = 0; i < size0; i++){
-    cout << 'i' << zeze[i] << endl;
-  }
-  */
   return WaysideHWptr->getCommandedSpeed();
 }
 
@@ -72,11 +55,20 @@ void HWTrackController::setControlMode(bool m){
 }
 
 void HWTrackController::selectBlock_Manual(int id){
-  //string comm = std::to_string(id);
-//  cout << comm << endl;
   WaysideHW.sendToArduino(id);
 }
 
+WayStruct* HWTrackController::getWayStructHW(){
+    return WayStruPtr;
+}
+
+void HWTrackController::updateHWWayside(){
+    WaysideHW.updateHW();
+    wayStrHW = WaysideHWptr->getWayStruct();
+}
+
+
+/*
 void HWTrackController::updateTrack(){
   int size = getTrackSize();
   for(int i = 0; i< size; i++){
@@ -103,5 +95,6 @@ void HWTrackController::updateFromWayStruc(){
 void HWTrackController::updateToWayStruc(){
   WayStruPtr->sector = assignedTrack;
 }
+*/
 
 //importPLC();

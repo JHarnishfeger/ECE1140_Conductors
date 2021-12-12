@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
+      <y>30</y>
       <width>121</width>
       <height>61</height>
      </rect>
@@ -36,7 +36,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>70</y>
+      <y>40</y>
       <width>151</width>
       <height>20</height>
      </rect>
@@ -65,21 +65,21 @@
      </font>
     </property>
     <property name="text">
-     <string>Update</string>
+     <string>UPDATE</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>40</x>
       <y>140</y>
-      <width>171</width>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>18</pointsize>
      </font>
     </property>
     <property name="text">
@@ -120,7 +120,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>130</y>
+      <y>90</y>
       <width>721</width>
       <height>16</height>
      </rect>
@@ -132,11 +132,16 @@
    <widget class="Line" name="line_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>310</x>
       <y>0</y>
-      <width>16</width>
-      <height>271</height>
+      <width>17</width>
+      <height>221</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
@@ -145,21 +150,21 @@
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>260</y>
-      <width>421</width>
-      <height>16</height>
+      <x>320</x>
+      <y>210</y>
+      <width>401</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="PLCtextBox">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>160</y>
+      <x>380</x>
+      <y>110</y>
       <width>231</width>
       <height>41</height>
      </rect>
@@ -173,11 +178,11 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="PLCButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>210</y>
+      <x>390</x>
+      <y>160</y>
       <width>201</width>
       <height>51</height>
      </rect>
@@ -210,14 +215,14 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>290</y>
+      <y>279</y>
       <width>281</width>
-      <height>20</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -227,7 +232,7 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>380</x>
       <y>20</y>
       <width>217</width>
       <height>65</height>
@@ -253,7 +258,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="BrokenRailCheckBox">
        <property name="font">
         <font>
          <pointsize>12</pointsize>
@@ -266,41 +271,59 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QCheckBox" name="LeftBox">
     <property name="geometry">
      <rect>
       <x>320</x>
       <y>330</y>
-      <width>248</width>
-      <height>28</height>
+      <width>125</width>
+      <height>26</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QCheckBox" name="LeftBox">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Switch Left</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="RightBox">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Switch Right</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Switch Left</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="RightBox">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>330</y>
+      <width>151</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Switch Right</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="TrainPresentBox">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>240</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Train Present</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

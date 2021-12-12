@@ -7,15 +7,9 @@ HWTCInterface::HWTCInterface(QWidget *parent)
 {
     ui->setupUi(this);
 
-    hwMode = 1;
+    hwMode = 1; //Set to manual mode
     ui->ModeBox->setChecked(true);
     brokenRailDetected = 0;
-
-
-
-        //setHWTrack(tk);
-
-
 
 }
 
@@ -36,6 +30,7 @@ void HWTCInterface::setHWTrack(vector<Block> tk){
     }
 
     addBlocksToUI();
+    hwtc.setControlMode(hwMode);
 }
 
 void HWTCInterface::setHWMode(bool m){
@@ -51,8 +46,6 @@ void HWTCInterface::addBlocksToUI(){
     for(int i = 0; i < tracksz; i++){
         int id = ids[i];
         QString bid = "Block " + QString::number(id);
-
-        //QListWidgetItem *item = new QListWidgetItem(s);
         ui->blockList->addItem(bid);
     }
 
@@ -78,6 +71,15 @@ void HWTCInterface::updateCrossingToUI(int id){
     }
 }
 
+void HWTCInterface::updateTrainPresentToUI(int id){
+    vector<bool> trainPre = hwWaysidePtr->getBlockOccupancy();
+    if(trainPre[id] == 1){
+        ui -> TrainPresentBox->setChecked(true);
+    }else{
+        ui -> TrainPresentBox->setChecked(false);
+    }
+}
+
 void HWTCInterface::on_pushButton_clicked() // Mode button
 {
     bool mm = 0;
@@ -88,9 +90,9 @@ void HWTCInterface::on_pushButton_clicked() // Mode button
     }
     setHWMode(mm);
 
-    if(hwMode == 0){
+    if(hwWaysidePtr->getMode() == 0){
         ui->ModeBox->setChecked(false);
-    }else if(hwMode == 1){
+    }else if(hwWaysidePtr->getMode() == 1){
         ui->ModeBox->setChecked(true);
     }
 
@@ -107,18 +109,43 @@ void HWTCInterface::on_blockList_itemClicked(QListWidgetItem *item)
     //QChar id = b.back();
     int idd = b.toInt();
 
-        updateSwitchToUI(idd);
-        updateCrossingToUI(idd);
-        blockSelected = idd;
+    vector<bool> ifSwitch = hwWaysidePtr->getIfBlockHasSwitch();
+    vector<bool> ifCross = hwWaysidePtr->getIfBlockHasCrossing();
+
+    if(ifSwitch[idd] == 0){
+        ui->LeftBox->setDisabled(true);
+        ui->RightBox->setDisabled(true);
+    }else{
+        ui->LeftBox->setDisabled(false);
+        ui->RightBox->setDisabled(false);
+    }
+
+    if(ifCross[idd] == 0){
+        ui->CrossingBox->setDisabled(true);
+    }else{
+        ui->CrossingBox->setDisabled(false);
+    }
+
+    updateSwitchToUI(idd);
+    updateCrossingToUI(idd);
+    updateTrainPresentToUI(idd);
+    blockSelected = idd;
 }
 
 
 void HWTCInterface::on_pushButton_2_clicked() //Update button
 {
+    int successfulReveive = 0;
     hwtc.selectBlock_Manual(blockSelected);
-    hwWaysidePtr->receiveFromArduino();
-    updateSwitchToUI(blockSelected);
-    updateCrossingToUI(blockSelected);
+    successfulReveive = hwWaysidePtr->receiveFromArduino();
+    if(successfulReveive == 1){
+        updateSwitchToUI(blockSelected);
+        updateCrossingToUI(blockSelected);
+    }else if(successfulReveive == 0){
+        QMessageBox::about(this, "Update Failed", "Update Failed. Please click UPDATE only while pressing the physical update button. ");
+    }else if(successfulReveive == -1){
+        QMessageBox::about(this, "Update Failed", "Update Failed -- Train Present on the Block! ");
+    }
 }
 
 
@@ -127,9 +154,30 @@ void HWTCInterface::on_pushButton_2_clicked() //Update button
 void HWTCInterface::on_ModeBox_stateChanged(int arg1)
 {
     if(arg1 == 0){
-        ui->pushButton_2->hide();
+        ui->pushButton_2->setDisabled(true);
     }else{
-        ui->pushButton_2->show();
+        ui->pushButton_2->setDisabled(false);
     }
 }
 
+
+void HWTCInterface::on_PLCButton_clicked()
+{
+
+    string filename;
+    filename = "C:\\Users\\pauls\\OneDrive\\Documents\\ECE1140\\HWTrackController\\" + ui->PLCtextBox->text().toStdString() + ".txt";
+    hwWaysidePtr->hwPLC.importPLC(filename);
+    cout << "Running " << hwWaysidePtr->hwPLC.getFilename() << endl;
+    hwWaysidePtr->detectTrack();
+
+}
+
+void HWTCInterface::updateHWTrackController(){
+    hwtc.updateHWWayside();
+}
+
+void HWTCInterface::setTrack(vector<Block> track){
+    setHWTrack(track);
+    emit sendWayStruct(hwtc.getWayStructHW());
+
+}

@@ -1,105 +1,48 @@
-#include<iostream>
-#include"HWTrackController.cpp"
-#include<vector>
-using namespace std;
+#include "hwtcinterface.h"
 
-int main(){
+#include <QApplication>
 
-  vector<Block> assignedBlocks;
-  Block b1, b2, b3, b4, b5;
-  b1.setType("switch");
-  b4.setType("switch");
-  b2.setType("switch");
-  b3.setType("crossing");
-  b5.setType("crossing");
-  assignedBlocks.push_back(b1);
-  assignedBlocks.push_back(b2);
-  assignedBlocks.push_back(b3);
-  assignedBlocks.push_back(b4);
-  assignedBlocks.push_back(b5);
-
-  HWTrackController hwCon;
-  hwCon.initializeHW(assignedBlocks);
-  Wayside *waysidePtr;
-  waysidePtr = hwCon.getWayside();
-  if(ifArduConnected()){
-    cout << "Connected! xixi" << endl;
-  }else{
-    cout << "Error in port name" << endl;
-  }
-
-  char carryOn = 'y';
-  vector<int> idVec;
-  int id, whichBlock = 0;
-  idVec = waysidePtr->getId();
-  int trackSize = hwCon.getTrackSize();
-
-  while(ifArduConnected() && carryOn == 'y'){
-    cout << "Select a block: " << endl;
-    cin >> whichBlock;
-    cout << "which is "<<whichBlock << endl;
-    id = idVec[whichBlock];
-
-    if(id < trackSize){
-
-      cout << "id is "<<id << endl;
-      hwCon.selectBlock_Manual(id);
-      //for(int a = 0 ; a < 10000; a++){}
-      waysidePtr->receiveFromArduino();
-  }
-    cin >> carryOn;
-  }
-
-    /*
-    cin >> command;
-    char *charArray = new char[command.size() + 1];
-    copy(command.begin(), command.end(), charArray);
-    charArray[command.size()] = '\n';
-
-    ardu.writeSerialPort(charArray, MAX_DATA_LENGTH);
-    ardu.readSerialPort(output, MAX_DATA_LENGTH);
-
-    cout << output << endl;
-
-    delete [] charArray;
-    */
-
-//  }
-/*
-  vector<Block> assignedBlocks;
-  Block b1, b2, b3, b4;
-  assignedBlocks.push_back(b1);
-  assignedBlocks.push_back(b2);
-  assignedBlocks.push_back(b3);
-  assignedBlocks.push_back(b4);
-  int s = assignedBlocks.size();
-
-  /*
-  Wayside haha;
-  haha.initWayside(assignedBlocks);
-  cout << 'a' << haha.getTrackSize() << endl;
-
-  Wayside *hahaptr;
-
-  hahaptr = &haha;
-
- cout << 'b' << hahaptr->getTrackSize() << endl;
-*/
-
-/*
-  HWTrackController hwCon(assignedBlocks);
-
-  vector<double> suggSpeed(3, 11.1);
-  int size = suggSpeed.size();
-  cout << size << endl;
-  vector<double> commSpeed;
-  hwCon.setSuggestedSpeed(suggSpeed);
-  commSpeed = hwCon.getCommandedSpeed();
-
-  for (int i = 0; i < size; i++){
-    cout << commSpeed[i] << endl;
-  }
-
-*/
-  return 0;
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    HWTCInterface w;
+    Block b0(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b1(10,"g","a","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b2(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b3(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b4(10,"g","b","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b5(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b6(10,"g","b","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b7(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b8(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b9(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b10(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b11(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b12(10,"g","a","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b13(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,0,0,0,0);
+        Block b14(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b15(10,"g","b","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+        Block b16(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b17(10,"g","b","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+        Block b18(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b19(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+        Block b20(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        Block b21(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        Block b22(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        Block b23(10,"g","a","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b24(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+        Block b25(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b26(10,"g","b","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+        Block b27(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b28(10,"g","b","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
+        Block b29(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,0);
+        Block b30(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+        Block b31(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        Block b32(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        //Block b33(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,1,0,1);
+        vector<Block> tk{b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,
+                    b19,b20,b21,b22,b23,b24,b25,b26,b27,b28,b29,b30,b31,b32};
+        w.setHWTrack(tk);
+    w.show();
+    return a.exec();
 }

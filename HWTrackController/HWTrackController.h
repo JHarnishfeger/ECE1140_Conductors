@@ -9,6 +9,7 @@ class HWTrackController{
 
 private:
   WayStruct *WayStruPtr;
+  WayStruct wayStrHW;
   Wayside_HW *WaysideHWptr;
   Wayside_HW WaysideHW;
   vector<Block> assignedTrack;
@@ -27,9 +28,11 @@ public:
   int getTrackSize();
   void setControlMode(bool);
   void selectBlock_Manual(int);
-  void updateTrack();
-  void updateFromWayStruc();
-  void updateToWayStruc();
+  WayStruct* getWayStructHW();
+  void updateHWWayside();
+  //void updateTrack();
+  //void updateFromWayStruc();
+  //void updateToWayStruc();
   //importPLC();
 };
 
