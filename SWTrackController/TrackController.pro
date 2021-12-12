@@ -17,6 +17,10 @@ SOURCES += \
     CTC/WaysideManager.cpp \
     CTC/ctcwindow.cpp \
     CTC/string_utils.cpp \
+    HWTC/HWTrackController.cpp \
+    HWTC/SerialPort.cpp \
+    HWTC/Wayside_HW.cpp \
+    HWTC/hwtcinterface.cpp \
     PLCController.cpp \
     SWTrackController.cpp \
     Wayside.cpp \
@@ -36,6 +40,10 @@ HEADERS += \
     CTC/WaysideManager.h \
     CTC/ctcwindow.h \
     CTC/string_utils.hpp \
+    HWTC/HWTrackController.h \
+    HWTC/SerialPort.h \
+    HWTC/Wayside_HW.h \
+    HWTC/hwtcinterface.h \
     PLCController.h \
     SWTrackController.h \
     WayStruct.h \
@@ -45,6 +53,7 @@ HEADERS += \
 
 FORMS += \
     CTC/ctcwindow.ui \
+    HWTC/hwtcinterface.ui \
     swtcinterface.ui \
     waysidewin.ui
 

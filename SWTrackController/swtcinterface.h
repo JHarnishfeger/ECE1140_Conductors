@@ -9,7 +9,8 @@
 using std::vector;
 #include "SWTrackController.h"
 #include "waysidewin.h"
-//#include "CTC/ctcwindow.h"
+#include "CTC/ctcwindow.h"
+#include "HWTC/hwtcinterface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SWTCInterface; }
@@ -25,12 +26,22 @@ public:
     void fillLists();
     vector<Block> getHWTrack();
     void update();
+signals:
+    void hwSet(vector<Block> hwtrk);
+    void waysidesSet(vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
 private slots:
     void on_CreateWaysides_clicked();
 
     void on_DesignateHWWayside_clicked();
 
     void on_WaysideList_itemClicked(QListWidgetItem *item);
+
+    void on_autoMode_stateChanged(int arg1);
+
+public slots:
+    void setTrack(vector<Block*> rl,vector<Block*> gl);
+
+    void getHWWaystruct(WayStruct* hwWaystr);
 
 private:
     Ui::SWTCInterface *ui;

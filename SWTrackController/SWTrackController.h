@@ -12,8 +12,8 @@ private:
     bool manualMode; //Shows if controller is in Manual mode. 0 = Automatic, 1 = Manual
 public:
     SWTrackController(); //Creates empty instance of track controller
-    void initialize(vector<Block>,vector<Block>,bool); //Initializes an empty controller
-    SWTrackController(vector<Block>,vector<Block>,int,bool); //Takes red model, green model, number of waysides, speed, authority, and mode to create an instance of the SWTrackController
+    void initialize(vector<Block*>,vector<Block*>,bool); //Initializes an empty controller
+    SWTrackController(vector<Block*>,vector<Block*>,int,bool); //Takes red model, green model, number of waysides, speed, authority, and mode to create an instance of the SWTrackController
     vector<Block> getHWTrack();
     void sanityCheck();
     void update();

@@ -8,7 +8,8 @@ Wayside::Wayside(vector<Block> track, bool ln){
     PLCController p(sector);
     plc = p;
     line = ln;
-    for(int i=0;i<sector.size();i++){
+    for(int i=0;i<sector.size();i++)
+    {
         if(sector[i].getType()=="switch")
             swich.push_back(sector[i]);
         else if(sector[i].getType()=="crossing")
@@ -54,21 +55,28 @@ void Wayside::update(){
 
 void Wayside::updateNoPLC(){
     bool found=0;
-    for(int i=0;i<sector.size();i++){
-        for(int j=0;j<swich.size();j++){
-            if(swich[j].getSwitchStatus()!=sector[i].getSwitchStatus()&&swich[j].getId()==sector[i].getId()) //IF SWITCH IS DIFFERENT THAN LOCAL POSITION{
+    for(int i=0;i<sector.size();i++)
+    {
+        for(int j=0;j<swich.size();j++)
+        {
+            if(swich[j].getSwitchStatus()!=sector[i].getSwitchStatus()&&swich[j].getId()==sector[i].getId()) //IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+            {
                 alerts.push_back("SWITCH " + std::to_string(swich[j].getId()) + " TOGGLED");
                 swich[j].setSwitchStatus(sector[i].getSwitchStatus());
             }
         }
-        for(int j=0;j<crossing.size();j++){
-            if(crossing[j].getCrossingStatus()!=sector[i].getCrossingStatus()&&crossing[j].getId()==sector[i].getId()) //IF CROSSING IS DIFFERENT THAN LOCAL POSITION{
+        for(int j=0;j<crossing.size();j++)
+        {
+            if(crossing[j].getCrossingStatus()!=sector[i].getCrossingStatus()&&crossing[j].getId()==sector[i].getId()) //IF CROSSING IS DIFFERENT THAN LOCAL POSITION
+            {
                 alerts.push_back("CROSSING " + std::to_string(crossing[j].getId()) + " TOGGLED");
                 crossing[j].setCrossingStatus(sector[i].getCrossingStatus());
             }
         }
-        for(int j=0;j<brokenRail.size();j++){
-            if(brokenRail[j].getRailStatus()!=sector[i].getRailStatus()&&brokenRail[j].getId()==sector[i].getId()) //IF BROKEN RAIL STATUS IS DIFFERENT THAN LOCAL VALUE{
+        for(int j=0;j<brokenRail.size();j++)
+        {
+            if(brokenRail[j].getRailStatus()!=sector[i].getRailStatus()&&brokenRail[j].getId()==sector[i].getId()) //IF BROKEN RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
+            {
                 alerts.push_back("RAIL " + std::to_string(brokenRail[j].getId()) + " BROKEN");
                 brokenRail[j].setRailStatus(sector[i].getRailStatus());
                 found = 1;
@@ -83,21 +91,28 @@ bool Wayside::detectTrack(){
     bool found=0;
     if(!runPLC())
         alerts.push_back("PLC output was incorrect. Track was not changed.");
-    for(int i=0;i<sector.size();i++){
-        for(int j=0;j<swich.size();j++){
-            if(swich[j].getSwitchStatus()!=sector[i].getSwitchStatus()&&swich[j].getId()==sector[i].getId())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION{
+    for(int i=0;i<sector.size();i++)
+    {
+        for(int j=0;j<swich.size();j++)
+        {
+            if(swich[j].getSwitchStatus()!=sector[i].getSwitchStatus()&&swich[j].getId()==sector[i].getId())//IF SWITCH IS DIFFERENT THAN LOCAL POSITION
+            {
                 alerts.push_back("SWITCH " + std::to_string(swich[j].getId()) + " TOGGLED");
                 swich[j].setSwitchStatus(sector[i].getSwitchStatus());
             }
         }
-        for(int j=0;j<crossing.size();j++){
-            if(crossing[j].getCrossingStatus()!=sector[i].getCrossingStatus()&&crossing[j].getId()==sector[i].getId())//IF CROSSING IS DIFFERENT THAN LOCAL POSITION{
+        for(int j=0;j<crossing.size();j++)
+        {
+            if(crossing[j].getCrossingStatus()!=sector[i].getCrossingStatus()&&crossing[j].getId()==sector[i].getId())//IF CROSSING IS DIFFERENT THAN LOCAL POSITION
+            {
                 alerts.push_back("CROSSING " + std::to_string(crossing[j].getId()) + " TOGGLED");
                 crossing[j].setCrossingStatus(sector[i].getCrossingStatus());
             }
         }
-        for(int j=0;j<brokenRail.size();j++){
-            if(brokenRail[j].getRailStatus()!=sector[i].getRailStatus()&&brokenRail[j].getId()==sector[i].getId())//IF BROKEN RAIL STATUS IS DIFFERENT THAN LOCAL VALUE{
+        for(int j=0;j<brokenRail.size();j++)
+        {
+            if(brokenRail[j].getRailStatus()!=sector[i].getRailStatus()&&brokenRail[j].getId()==sector[i].getId())//IF BROKEN RAIL STATUS IS DIFFERENT THAN LOCAL VALUE
+            {
                 alerts.push_back("RAIL " + std::to_string(brokenRail[j].getId()) + " BROKEN");
                 brokenRail[j].setRailStatus(sector[i].getRailStatus());
                 found = 1;
@@ -161,8 +176,10 @@ void Wayside::addBrokenRail(Block i){
 
 void Wayside::fixBrokenRail(Block r){
     bool flag=0;
-    for(int i=0;i<brokenRail.size();i++){
-        if(brokenRail[i].getId()==r.getId()){
+    for(int i=0;i<brokenRail.size();i++)
+    {
+        if(brokenRail[i].getId()==r.getId())
+        {
             brokenRail.erase(brokenRail.begin()+i);
             flag = 1;
         }
@@ -173,10 +190,12 @@ void Wayside::fixBrokenRail(Block r){
 
 vector<Block> Wayside::getBrokenRails(){
     for(int i=0;i<brokenRail.size();i++)
-        for(int j=0;j<brokenRail.size();j++){
+        for(int j=0;j<brokenRail.size();j++)
+        {
             if(i==j)
                 continue;
-            else if(brokenRail[i].getId()==brokenRail[j].getId()){
+            else if(brokenRail[i].getId()==brokenRail[j].getId())
+            {
                 brokenRail.erase(brokenRail.begin()+j);
                 j--;
             }
@@ -190,8 +209,10 @@ void Wayside::addMaintenance(Block i){
 
 void Wayside::endMaintenance(Block m){
     bool flag=0;
-    for(int i=0;i<maintenance.size();i++){
-        if(maintenance[i].getId()==m.getId()){
+    for(int i=0;i<maintenance.size();i++)
+    {
+        if(maintenance[i].getId()==m.getId())
+        {
             maintenance.erase(maintenance.begin()+i);
             flag = 1;
         }
@@ -225,8 +246,10 @@ void Wayside::setMode(bool m){
 }
 
 bool Wayside::switchTrack(Block &sw){
-    for(int i=0;i<sector.size();i++){
-        if(sector[i].getId()==sw.getId()){
+    for(int i=0;i<sector.size();i++)
+    {
+        if(sector[i].getId()==sw.getId())
+        {
             sw.setSwitchStatus(!sw.getSwitchStatus());
             break;
         }
@@ -236,8 +259,10 @@ bool Wayside::switchTrack(Block &sw){
 }
 
 bool Wayside::toggleCrossing(Block &cr){
-    for(int i=0;i<sector.size();i++){
-        if(sector[i].getId()==cr.getId()){
+    for(int i=0;i<sector.size();i++)
+    {
+        if(sector[i].getId()==cr.getId())
+        {
             cr.setCrossingStatus(!cr.getCrossingStatus());
             break;
         }
@@ -250,8 +275,10 @@ vector<Block> Wayside::getTrackOccupancy(){
     vector<Block> occ;
     occ.clear();
     trackOccupancy.clear();
-    for(int i=0;i<sector.size();i++){
-        if(sector[i].getTrainPresent()==true){
+    for(int i=0;i<sector.size();i++)
+    {
+        if(sector[i].getTrainPresent()==true)
+        {
             occ.push_back(sector[i]);
         }
     }
@@ -283,13 +310,16 @@ bool Wayside::runPLC(){
 
 bool Wayside::updateFromPLC(){
     bool change=0;
-    for(int i=0;i<sector.size();i++){
-        if(sector[i].getSwitchStatus()!=plc.SW[i]){
+    for(int i=0;i<sector.size();i++)
+    {
+        if(sector[i].getSwitchStatus()!=plc.SW[i])
+        {
             //ALERT
             change = 1;
             sector[i].setSwitchStatus(plc.SW[i]);
         }
-        if(sector[i].getCrossingStatus()!=plc.CR[i]){
+        if(sector[i].getCrossingStatus()!=plc.CR[i])
+        {
             //ALERT
             change = 1;
             sector[i].setCrossingStatus(plc.CR[i]);
