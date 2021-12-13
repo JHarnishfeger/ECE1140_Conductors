@@ -97,3 +97,20 @@ void WaysideManager::addNewRouteToQueues(std::list<Authority> route){
         setAuthority(authority);
     }
 }
+
+Authority WaysideManager::getAuthority(std::string branch){
+    for(WayStruct* w : waysides){
+        std::vector<Block>& sector = w->sector;
+        for(unsigned int i = 0; i < sector.size(); i++){
+            if(track->getBranchOfBlock(sector[i].getId()) == branch){
+                auto authorities = w->auth;
+                for(unsigned int i = 0; i < authorities.size(); i++){
+                    if(authorities[i].branch == branch){
+                        return authorities[i];
+                    }
+                }
+            }
+        }
+    }
+    return Authority{};
+}

@@ -36,6 +36,8 @@ class WaysideManager{
         void setBlockClosedForMaintenence(int blockId, bool maintenence);
 
         void setAuthority(Authority authority);
+
+        Authority getAuthority(std::string branch);
 	
 	private:
 	
