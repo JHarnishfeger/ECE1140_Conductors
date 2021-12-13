@@ -5,7 +5,7 @@
 #include "WaysideManager.h"
 
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) :
-trainTracker(&track){
+trainTracker(&track, &waysideManager){
 
     if(sw_waystructs == nullptr || hw_waystruct == nullptr){
         std::cout << "CTC: WayStructs are being recieved as null!\n";
@@ -113,10 +113,12 @@ void CTC::dispatchTrain(CTCSchedule schedule){
 
     //TODO
     //Get the route
-    
-    //Right now, all trains come from yard
+
     int destinationBlock = schedule.destination;
-    std::list<std::string> route = track.getBranchRoute("YARD", track.getBranchOfBlock(schedule.destination));
+    std::list<std::string> route = track.getBranchRoute(
+        trainTracker.getTrainLocation(schedule.train),
+        track.getBranchOfBlock(schedule.destination)
+    );
     
     //Send Authorities to each wayside
     std::list<Authority> authorities;
