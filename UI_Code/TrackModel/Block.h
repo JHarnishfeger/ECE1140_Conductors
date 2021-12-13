@@ -6,32 +6,30 @@
 #include <time.h>
 #include <string>
 #include <sstream>
+#include <cmath>
+#include <vector>
 using std::string;
+using std::vector;
 
 //Block class
 class Block{
 	private:
-		static int instanceCounter;	
-		static double xCordTotal;
-		static double yCordTotal;
-		static double totalDistance;
-		int passengers;
-		int id;
 		string line;
 		string branch;
 		string type;
-		string direction;
-		string nextBlocks;
 		string stationName;
-		double length;
-		double xCord;
-		double yCord;
-		double grade;
-		double height;
-		double temperature;
-		double speedLimit;
+		string nextBranches;
+		vector<int> nextBlocks;
+		int number;
+		int speedLimit;
+		int passengers;
+		int trafficLightStatus;
+		int stationSide;
 		double suggestedSpeed;
-		double TDBegin;
+		double temperature;
+		double length;
+		double grade;
+		double elevation;
 		bool authority;
 		bool railStatus;
 		bool circuitStatus;
@@ -41,108 +39,108 @@ class Block{
 		bool switchStatus;
 		bool trainPresent;
 		bool beaconPresent;
-		bool stationSide;
 		uint32_t trackCircuitData;
 		uint16_t beaconData;
 	public:
-		//Constructors:
+		//Constructors: ------------------------------------------------
 		Block();
-		Block(int,string,string,string,string,string,string,double,double,double,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t);
-		Block(string,string,int,double,double,double,string,double,double,string);
-		//Attributes:
-		//passengers
-		void setPassengers(int);
-		int getPassengers();
-		//id
-		int getId();
-		//line
+		Block(string,string,string,string,string,vector<int>,int,int,int,int,int,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t,uint16_t);
+		Block(string,string,int,double,double,int,string,int,double,double);
+		//Attributes: --------------------------------------------------
+		//line:
 		void setLine(string);
 		string getLine();
-		//branch
+		//branch:
 		void setBranch(string);
 		string getBranch();
-		//type
+		//type:
 		void setType(string);
 		string getType();
-		//direction
-		void setDirection(string);
-		string getDirection();
-		//nextBlocks
-		void setNextBlocks(string);
-		string getNextBlocks();
-		//stationName
+		//stationName:
 		void setStationName(string);
 		string getStationName();
-		//length
-		void setLength(double);
-		double getLength();
-		//xCord
-		void setXCord(double);
-		double getXCord();
-		//yCord
-		void setYCord(double);
-		double getYCord();
-		//grade
-		void setGrade(double);
-		double getGrade();
-		//height
-		void setHeight(double);
-		double getHeight();
-		//temperature
-		void setTemperature(double);
-		double getTemperature();
-		//speedLimit
-		void setSpeedLimit(double);
-		double getSpeedLimit();
-		//suggestedSpeed
+		//nextBranches
+		void setNextBranches(string);
+		string getNextBranches();
+		//nextBlocks:
+		void setNextBlocks(int,int);
+		vector<int> getNextBlocks();
+		//number:
+		void setBlockNumber(int);
+		int getBlockNumber();
+		//speedLimit:
+		void setSpeedLimit(int);
+		int getSpeedLimit();
+		//passengers:
+		void setPassengerCount(int);
+		int getPassengerCount();
+		//trafficLightStatus:
+		void setTrafficLightStatus(int);
+		int getTrafficLightStatus();
+		//stationSide:
+		void setStationSide(int);
+		int getStationSide();
+		//suggestedSpeed:
 		void setSuggestedSpeed(double);
 		double getSuggestedSpeed();
-		//authority
+		//temperature:
+		void setTemperature(double);
+		double getTemperature();
+		//length:
+		void setLength(double);
+		double getLength();
+		//grade:
+		void setGrade(double);
+		double getGrade();
+		//elevation:
+		void setElevation(double);
+		double getElevation();
+		//authority:
 		void setAuthority(bool);
 		bool getAuthority();
 		void toggleAuthority();
-		//railStatus
+		//railStatus:
 		void setRailStatus(bool);
 		bool getRailStatus();
 		void toggleRailStatus();
-		//circuitStatus
+		//circuitStatus:
 		void setCircuitStatus(bool);
 		bool getCircuitStatus();
 		void toggleCircuitStatus();
-		//powerStatus
+		//powerStatus:
 		void setPowerStatus(bool);
 		bool getPowerStatus();
 		void togglePowerStatus();
-		//heaterStatus
+		//heaterStatus:
 		void setHeaterStatus(bool);
 		bool getHeaterStatus();
 		void toggleHeaterStatus();
-		//crossingStatus
+		//crossingStatus:
 		void setCrossingStatus(bool);
 		bool getCrossingStatus();
 		void toggleCrossingStatus();
-		//switchStatus
+		//switchStatus:
 		void setSwitchStatus(bool);
 		bool getSwitchStatus();
 		void toggleSwitchStatus();
-		//trainPresent
+		//trainPresent:
 		void setTrainPresent(bool);
 		bool getTrainPresent();
 		void toggleTrainPresent();
-		//beaconPresent
+		//beaconPresent:
 		void setBeaconPresent(bool);
 		bool getBeaconPresent();
-		//stationSide
-		void setStationSide(bool);
-		bool getStationSide();
-		//encoding
+		//trackCircuitData:
 		void encodeTrackCircuitData();
-		void encodeBeaconData();
 		uint32_t getTrackCircuitData();
+		//beaconData:
+		void encodeBeaconData();
 		uint16_t getBeaconData();
-		//toStrings
+		//toStrings:
 		string toString();
 		string toStringDetailed();
 };
 //End Block class
 #endif
+
+

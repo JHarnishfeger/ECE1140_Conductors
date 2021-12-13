@@ -23,7 +23,7 @@ void TrackModel::on_loadTrackButton_clicked()
     for(int i = 0; i < lineSize; i++){
         QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
         QString branch = QString::fromStdString(t.getGreenLine().at(i)->getBranch());
-        QString id = QString::number(t.getGreenLine().at(i)->getId());
+        QString id = QString::number(t.getGreenLine().at(i)->getBlockNumber());
         QString blockString = line+","+branch+","+id;
         lineList << blockString;
     }
@@ -40,7 +40,7 @@ void TrackModel::on_searchBlockButton_clicked()
     //Update searchedBlock current block display
     QString currBlockLine = QString::fromStdString(searchedBlock->getLine());
     QString currBlockBranch = QString::fromStdString(searchedBlock->getBranch());
-    QString currBlockId = QString::number(searchedBlock->getId());
+    QString currBlockId = QString::number(searchedBlock->getBlockNumber());
     ui->currentBlockTextBoxLine->setText(currBlockLine);
     ui->currentBlockTextBoxBranch->setText(currBlockBranch);
     ui->currentBlockTextBoxId->setText(currBlockId);
@@ -52,12 +52,9 @@ void TrackModel::on_searchBlockButton_clicked()
     QString currBlockHeaterStatus = QString::number(searchedBlock->getHeaterStatus());
     QString currBlockHeaterTemp = QString::number(searchedBlock->getTemperature());
     QString currBlockType = QString::fromStdString(searchedBlock->getType());
-    QString currBlockDirection = QString::fromStdString(searchedBlock->getDirection());
     QString currBlockLength = QString::number(searchedBlock->getLength());
-    QString currBlockXCord = QString::number(searchedBlock->getXCord());
-    QString currBlockYCord = QString::number(searchedBlock->getYCord());
     QString currBlockGrade = QString::number(searchedBlock->getGrade());
-    QString currBlockHeight = QString::number(searchedBlock->getHeight());
+    QString currBlockHeight = QString::number(searchedBlock->getElevation());
     QString currBlockSpeedLimit = QString::number(searchedBlock->getSpeedLimit());
     QString currBlockSuggestedSpeed = QString::number(searchedBlock->getSuggestedSpeed());
     QString currBlockStationName = QString::fromStdString(searchedBlock->getStationName());
@@ -65,7 +62,7 @@ void TrackModel::on_searchBlockButton_clicked()
     QString currBlockCrossingStatus = QString::number(searchedBlock->getCrossingStatus());
     QString currBlockSwitchStatus = QString::number(searchedBlock->getSwitchStatus());
     QString currBlockTrainPresent = QString::number(searchedBlock->getTrainPresent());
-    QString currBlockPassengers = QString::number(searchedBlock->getPassengers());
+    QString currBlockPassengers = QString::number(searchedBlock->getPassengerCount());
 
     //update stats for searchedBlock
     ui->lineTextBox->setText(currBlockLine);
@@ -77,10 +74,7 @@ void TrackModel::on_searchBlockButton_clicked()
     ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
     ui->trackHeaterTemperatureTextBox->setText(currBlockHeaterTemp);
     ui->typeTextBox->setText(currBlockType);
-    ui->directionTextBox->setText(currBlockDirection);
     ui->lengthTextBox->setText(currBlockLength);
-    ui->xCordTextBox->setText(currBlockXCord);
-    ui->yCordTextBox->setText(currBlockYCord);
     ui->gradeTextBox->setText(currBlockGrade);
     ui->heightTextBox->setText(currBlockHeight);
     ui->speedLimitTextBox->setText(currBlockSpeedLimit);
@@ -199,7 +193,7 @@ void TrackModel::on_selectBlockButton_clicked()
    //Update searchedBlock current block display
    QString currBlockLine = QString::fromStdString(searchedBlock->getLine());
    QString currBlockBranch = QString::fromStdString(searchedBlock->getBranch());
-   QString currBlockId = QString::number(searchedBlock->getId());
+   QString currBlockId = QString::number(searchedBlock->getBlockNumber());
    ui->currentBlockTextBoxLine->setText(currBlockLine);
    ui->currentBlockTextBoxBranch->setText(currBlockBranch);
    ui->currentBlockTextBoxId->setText(currBlockId);
@@ -211,12 +205,9 @@ void TrackModel::on_selectBlockButton_clicked()
    QString currBlockHeaterStatus = QString::number(searchedBlock->getHeaterStatus());
    QString currBlockHeaterTemp = QString::number(searchedBlock->getTemperature());
    QString currBlockType = QString::fromStdString(searchedBlock->getType());
-   QString currBlockDirection = QString::fromStdString(searchedBlock->getDirection());
    QString currBlockLength = QString::number(searchedBlock->getLength());
-   QString currBlockXCord = QString::number(searchedBlock->getXCord());
-   QString currBlockYCord = QString::number(searchedBlock->getYCord());
    QString currBlockGrade = QString::number(searchedBlock->getGrade());
-   QString currBlockHeight = QString::number(searchedBlock->getHeight());
+   QString currBlockHeight = QString::number(searchedBlock->getElevation());
    QString currBlockSpeedLimit = QString::number(searchedBlock->getSpeedLimit());
    QString currBlockSuggestedSpeed = QString::number(searchedBlock->getSuggestedSpeed());
    QString currBlockStationName = QString::fromStdString(searchedBlock->getStationName());
@@ -224,7 +215,7 @@ void TrackModel::on_selectBlockButton_clicked()
    QString currBlockCrossingStatus = QString::number(searchedBlock->getCrossingStatus());
    QString currBlockSwitchStatus = QString::number(searchedBlock->getSwitchStatus());
    QString currBlockTrainPresent = QString::number(searchedBlock->getTrainPresent());
-   QString currBlockPassengers = QString::number(searchedBlock->getPassengers());
+   QString currBlockPassengers = QString::number(searchedBlock->getPassengerCount());
 
    //update stats for searchedBlock
    ui->lineTextBox->setText(currBlockLine);
@@ -236,10 +227,7 @@ void TrackModel::on_selectBlockButton_clicked()
    ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
    ui->trackHeaterTemperatureTextBox->setText(currBlockHeaterTemp);
    ui->typeTextBox->setText(currBlockType);
-   ui->directionTextBox->setText(currBlockDirection);
    ui->lengthTextBox->setText(currBlockLength);
-   ui->xCordTextBox->setText(currBlockXCord);
-   ui->yCordTextBox->setText(currBlockYCord);
    ui->gradeTextBox->setText(currBlockGrade);
    ui->heightTextBox->setText(currBlockHeight);
    ui->speedLimitTextBox->setText(currBlockSpeedLimit);

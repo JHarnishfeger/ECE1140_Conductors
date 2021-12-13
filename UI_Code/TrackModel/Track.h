@@ -51,6 +51,7 @@ class Track{
 		bool fixRail(string,int);
 		bool fixCircuit(string,int);
 		bool fixPower(string,int);
+		void updateTrack(vector<Block>);
 		//toStrings
 		string toString();
 		string toStringDetailed();

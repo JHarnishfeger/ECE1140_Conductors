@@ -4,7 +4,7 @@
 //Constructors:
 //Default constructor
 Track::Track(){
-	loadTrack("testTrack.txt");
+	loadTrack("greenLine.txt");
 	suggSpeed = 45.0;
 }
 //Full input constructor
@@ -76,13 +76,13 @@ Block* Track::searchBlock(string line, int id){
 Block* Track::searchBlockById(string line, int id){
 	if(line == "green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
-			if(greenLine.at(g)->getId() == id){
+			if(greenLine.at(g)->getBlockNumber() == id){
 				return greenLine.at(g);
 			}
 		}
 	}else if(line == "red"){
 		for(unsigned int r = 0; r < redLine.size(); r++){
-			if(redLine.at(r)->getId() == id){
+			if(redLine.at(r)->getBlockNumber() == id){
 				return redLine.at(r);
 			}
 		}
@@ -283,8 +283,8 @@ bool Track::loadTrack(string filename){
 	std::ifstream inputFile;
 	inputFile.open(filename);
 	
-	string header, fsize, line, branch, id, length, grade, speedLimit, 
-	type, height, direction;
+	string header, fsize, line, branch, blockNumber, length, grade, speedLimit, type,
+	stationSide, elevation, trash;
 	int fileSize;
 	getline(inputFile,header);
 	getline(inputFile,fsize);
@@ -293,32 +293,58 @@ bool Track::loadTrack(string filename){
 	for(int i = 0; i < fileSize; i++){
 		getline(inputFile, line, ',');
 		getline(inputFile, branch, ',');
-		getline(inputFile, id, ',');
+		getline(inputFile, blockNumber, ',');
 		getline(inputFile, length, ',');
 		getline(inputFile, grade, ',');
 		getline(inputFile, speedLimit, ',');
 		getline(inputFile, type, ',');
-		getline(inputFile, height, ',');
-		getline(inputFile, direction);
-		if(line == "green"){
-			std::stringstream ss2(id);
-			int idgreen = 0;
-			ss2 >> idgreen;
-			greenLine.push_back(new Block(line,branch,idgreen,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
+		getline(inputFile, stationSide, ',');
+		if(line == "Green"){
+			getline(inputFile, elevation, ',');
+			getline(inputFile, trash);
+		}else{
+			getline(inputFile, elevation);
+		}
+		if(line == "Green"){
+			std::stringstream ss2(blockNumber);
+			std::stringstream ss3(speedLimit);
+			std::stringstream ss4(stationSide);
+			int blockNumG, speedLimG, stationSDEG;
+			ss2 >> blockNumG;
+			ss3 >> speedLimG;
+			ss4 >> stationSDEG;
+			greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), suggSpeed));
 			if(type == "station"){
 				greenLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
-		if(line == "red"){
-			std::stringstream ss3(id);
-			int idred = 0;
-			ss3 >> idred;
-			redLine.push_back(new Block(line,branch,idred,stod(length),stod(grade),stod(speedLimit),type,stod(height),suggSpeed,direction));
+		if(line == "Red"){
+			std::stringstream ss5(blockNumber);
+			std::stringstream ss6(speedLimit);
+			std::stringstream ss7(stationSide);
+			int blockNumR, speedLimR, stationSDER;
+			ss5 >> blockNumR;
+			ss6 >> speedLimR;
+			ss7 >> stationSDER;
+			redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), suggSpeed));
 			if(type == "station"){
 				redLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
-		//Fix Branches?
+		for(unsigned int g = 0; g < greenLine.size(); g++){
+			if(greenLine.at(g)->getType() == "SWITCH"){
+				string Block1 = searchBlockById("green", greenLine.at(g)->getNextBlocks().at(0))->getBranch();
+				string Block2 = searchBlockById("green", greenLine.at(g)->getNextBlocks().at(1))->getBranch();
+				greenLine.at(g)->setNextBranches(Block1 + Block2);
+			}
+		}
+		for(unsigned int r = 0; r < redLine.size(); r++){
+			if(redLine.at(r)->getType() == "SWITCH"){
+				string Block1 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(0))->getBranch();
+				string Block2 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(1))->getBranch();
+				redLine.at(r)->setNextBranches(Block1 + Block2);
+			}
+		}
 	}
 	inputFile.close();
 	return false;
@@ -394,6 +420,12 @@ bool Track::fixPower(string line, int id){
 	}else{
 		return false;
 	}
+}
+//Params: vector<Block>
+//Returns: None
+//Desc: takes in a vector of blocks and updates the track with inputted vector<Block>
+void updateTrack(vector<Block>){
+	//WIP
 }
 //Params: None
 //Returns string
