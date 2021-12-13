@@ -1,15 +1,17 @@
 #include "PLCController.h"
 
-PLCController::PLCController(){
+PLCController::PLCController(){
     pos = 0;
+    filename = "";
 }
 
-PLCController::PLCController(vector<Block> tr){
+PLCController::PLCController(vector<Block> tr){
     pos = 0;
+    filename = "";
     track = tr;
     bool flag = 0;
-    /*for(int i=0;i<occupancy.size();i++){
-        for(int j=0;j<branchOccupancy.size();j++){
+    /*for(int i=0;i<occupancy.size();i++){
+        for(int j=0;j<branchOccupancy.size();j++){
             if(occupancy[i].getBranch()==branchOccupancy[j])
                 flag = 1;
         }
@@ -19,23 +21,23 @@ PLCController::PLCController(vector<Block> tr){
     }*/
     bool auCheck;
     bool auNext;
-    for(int i=0;i<track.size();i++){
+    for(int i=0;i<track.size();i++){
         TR.push_back(track[i].getTrainPresent()); //TRAIN
-        SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
-        CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
+        SL.push_back(track[i].getType()=="SWITCH"); //SWITCH LOCATION
+        CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
-        SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        SA.push_back(track[i].getType()=="STATION"); //STATION LOCATION
         auCheck = 0;
         auNext = 0;
-        for(int j=0;j<auth.size();j++){
+        for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&(track[i].getId()<=auth[j].endBlock||auth[j].endBlock==-1))
                 auCheck = 1;
-            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch){
+            if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
                     auNext = 0;
                 else
@@ -44,60 +46,60 @@ PLCController::PLCController(vector<Block> tr){
             else
                 auNext = 0;
         }
-        AU.push_back(auCheck);
-        NB.push_back(auNext);
+        AU.push_back(auCheck); //AUTHORITY
+        NB.push_back(auNext); //NEXT BRANCH
     }
 }
 
-PLCController& PLCController::operator=(PLCController& p){
+PLCController& PLCController::operator=(PLCController& p){
     this->pos = p.getPos();
     this->track = p.track;
     return *this;
 }
 
-int PLCController::getPos(){
+int PLCController::getPos(){
     return pos;
 }
 
-void PLCController::setPos(int i){
+void PLCController::setPos(int i){
     pos = i;
 }
 
-string PLCController::getFilename(){
+string PLCController::getFilename(){
     return filename;
 }
 
-bool PLCController::switchTrack(){
+bool PLCController::switchTrack(){
     track[pos].setSwitchStatus(!track[pos].getSwitchStatus());
     return track[pos].getSwitchStatus();
 }
 
-bool PLCController::toggleCrossing(){
+bool PLCController::toggleCrossing(){
     track[pos].setCrossingStatus(!track[pos].getCrossingStatus());
     return track[pos].getCrossingStatus();
 }
 
-void PLCController::importPLC(string file){
+void PLCController::importPLC(string file){
     bool auCheck;
     filename = file;
     bool auNext;
-    for(int i=0;i<track.size();i++){
+    for(int i=0;i<track.size();i++){
         TR.push_back(track[i].getTrainPresent()); //TRAIN
-        SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
-        CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
+        SL.push_back(track[i].getType()=="SWITCH"); //SWITCH LOCATION
+        CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0);
-        SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        SA.push_back(track[i].getType()=="STATION"); //STATION LOCATION
         auCheck = 0;
         auNext = 0;
-        for(int j=0;j<auth.size();j++){
+        for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
-            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch){
+            if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
                     auNext = 0;
                 else
@@ -111,7 +113,7 @@ void PLCController::importPLC(string file){
     }
 }
 
-bool PLCController::runPLC(){
+bool PLCController::runPLC(){
     std::ifstream plc(filename);
     /*if(!plc.good())
         return 0;*/
@@ -159,7 +161,7 @@ bool PLCController::runPLC(){
             for(int i=0;i<10;i++){
                 arg = "";
                 error = 0;
-                lineParse >> arg; //READING ARGUMENT <-- ISSUE: The program continues reading in the last word rather than "" when empty
+                lineParse >> arg; //READING ARGUMENT
                 if(arg=="")
                     break;
                 //std::cout << arg[0] << ", " << arg.back() << std::endl;
@@ -262,43 +264,43 @@ bool PLCController::runPLC(){
                     }
                     else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<SL.size();j++){
+                        for(int j=pos+posOffset;j<SL.size();j++){
                             if(pos+posOffset<SL.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SL[j];
                         }
                     }
                     else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(pos+posOffset<SL.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SL[j];
                         }
                     }
                 }
-                else if(dataTarget=="SW"){
-                    if(stretch==2){
+                else if(dataTarget=="SW"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<SW.size();j++)
                                 argVals[i] = argVals[i] || SW[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<SW.size())
                             argVals.push_back(SW[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<SW.size();j++){
+                        for(int j=pos+posOffset;j<SW.size();j++){
                             if(pos+posOffset<SW.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SW[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<SW.size()&&pos+posOffset>=0)
@@ -306,30 +308,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="CL"){
-                    if(stretch==2){
+                else if(dataTarget=="CL"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<CL.size();j++)
                                 argVals[i] = argVals[i] || CL[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<CL.size())
                             argVals.push_back(CL[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<CL.size();j++){
+                        for(int j=pos+posOffset;j<CL.size();j++){
                             if(pos+posOffset<CL.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || CL[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<CL.size()&&pos+posOffset>=0)
@@ -337,30 +339,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="CR"){
-                    if(stretch==2){
+                else if(dataTarget=="CR"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<CR.size();j++)
                                 argVals[i] = argVals[i] || CR[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<CR.size())
                             argVals.push_back(CR[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<CR.size();j++){
+                        for(int j=pos+posOffset;j<CR.size();j++){
                             if(pos+posOffset<CR.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || CR[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<CR.size()&&pos+posOffset>=0)
@@ -368,30 +370,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="BR"){
-                    if(stretch==2){
+                else if(dataTarget=="BR"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<BR.size();j++)
                                 argVals[i] = argVals[i] || BR[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<BR.size())
                             argVals.push_back(BR[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<BR.size();j++){
+                        for(int j=pos+posOffset;j<BR.size();j++){
                             if(pos+posOffset<BR.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || BR[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<SL.size()&&pos+posOffset>=0)
@@ -399,30 +401,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="SS"){
-                    if(stretch==2){
+                else if(dataTarget=="SS"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<SS.size();j++)
                                 argVals[i] = argVals[i] || SS[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<SS.size())
                             argVals.push_back(SS[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<SS.size();j++){
+                        for(int j=pos+posOffset;j<SS.size();j++){
                             if(pos+posOffset<SS.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SS[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<SS.size()&&pos+posOffset>=0)
@@ -430,30 +432,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="SR"){
-                    if(stretch==2){
+                else if(dataTarget=="SR"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<SR.size();j++)
                                 argVals[i] = argVals[i] || SR[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<SR.size())
                             argVals.push_back(SR[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<SR.size();j++){
+                        for(int j=pos+posOffset;j<SR.size();j++){
                             if(pos+posOffset<SR.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SR[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<SR.size()&&pos+posOffset>=0)
@@ -461,30 +463,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="ST"){
-                    if(stretch==2){
+                else if(dataTarget=="ST"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<SR.size();j++)
                                 argVals[i] = argVals[i] || ST[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<ST.size())
                             argVals.push_back(ST[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<ST.size();j++){
+                        for(int j=pos+posOffset;j<ST.size();j++){
                             if(pos+posOffset<ST.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || ST[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<ST.size()&&pos+posOffset>=0)
@@ -492,30 +494,30 @@ bool PLCController::runPLC(){
                         }
                     }
                 }
-                else if(dataTarget=="SA"){
-                    if(stretch==2){
+                else if(dataTarget=="SA"){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<SA.size();j++)
                                 argVals[i] = argVals[i] || SA[j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<SA.size())
                             argVals.push_back(SA[pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<SA.size();j++){
+                        for(int j=pos+posOffset;j<SA.size();j++){
                             if(pos+posOffset<SA.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SA[j];
                             if(SL[j]==1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(SL[j]==1)
                                 break;
                             if(pos+posOffset<SA.size()&&pos+posOffset>=0)
@@ -530,7 +532,7 @@ bool PLCController::runPLC(){
 
             value = argVals[0];
             //std::cout << "Vals: " << argVals[0];
-            for(int i=1;i<argVals.size();i++){
+            for(int i=1;i<argVals.size();i++){
                 //std::cout << " " << argVals[i];
                 if(opps[i-1]=="&")
                     value = value && argVals[i];
@@ -544,7 +546,7 @@ bool PLCController::runPLC(){
             //if(inOpp) //TESTING
             //    std::cout << "Hit!" << std::endl;
         }
-        else if(command=="OUT"&&inTask&&inOpp){
+        else if(command=="OUT"&&inTask&&inOpp){
             lineParse >> arg;
             lineParse >> value;
 
@@ -552,11 +554,11 @@ bool PLCController::runPLC(){
             dataTarget = arg.substr(0,2);
             arg.erase(0,2);
 
-            if(arg[arg.size()-1]=='+'){
+            if(arg[arg.size()-1]=='+'){
                 stretch = 1;
                 arg.pop_back();
             }
-            else if(arg[arg.size()-1]=='-'){
+            else if(arg[arg.size()-1]=='-'){
                 stretch = -1;
                 arg.pop_back();
             }
@@ -568,23 +570,23 @@ bool PLCController::runPLC(){
                 stretch = 2;
 
             //std::cout << "Stretch: " << stretch << std::endl;
-            if(dataTarget=="TR"){
-                if(stretch==2){
+            if(dataTarget=="TR"){
+                if(stretch==2){
                     for(int j=0;j<TR.size();j++)
                         TR[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<TR.size())
                     TR[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<TR.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<TR.size();j++){
                         if(pos+posOffset>=0)
                             TR[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<TR.size())
@@ -592,43 +594,43 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="SL"){
-                if(stretch==2){
+            else if(dataTarget=="SL"){
+                if(stretch==2){
                     for(int j=0;j<SL.size();j++)
                         SL[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<SL.size())
                     SL[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<SL.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<SL.size();j++){
                         if(pos+posOffset>=0)
                             SL[j] = value;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(pos+posOffset<SL.size())
                             SL[j] = value;
                     }
                 }
             }
-            else if(dataTarget=="SW"){
-                if(stretch==2){
+            else if(dataTarget=="SW"){
+                if(stretch==2){
                     for(int j=0;j<SW.size();j++)
                         SW[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<SW.size())
                     SW[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<SW.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<SW.size();j++){
                         if(pos+posOffset>=0)
                             SW[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<SW.size())
@@ -636,23 +638,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="CL"){
-                if(stretch==2){
+            else if(dataTarget=="CL"){
+                if(stretch==2){
                     for(int j=0;j<CL.size();j++)
                         CL[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<CL.size())
                     CL[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<CL.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<CL.size();j++){
                         if(pos+posOffset>=0)
                             CL[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<CL.size())
@@ -660,23 +662,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="CR"){
-                if(stretch==2){
+            else if(dataTarget=="CR"){
+                if(stretch==2){
                     for(int j=0;j<CR.size();j++)
                         CR[j] = value;
                 }
                 if(stretch==0&&pos+posOffset>=0&&pos+posOffset<CR.size())
                     CR[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<CR.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<CR.size();j++){
                         if(pos+posOffset>=0)
                             CR[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<CR.size())
@@ -684,23 +686,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="BR"){
-                if(stretch==2){
+            else if(dataTarget=="BR"){
+                if(stretch==2){
                     for(int j=0;j<BR.size();j++)
                         BR[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<BR.size())
                     BR[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<BR.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<BR.size();j++){
                         if(pos+posOffset>=0)
                             BR[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<BR.size())
@@ -708,23 +710,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="SS"){
-                if(stretch==2){
+            else if(dataTarget=="SS"){
+                if(stretch==2){
                     for(int j=0;j<SS.size();j++)
                         SS[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<SS.size())
                     SS[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<SS.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<SS.size();j++){
                         if(pos+posOffset>=0)
                             SS[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<SS.size())
@@ -732,23 +734,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="SR"){
-                if(stretch==2){
+            else if(dataTarget=="SR"){
+                if(stretch==2){
                     for(int j=0;j<SR.size();j++)
                         SR[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<SR.size())
                     SR[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<SR.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<SR.size();j++){
                         if(pos+posOffset>=0)
                             SR[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<SR.size())
@@ -756,23 +758,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="ST"){
-                if(stretch==2){
+            else if(dataTarget=="ST"){
+                if(stretch==2){
                     for(int j=0;j<ST.size();j++)
                         ST[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<ST.size())
                     ST[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<ST.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<ST.size();j++){
                         if(pos+posOffset>=0)
                             ST[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<ST.size())
@@ -780,23 +782,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="SA"){
-                if(stretch==2){
+            else if(dataTarget=="SA"){
+                if(stretch==2){
                     for(int j=0;j<SA.size();j++)
                         SA[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<SA.size())
                     SA[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<SA.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<SA.size();j++){
                         if(pos+posOffset>=0)
                             SA[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<SA.size())
@@ -804,23 +806,23 @@ bool PLCController::runPLC(){
                     }
                 }
             }
-            else if(dataTarget=="AU"){
-                if(stretch==2){
+            else if(dataTarget=="AU"){
+                if(stretch==2){
                     for(int j=0;j<AU.size();j++)
                         AU[j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<AU.size())
                     AU[pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<AU.size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<AU.size();j++){
                         if(pos+posOffset>=0)
                             AU[j] = value;
                         if(SL[j]==1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(SL[j]==1)
                             break;
                         if(pos+posOffset<AU.size())
@@ -836,7 +838,7 @@ bool PLCController::runPLC(){
     return 1;
 }
 
-void PLCController::execute(){
+void PLCController::execute(){
     bool auCheck;
     bool auNext;
     TR.clear();
@@ -851,23 +853,23 @@ void PLCController::execute(){
     SA.clear();
     AU.clear();
     NB.clear();
-    for(int i=0;i<track.size();i++){
+    for(int i=0;i<track.size();i++){
         TR.push_back(track[i].getTrainPresent()); //TRAIN
-        SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
-        CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
+        SL.push_back(track[i].getType()=="SWITCH"); //SWITCH LOCATION
+        CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0);
-        SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        SA.push_back(track[i].getType()=="STATION"); //STATION LOCATION
         auCheck = 0;
         auNext = 0;
-        for(int j=0;j<auth.size();j++){
+        for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
-            if(track[i].getType()=="switch"&&track[i].getBranch()==auth[j].branch){
+            if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
                     auNext = 0;
                 else
@@ -944,7 +946,7 @@ void PLCController::execute(){
         std::cout << NB[i] << " ";
     std::cout << std::endl << std::endl;
 
-    for(pos=0;pos<TR.size();pos++){
+    for(pos=0;pos<TR.size();pos++){
         //std::cout << "Executing " << filename << " at position " << pos << std::endl;
         runPLC();
     }
@@ -988,7 +990,7 @@ void PLCController::execute(){
     std::cout << std::endl << std::endl;
 }
 
-/*void PLCController::runPLCOnce(){
+/*void PLCController::runPLCOnce(){
     TR.clear();
     SL.clear();
     CL.clear();
@@ -999,17 +1001,17 @@ void PLCController::execute(){
     SR.clear();
     ST.clear();
     SA.clear();
-    for(int i=0;i<track.size();i++){
+    for(int i=0;i<track.size();i++){
         TR.push_back(track[i].getTrainPresent()); //TRAIN
-        SL.push_back(track[i].getType()=="switch"); //SWITCH LOCATION
-        CL.push_back(track[i].getType()=="crossing"); //CROSSING LOCATION
+        SL.push_back(track[i].getType()=="SWITCH"); //SWITCH LOCATION
+        CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
         BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
-        SA.push_back(track[i].getType()=="station"); //STATION LOCATION
+        SA.push_back(track[i].getType()=="STATION"); //STATION LOCATION
     }
 
     std::cout << "TR Values      : ";
@@ -1079,9 +1081,9 @@ void PLCController::execute(){
     std::cout << std::endl << std::endl;
 }*/
 
-bool PLCController::verifyPLC(){
+bool PLCController::verifyPLC(){
     bool correct=1;
-    for(pos=0;pos<TR.size();pos++){
+    for(pos=0;pos<TR.size();pos++){
         std::ifstream plc(filename);
         string line;
         string command;
@@ -1101,19 +1103,19 @@ bool PLCController::verifyPLC(){
         vector<bool> argVals;
         string opp;
         vector<string> opps;
-        while(std::getline(plc,line)){
+        while(std::getline(plc,line)){
             //std::cout << line << std::endl;
             command = "";
             stretch = 0;
             stringstream lineParse(line);
             lineParse >> command;
-            if(command=="TASK"){
+            if(command=="TASK"){
                 inTask = 1;
             }
-            else if(command=="ENDTASK"){
+            else if(command=="ENDTASK"){
                 inTask = 0;
             }
-            else if(command=="OPP"&&inTask){
+            else if(command=="OPP"&&inTask){
                 //std::cout << line << std::endl;
                 arg = "";
                 opp = "";
@@ -1123,18 +1125,18 @@ bool PLCController::verifyPLC(){
                 args.clear();
                 opps.clear();
 
-                for(int i=0;i<10;i++){
+                for(int i=0;i<10;i++){
                     arg = "";
                     error = 0;
                     lineParse >> arg; //READING ARGUMENT <-- ISSUE: The program continues reading in the last word rather than "" when empty
                     if(arg=="")
                         break;
                     //std::cout << arg[0] << ", " << arg.back() << std::endl;
-                    if(arg[0]!='('||arg.back()!=')'){
+                    if(arg[0]!='('||arg.back()!=')'){
                         error = 1;
                         break;
                     }
-                    else{
+                    else{
                         arg.erase(0,1);
                         arg.pop_back();
                         args.push_back(arg);
@@ -1144,33 +1146,33 @@ bool PLCController::verifyPLC(){
                         break;
                     opps.push_back(opp);
                 }
-                if(error){
+                if(error){
                     std::cout << "An error occurred." << std::endl;
                     return 0;
                 }
                 //std::cout << "Num of args: " << args.size() << std::endl;
-                for(int i=0;i<args.size();i++) //Computing values for arguments{
+                for(int i=0;i<args.size();i++){ //Computing values for arguments
                     negate = 0;
                     stretch = 0;
-                    if(args[i][0]=='!'){
+                    if(args[i][0]=='!'){
                         negate = 1;
                         args[i].erase(0,1);
                     }
-                    if(args[i]!="1"&&args[i]!="0"){
+                    if(args[i]!="1"&&args[i]!="0"){
                         dataTarget = args[i].substr(0,2);
                         args[i].erase(0,2);
-                        if(args[i].back()=='+'){
+                        if(args[i].back()=='+'){
                             stretch = 1;
                             args[i].pop_back();
                         }
-                        else if(args[i].back()=='-'){
+                        else if(args[i].back()=='-'){
                             stretch = -1;
                             args[i].pop_back();
                         }
                         posTarget = args[i];
                         if(posTarget!="")
                             posOffset = std::stoi(posTarget);
-                        else{
+                        else{
                             stretch = 2;
                             posOffset = 0;
                         }
@@ -1205,29 +1207,29 @@ bool PLCController::verifyPLC(){
                     else if(dataTarget=="NB")
                         index = 11;
 
-                    if(stretch==2){
+                    if(stretch==2){
                         argVals.push_back(0);
                         for(int j=0;j<checkVecs[index].size();j++)
                                 argVals[i] = argVals[i] || checkVecs[index][j];
                     }
-                    else if(stretch==0){
+                    else if(stretch==0){
                         if(pos+posOffset>=0&&pos+posOffset<checkVecs[index].size())
                             argVals.push_back(checkVecs[index][pos+posOffset]);
                         else
                             argVals.push_back(0);
                     }
-                    else if(stretch==1){
+                    else if(stretch==1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j<checkVecs[index].size();j++){
+                        for(int j=pos+posOffset;j<checkVecs[index].size();j++){
                             if(pos+posOffset<checkVecs[index].size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || checkVecs[index][j];
                             if(checkVecs[1][j]==1&&index!=1)
                                 break;
                         }
                     }
-                    else if(stretch==-1){
+                    else if(stretch==-1){
                         argVals.push_back(0);
-                        for(int j=pos+posOffset;j>=0;j--){
+                        for(int j=pos+posOffset;j>=0;j--){
                             if(checkVecs[1][j]==1&&index!=1)
                                 break;
                             if(pos+posOffset<checkVecs[index].size()&&pos+posOffset>=0)
@@ -1240,7 +1242,7 @@ bool PLCController::verifyPLC(){
                 }
                 value = argVals[0];
                 //std::cout << "Vals: " << argVals[0];
-                for(int i=1;i<argVals.size();i++){
+                for(int i=1;i<argVals.size();i++){
                     //std::cout << " " << argVals[i];
                     if(opps[i-1]=="&")
                         value = value && argVals[i];
@@ -1253,7 +1255,7 @@ bool PLCController::verifyPLC(){
                 //if(inOpp) //TESTING
                 //    std::cout << "Hit!" << std::endl;
             }
-            if(command=="OUT"&&inTask&&inOpp){
+            if(command=="OUT"&&inTask&&inOpp){
                 //std::cout << "we in" << std::endl;
                 lineParse >> arg;
                 lineParse >> value;
@@ -1262,11 +1264,11 @@ bool PLCController::verifyPLC(){
                 dataTarget = arg.substr(0,2);
                 arg.erase(0,2);
 
-                if(arg[arg.size()-1]=='+'){
+                if(arg[arg.size()-1]=='+'){
                     stretch = 1;
                     arg.pop_back();
                 }
-                else if(arg[arg.size()-1]=='-'){
+                else if(arg[arg.size()-1]=='-'){
                     stretch = -1;
                     arg.pop_back();
                 }
@@ -1302,22 +1304,22 @@ bool PLCController::verifyPLC(){
                 else if(dataTarget=="NB")
                     index = 11;
 
-                if(stretch==2){
+                if(stretch==2){
                     for(int j=0;j<checkVecs[index].size();j++)
                         checkVecs[index][j] = value;
                 }
                 else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<checkVecs[index].size())
                     checkVecs[index][pos+posOffset] = value;
-                else if(stretch==1){
-                    for(int j=pos+posOffset;j<checkVecs[index].size();j++){
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<checkVecs[index].size();j++){
                         if(pos+posOffset>=0)
                             checkVecs[index][j] = value;
                         if(checkVecs[1][j]==1&&index!=1)
                             break;
                     }
                 }
-                else if(stretch==-1){
-                    for(int j=pos+posOffset;j>=0;j--){
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
                         if(checkVecs[1][j]==1&&index!=1)
                             break;
                         if(pos+posOffset<checkVecs[index].size())
@@ -1381,7 +1383,7 @@ bool PLCController::verifyPLC(){
     correct = correct && (checkVecs[10]==AU);
     correct = correct && (checkVecs[11]==NB);
     std::cout << "VALID: " << correct << std::endl;
-    if(!correct){
+    if(!correct){
         TR = oldVecs[0];
         SL = oldVecs[1];
         CL = oldVecs[2];

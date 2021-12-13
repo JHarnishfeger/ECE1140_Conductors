@@ -33,6 +33,11 @@ OPP (TR0) & (!AU0)
 OUT ST0 1
 ENDTASK
 
+TASK Reset_Speed_From_Stop
+OPP (!ST0)
+OUT SR0 1
+ENDTASK
+
 #TASK Next_Branch
 OPP (NB0) & (SL0)
 OUT SW0 1

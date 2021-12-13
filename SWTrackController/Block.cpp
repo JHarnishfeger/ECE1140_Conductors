@@ -15,7 +15,7 @@ Block::Block(){
 	instanceCounter++;
 	line = "green";
 	branch = "a";
-	type = "rail";
+	type = "RAIL";
 	direction = "north";
 	nextBranches = "bc";
 	length = 10.0;
@@ -67,7 +67,7 @@ double speedLimitIN, double suggestedSpeedIN, bool authorityIN, bool railStatusI
 //Functional constructor
 Block::Block(string lineIN, string typeIN, string directionIN, double lengthIN, double gradeIN, double temperatureIN, double heightIN,
 double speedLimitIN, double suggestedSpeedIN){
-	if(type == "station"){
+	if(type == "STATION"){
 		passengers = rand() % 100 + 1;
 	}else{
 		passengers = 0;
@@ -78,7 +78,7 @@ double speedLimitIN, double suggestedSpeedIN){
 	branch = branchesList[branchIndex];
 	type = typeIN;
 	direction = directionIN;
-	if(type == "switch"){
+	if(type == "SWITCH"){
 		nextBranches = branchesList.substr(branchIndex,2);
 		branchIndex++;
 	}else{
@@ -167,7 +167,7 @@ string Block::getBranch(){
 //Params: string
 //Returns: None
 //Desc: sets the value of the attribute type = to inputted string
-//Notes: type should be set to "rail", "yard", "station", "switch", or "crossing" function assumes no user error
+//Notes: type should be set to "RAIL", "yard", "STATION", "SWITCH", or "CROSSING" function assumes no user error
 void Block::setType(string typeIN){
 	type = typeIN;
 }

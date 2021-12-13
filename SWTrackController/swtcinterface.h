@@ -23,7 +23,6 @@ public:
     ~SWTCInterface();
     void fillLists();
     vector<Block> getHWTrack();
-    void update();
 signals:
     void hwSet(vector<Block> hwtrk);
     void waysidesSet(vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
@@ -40,6 +39,8 @@ public slots:
     void setTrack(vector<Block*> rl,vector<Block*> gl);
 
     void getHWWaystruct(WayStruct* hwWaystr);
+
+    void update();
 
 private:
     Ui::SWTCInterface *ui;

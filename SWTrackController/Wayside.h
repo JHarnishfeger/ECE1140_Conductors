@@ -29,8 +29,8 @@ public:
     Wayside(); //Initialize Empty Wayside
     Wayside& operator=(Wayside&); //Copy wayside
     void initialize(); //Sets up module and initializes sub-modules and GUI
-    void update(); //Sets current values upon being called
-    void updateNoPLC();
+    void update(); //Sets current values upon being called, runs wayside in real time
+    void updateNoPLC(); //Update method without running PLC (not in use)
     bool detectTrack(); //Detects any notable scenarios in the track using the PLC program
     int getID(); //Gets the wayside's ID
     void setID(int); //Sets the wayside's ID
@@ -56,16 +56,16 @@ public:
     bool switchTrack(Block&); //Switches a track
     bool toggleCrossing(Block&); //Toggles a crossing
     vector<Block> getTrackOccupancy(); //Fetches track occupancy over sector
-    void importPLC(string);
-    bool runPLC();
+    void importPLC(string); //Imports given filename to PLC
+    bool runPLC(); //Runs PLC over all blocks
     //void runPLCOnce(int);
-    bool updateFromPLC();
-    void wayStrInit();
+    bool updateFromPLC(); //Retrieve updated data from PLCController
+    void wayStrInit(); //Sets up WayStruct
     vector<Block> trackOccupancy; //Holds the blocks of where any trains are currently on the track
     vector<Block> swich; //Holds the block number of any blocks with broken rails
     vector<Block> crossing; //Holds the block number of any blocks with broken rails
     vector<Block> sector; //Holds all info about each block associated with the current wayside
-    WayStruct wayStr;
+    WayStruct wayStr; //WayStruct for this wayside
     PLCController plc; //Controller for the PLC program
 };
 

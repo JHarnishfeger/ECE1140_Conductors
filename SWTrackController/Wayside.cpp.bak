@@ -10,9 +10,9 @@ Wayside::Wayside(vector<Block> track, bool ln){
     line = ln;
     for(int i=0;i<sector.size();i++)
     {
-        if(sector[i].getType()=="switch")
+        if(sector[i].getType()=="SWITCH")
             swich.push_back(sector[i]);
-        else if(sector[i].getType()=="crossing")
+        else if(sector[i].getType()=="CROSSING")
             crossing.push_back(sector[i]);
         else if(sector[i].getRailStatus())
             brokenRail.push_back(sector[i]);

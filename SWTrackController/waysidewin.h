@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QWidgetList>
 #include <QListWidgetItem>
+#include <QDir>
 #include "Wayside.h"
 
 namespace Ui {

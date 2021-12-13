@@ -19,17 +19,17 @@ void SWTrackController::initialize(vector<Block*> red, vector<Block*> green, boo
     //setSuggestedSpeed(s);
     setMode(m);
     for(int i=0;i<redLine.size();i++){
-        if(redLine[i].getType()=="switch")
+        if(redLine[i].getType()=="SWITCH")
             swich.push_back(redLine[i]);
-        else if(redLine[i].getType()=="crossing")
+        else if(redLine[i].getType()=="CROSSING")
             crossing.push_back(redLine[i]);
         else if(redLine[i].getRailStatus())
             brokenRail.push_back(redLine[i]);
     }
     for(int i=0;i<greenLine.size();i++){
-        if(greenLine[i].getType()=="switch")
+        if(greenLine[i].getType()=="SWITCH")
             swich.push_back(greenLine[i]);
-        else if(greenLine[i].getType()=="crossing")
+        else if(greenLine[i].getType()=="CROSSING")
             crossing.push_back(greenLine[i]);
         else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
@@ -51,17 +51,17 @@ SWTrackController::SWTrackController(vector<Block*> red, vector<Block*> green, i
     //setSuggestedSpeed(s);
     setMode(m);
     for(int i=0;i<redLine.size();i++){
-        if(redLine[i].getType()=="switch")
+        if(redLine[i].getType()=="SWITCH")
             swich.push_back(redLine[i]);
-        else if(redLine[i].getType()=="crossing")
+        else if(redLine[i].getType()=="CROSSING")
             crossing.push_back(redLine[i]);
         else if(redLine[i].getRailStatus())
             brokenRail.push_back(redLine[i]);
     }
     for(int i=0;i<greenLine.size();i++){
-        if(greenLine[i].getType()=="switch")
+        if(greenLine[i].getType()=="SWITCH")
             swich.push_back(greenLine[i]);
-        else if(greenLine[i].getType()=="crossing")
+        else if(greenLine[i].getType()=="CROSSING")
             crossing.push_back(greenLine[i]);
         else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
