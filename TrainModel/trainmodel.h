@@ -1,20 +1,28 @@
 #ifndef TRAINMODEL_H
 #define TRAINMODEL_H
 #include <iostream>
+#include <QObject>
+//#include "SMBA.h"
 
 class trainModel{
 
     private:
+
+        //Hardware 0 or Software 1
+        bool HorS;
+
         //ID of train and next station
         int ID;
         std::string nextStation;
 
         //speed variables
-        double actualSpeed;
+        double actualSpeed0,actualSpeed1;
         double suggestedSpeed;
-        double acceleration;
+        double acceleration0,acceleration1;
         double power;
         int speedLimit;
+        double decelerationRateBrake;
+        double decelerationRateEmergencyBrake;
 
         //passenger variable
         int numPassengers;	//number of passengers
@@ -48,9 +56,9 @@ class trainModel{
         uint16_t BeaconData;
 
     public:
-        trainModel();
-        trainModel(double sS,int t,int a);
+        trainModel(bool HardwareOfSoftware);
         ~trainModel();
+
 
         //IDs
         void setID(int id);
@@ -121,6 +129,14 @@ class trainModel{
         //send Beacon Data
         void setBeaconData(uint16_t Data);
         uint16_t getBeaconData();
+
+    signals:
+
+        //Signals for MBO
+        double getMovingBlockAuthority();
+        double getMovingBlockSpeed();
+        void receiveCoords(int trainID, double latitude, double longitude, double distanceTravelled);
+
 };
 
 #endif // TRAINMODEL_H

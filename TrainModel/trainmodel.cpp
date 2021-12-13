@@ -7,14 +7,16 @@
   assigned crew and assigned number of cars
   that are connected to the train.
   */
-trainModel::trainModel() {
+trainModel::trainModel(bool HardwareOrSoftware) {
   authority = 0;
   numPassengers = 0;
   crewCount = 1;
   carCount = 2;
   mass = carCount * modelMass;
-  actualSpeed = 0;
-  acceleration = 0;
+  actualSpeed0 = 0;
+  actualSpeed1 = 0;
+  acceleration0 = 0;
+  acceleration1 = 0;
   leftDoor = false;
   rightDoor = false;
   interiorLights = true;
@@ -25,6 +27,9 @@ trainModel::trainModel() {
   signalFail = false;
   brakeFail = false;
   temperature = 60;
+  decelerationRateBrake = -0.5;
+  decelerationRateEmergencyBrake = -1;
+  HorS = HardwareOrSoftware;
 };
 
 /*Function is to act as the de-constructor
@@ -51,31 +56,29 @@ void trainModel::setSpeed(double inputPower){
   power = inputPower;
 
   //Calculating speed
-  if(actualSpeed == 0){
-      actualSpeed = 1;
+  if(actualSpeed1 == 0){
+      actualSpeed1 = 1;
   }
 
-  force = power/actualSpeed;
-  acceleration = force/mass;
+  force = power/actualSpeed1;
+  acceleration1 = force/mass;
 
-  if (acceleration > 2){
-      acceleration = 2;
+  if (acceleration1 > 2){
+      acceleration1 = 2;
   }
 
   //if the Brakes or Emergency-Brakes are on
   if(brakes == true){
-      acceleration = -1;
-      if(actualSpeed <= 1){
-          actualSpeed = 0;
-          acceleration = 0;
+      acceleration1 = acceleration1 + decelerationRateBrake;
+      if(actualSpeed1 == 0){
+          actualSpeed1 = 0;
+          acceleration1 = 0;
       }
   }
 
   if(eBrakes == true){
-      acceleration = -2;
-      if(actualSpeed <= 2){
-          actualSpeed = 0;
-          acceleration = 0;
+      acceleration1 = -2;
+      if(actualSpeed1 == 0){
           engineFail = false;
           signalFail = false;
       }
@@ -83,27 +86,28 @@ void trainModel::setSpeed(double inputPower){
 
   //Doesnt work well need to fix
   if(brakeFail == true){
-      acceleration = -0.1;
-      eBrakes == false;
-      brakes == false;
-      if(actualSpeed <= 0.1){
-          actualSpeed = 0;
-          acceleration = 0;
+      acceleration1 = acceleration1 - 0.1;
+      if(actualSpeed1 == 0){
           brakeFail = false;
       }
   }
 
-  actualSpeed = actualSpeed + acceleration;
+  actualSpeed1 = actualSpeed0 + ((1/2)*(acceleration0 + acceleration1));
+  distanceTraveled += actualSpeed1;
+
+  //reinitializing the previous iterated acceleration and speed
+  acceleration0 = acceleration1;
+  actualSpeed0 = actualSpeed1;
 }
 
 /*Functions is to return the speed or accleration
  * of the train.*/
 double trainModel::getSpeed(){
-    return actualSpeed;
+    return actualSpeed1;
 }
 
 double trainModel::getAcceleration(){
-    return acceleration;
+    return acceleration1;
 }
 
 //speed limit functions

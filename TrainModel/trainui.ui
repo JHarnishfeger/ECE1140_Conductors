@@ -198,8 +198,8 @@
    <widget class="QWidget" name="verticalLayoutWidget_7">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>200</y>
+      <x>230</x>
+      <y>90</y>
       <width>160</width>
       <height>80</height>
      </rect>
@@ -220,10 +220,10 @@
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>200</y>
-      <width>189</width>
-      <height>80</height>
+      <x>230</x>
+      <y>189</y>
+      <width>161</width>
+      <height>81</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -455,8 +455,8 @@
    <widget class="QSlider" name="Temp_Change">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>310</y>
+      <x>230</x>
+      <y>300</y>
       <width>160</width>
       <height>22</height>
      </rect>
@@ -494,6 +494,48 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_8">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>90</y>
+      <width>160</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_8">
+     <item>
+      <widget class="QLabel" name="Height">
+       <property name="text">
+        <string>Height (m)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLCDNumber" name="Height_2"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="Width">
+       <property name="text">
+        <string>Width (m)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLCDNumber" name="Width_2"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="Length">
+       <property name="text">
+        <string>Length (m)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLCDNumber" name="Length_2"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -501,7 +543,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
