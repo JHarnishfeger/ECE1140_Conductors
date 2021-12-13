@@ -163,9 +163,8 @@ void HWTCInterface::on_ModeBox_stateChanged(int arg1)
 
 void HWTCInterface::on_PLCButton_clicked()
 {
-
     string filename;
-    filename = "C:\\Users\\pauls\\OneDrive\\Documents\\ECE1140\\HWTrackController\\" + ui->PLCtextBox->text().toStdString() + ".txt";
+    filename = ui->PLCtextBox->text().toStdString() + ".txt";
     hwWaysidePtr->hwPLC.importPLC(filename);
     cout << "Running " << hwWaysidePtr->hwPLC.getFilename() << endl;
     hwWaysidePtr->detectTrack();
@@ -178,6 +177,20 @@ void HWTCInterface::updateHWTrackController(){
 
 void HWTCInterface::setTrack(vector<Block> track){
     setHWTrack(track);
-    emit sendWayStruct(hwtc.getWayStructHW());
+    emit sendHWWayStruct(hwtc.getWayStructHW());
+}
 
+void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
+    vector<Block> track;
+    if(hwWaysidePtr->getLine() == "r"){
+        for(int i = 0; i < hwWaysidePtr->getTrackSize(); i++){
+            track.push_back(*red[i]);
+        }
+    }else{
+        for(int i = 0; i < hwWaysidePtr->getTrackSize(); i++){
+            track.push_back(*green[i]);
+        }
+    }
+    hwWaysidePtr->updateTrack(track);
+    emit updateToHWTrack(hwWaysidePtr->sector);
 }

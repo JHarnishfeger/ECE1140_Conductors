@@ -294,7 +294,7 @@ void Wayside_HW::wayStrInit(){
 
 void Wayside_HW::updateFromWayStr(){
     suggestedSpeed = wayStr.suggestedSpeed;
-    sector = wayStr.sector;
+    //sector = wayStr.sector;
     authority = wayStr.auth;
 }
 
@@ -302,6 +302,16 @@ void Wayside_HW::updateToWayStr(){
     wayStr.sector = sector;
     wayStr.auth = authority;
     wayStr.id = 0;
+}
+
+void Wayside_HW::updateTrack(vector<Block> t){
+    sector = t;
+    int trackSize = t.size();
+    blockOccupany.clear();
+    for(int i = 0; i < trackSize; i++){
+        blockOccupany.push_back(t[i].getTrainPresent());
+    }
+    detectTrack();
 }
 
 bool Wayside_HW::detectTrack(){
@@ -357,6 +367,7 @@ void Wayside_HW::updateHW(){
     //}
 
 }
+
 
 
 

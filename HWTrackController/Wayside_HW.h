@@ -32,11 +32,11 @@ class Wayside_HW{
     vector<bool> blockOccupany;
     vector<bool> brokenRail;
     bool maintenanceMode;
-    //PLCController plc;
-    //PLC plc;
+
   public:
     void initWayside(vector<Block>); //Initialize Wayside
     int getTrackSize();
+    //vector<Block> getSector();
     vector<int> getId();
     string getLine();
     void setMode(bool); //Set manual/auto mode
@@ -64,6 +64,7 @@ class Wayside_HW{
     bool updatetFromPLC();
     void wayStrInit();
     void updateHW();
+    void updateTrack(vector<Block>);
     void updateFromWayStr();
     void updateToWayStr();
     bool detectTrack();

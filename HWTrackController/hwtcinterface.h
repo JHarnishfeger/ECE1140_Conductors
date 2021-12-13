@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QPalette>
+#include <QFileDialog>
 QT_BEGIN_NAMESPACE
 namespace Ui { class HWTCInterface; }
 QT_END_NAMESPACE
@@ -35,10 +36,14 @@ private slots:
 
     void on_PLCButton_clicked();
 
+public slots:
     void setTrack(vector<Block> track);
+    void updateFromHWTrack(vector<Block*> red, vector<Block*> green);
+
 
 signals:
-    void sendWayStruct(WayStruct *way);
+    void sendHWWayStruct(WayStruct *way);
+    void updateToHWTrack(vector<Block> track);
 
 private:
     Ui::HWTCInterface *ui;
