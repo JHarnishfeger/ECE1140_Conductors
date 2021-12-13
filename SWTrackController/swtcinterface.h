@@ -9,8 +9,6 @@
 using std::vector;
 #include "SWTrackController.h"
 #include "waysidewin.h"
-#include "CTC/ctcwindow.h"
-#include "HWTC/hwtcinterface.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SWTCInterface; }

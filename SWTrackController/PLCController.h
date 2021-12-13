@@ -35,11 +35,10 @@ public:
     vector<bool> SA; //Binary string representing station location (1 = Station, 0 = Not Station)
     vector<bool> AU; //Binary string representing authority (1 = Auth on Block, 2 = No Auth on Block)
     vector<bool> NB; //Binary string representing next branch to be taken (0 = Switch Pos 0, 1 = Switch Pos 1)
-    vector<vector<bool>> checkVecs;
-    vector<vector<bool>> oldVecs;
+    vector<vector<bool>> checkVecs; //Vectors to be filled with the results of checking each value a second time
+    vector<vector<bool>> oldVecs; //Vectors holding the previous values of the PLC execution
     vector<Block> track; //All blocks controlled by wayside, in order to create boolean vectors
-    vector<Authority> auth;
-    vector<string> branchOccupancy; //All branches in the sector that are occupied
+    vector<Authority> auth; //Authority data for all applicable branches
     int getPos(); //Retrieves iterator
     void setPos(int); //Sets iterator
     string getFilename();

@@ -31,6 +31,7 @@ PLCController::PLCController(vector<Block> tr){
         ST.push_back(0); //STOP
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
         auCheck = 0;
+        auNext = 0;
         for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&(track[i].getId()<=auth[j].endBlock||auth[j].endBlock==-1))
                 auCheck = 1;
@@ -92,6 +93,7 @@ void PLCController::importPLC(string file){
         ST.push_back(0);
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
         auCheck = 0;
+        auNext = 0;
         for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
@@ -861,6 +863,7 @@ void PLCController::execute(){
         ST.push_back(0);
         SA.push_back(track[i].getType()=="station"); //STATION LOCATION
         auCheck = 0;
+        auNext = 0;
         for(int j=0;j<auth.size();j++){
             if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;

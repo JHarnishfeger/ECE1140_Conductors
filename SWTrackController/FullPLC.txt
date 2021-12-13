@@ -13,7 +13,7 @@ ENDTASK
 TASK Rail_Broken
 OPP (BR0) | (BR1) | (BR-1)
 OUT ST0 1
-OPP (&BR0) & (!BR1) & (!BR-1)
+OPP (!BR0) & (!BR1) & (!BR-1)
 OUT ST0 0
 ENDTASK
 

@@ -13,7 +13,7 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     Block c(10,"g","a","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
     Block d(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
     Block e(10,"g","b","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block f(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block f(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,1,1,1,1,0,0,0);
     Block g(10,"g","b","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
     Block h(10,"g","b","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
     Block i(10,"g","c","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
@@ -23,7 +23,7 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     Block m(10,"g","d","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
     Block n(10,"r","d","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
     Block o(10,"r","d","switch","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block p(10,"r","e","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    Block p(10,"r","e","rail","north","bc",10.0,0,0,1,5,50,45,45,0,1,1,1,1,0,0,0);
     Block q(10,"r","e","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
     Block r(10,"r","e","crossing","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
     Block s(10,"r","f","rail","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
@@ -99,6 +99,7 @@ void SWTCInterface::on_DesignateHWWayside_clicked(){
                 wui[i]->close();
             }
         }
+        std::cout << "Set Wayside " << tc.hwWay+1 << " as hardware controlled wayside!" << std::endl;
         //vector<WayStruct> swWayPtr;
         tc.wayPtr->clear();
         for(int i=0;i<tc.waysides.size();i++){
