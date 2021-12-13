@@ -7,7 +7,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    trainUI w(50.0,5,5);
+    trainUI w(nullptr,1);
+    w.mainTrain->setID(22);
+    w.mainTrain->setSpeed(100000);
     w.show();
 
     //int codedStationCode = 31;

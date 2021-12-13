@@ -29,7 +29,7 @@ class trainModel{
 
         //metrics of the train
         double mass; //in Kg
-        double modelMass = 4000;
+        double modelMass = 4000; //kg
         double width,length,height;
         int carCount;
         int crewCount;

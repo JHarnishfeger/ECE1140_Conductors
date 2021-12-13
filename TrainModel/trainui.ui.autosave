@@ -207,8 +207,17 @@
     <layout class="QVBoxLayout" name="verticalLayout_7">
      <item>
       <widget class="QLabel" name="label_17">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
        <property name="text">
         <string>Power(W)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

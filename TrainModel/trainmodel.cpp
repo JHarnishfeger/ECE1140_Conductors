@@ -12,9 +12,9 @@ trainModel::trainModel(bool HardwareOrSoftware) {
   numPassengers = 0;
   crewCount = 1;
   carCount = 2;
-  mass = carCount * modelMass;
+  mass = (carCount * modelMass) + (numPassengers * 70);
   actualSpeed0 = 0;
-  actualSpeed1 = 0;
+  actualSpeed1 = 1;
   acceleration0 = 0;
   acceleration1 = 0;
   leftDoor = false;
@@ -27,8 +27,8 @@ trainModel::trainModel(bool HardwareOrSoftware) {
   signalFail = false;
   brakeFail = false;
   temperature = 60;
-  decelerationRateBrake = -0.5;
-  decelerationRateEmergencyBrake = -1;
+  decelerationRateBrake = -0.2;
+  decelerationRateEmergencyBrake = -0.4;
   HorS = HardwareOrSoftware;
 };
 
@@ -55,44 +55,56 @@ void trainModel::setSpeed(double inputPower){
   //setting power for display
   power = inputPower;
 
-  //Calculating speed
-  if(actualSpeed1 == 0){
-      actualSpeed1 = 1;
-  }
-
-  force = power/actualSpeed1;
-  acceleration1 = force/mass;
-
   if (acceleration1 > 2){
       acceleration1 = 2;
   }
-
-  //if the Brakes or Emergency-Brakes are on
   if(brakes == true){
-      acceleration1 = acceleration1 + decelerationRateBrake;
-      if(actualSpeed1 == 0){
+    acceleration1 = acceleration1 + decelerationRateBrake;
+    if((actualSpeed1+acceleration1) <= 0){
+        actualSpeed1 = 0;
+        actualSpeed0 = 0;
+        acceleration0 = 0;
+        acceleration1 = 0;
+    }
+  }
+  else if(eBrakes == true){
+        acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
+        if((actualSpeed1+acceleration1) <= 0){
+            engineFail = false;
+            signalFail = false;
+            actualSpeed1 = 0;
+            actualSpeed0 = 0;
+            acceleration0 = 0;
+            acceleration1 = 0;
+        }
+      }
+    //Doesnt work well need to fix
+    else if(brakeFail == true){
+        acceleration1 = acceleration1 - 0.01;
+        if((actualSpeed1+acceleration1) <= 0){
+            actualSpeed1 = 0;
+            actualSpeed0 = 0;
+            acceleration0 = 0;
+            acceleration1 = 0;
+            brakeFail = false;
+        }
+     }
+  else if(engineFail == true){
+      acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
+      if((actualSpeed1+acceleration1) <= 0){
           actualSpeed1 = 0;
+          actualSpeed0 = 0;
+          acceleration0 = 0;
           acceleration1 = 0;
-      }
-  }
-
-  if(eBrakes == true){
-      acceleration1 = -2;
-      if(actualSpeed1 == 0){
-          engineFail = false;
-          signalFail = false;
-      }
-  }
-
-  //Doesnt work well need to fix
-  if(brakeFail == true){
-      acceleration1 = acceleration1 - 0.1;
-      if(actualSpeed1 == 0){
           brakeFail = false;
       }
-  }
+   }
+    else {
+      force = power/actualSpeed1;
+      acceleration1 = force/mass;
+     }
 
-  actualSpeed1 = actualSpeed0 + ((1/2)*(acceleration0 + acceleration1));
+  actualSpeed1 = actualSpeed0 + ((.5) * (acceleration0 + acceleration1));
   distanceTraveled += actualSpeed1;
 
   //reinitializing the previous iterated acceleration and speed

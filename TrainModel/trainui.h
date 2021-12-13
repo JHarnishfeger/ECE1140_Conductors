@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include "trainmodel.h"
-#include "../TrainControlSW/uiswtraincontroller.h"
+//#include "../TrainControlSW/uiswtraincontroller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class trainUI; }
@@ -22,7 +22,7 @@ public:
 
     //main train
     trainModel *mainTrain = new trainModel(HorS);
-    UISWTrainController s;
+    //UISWTrainController s;
     //train controller UI
 
 
