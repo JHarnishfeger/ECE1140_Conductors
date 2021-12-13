@@ -163,11 +163,25 @@ void HWTCInterface::on_ModeBox_stateChanged(int arg1)
 
 void HWTCInterface::on_PLCButton_clicked()
 {
+    /*
+    vector<bool> sw = hwWaysidePtr->getBlockSwitchPosition();
+    for(int i = 0; i < sw.size(); i++){
+        cout << sw[i] << " ";
+    }
+    cout << endl;
+    */
     string filename;
     filename = ui->PLCtextBox->text().toStdString() + ".txt";
     hwWaysidePtr->hwPLC.importPLC(filename);
     cout << "Running " << hwWaysidePtr->hwPLC.getFilename() << endl;
     hwWaysidePtr->detectTrack();
+    /*
+    sw = hwWaysidePtr->getBlockSwitchPosition();
+    for(int i = 0; i < sw.size(); i++){
+        cout << sw[i] << " ";
+    }
+    cout << endl;
+    */
 
 }
 
