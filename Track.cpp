@@ -465,12 +465,28 @@ void Track::updateTrack(vector<Block> newTrack){
 	for(unsigned int t = 0; t < newTrack.size(); t++){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if((newTrack.at(t).getLine() == "Green") && (newTrack.at(t).getBlockNumber() == greenLine.at(g)->getBlockNumber())){
-				greenLine.at(g) = &newTrack.at(t);
+				if(greenLine.at(g)->getSwitchStatus() != newTrack.at(t).getSwitchStatus()){
+					greenLine.at(g)->setSwitchStatus(newTrack.at(t).getSwitchStatus());
+				}
+				if(greenLine.at(g)->getCrossingStatus() != newTrack.at(t).getCrossingStatus()){
+					greenLine.at(g)->setCrossingStatus(newTrack.at(t).getCircuitStatus());
+				}
+				if(greenLine.at(g)->getSuggestedSpeed() != newTrack.at(t).getSuggestedSpeed()){
+					greenLine.at(g)->setSuggestedSpeed(newTrack.at(t).getSuggestedSpeed());
+				}
 			}
 		}
 		for(unsigned int r = 0; r < redLine.size(); r++){
 			if((newTrack.at(t).getLine() == "Red") && (newTrack.at(t).getBlockNumber() == redLine.at(r)->getBlockNumber())){
-				redLine.at(r) = &newTrack.at(t);
+				if(redLine.at(r)->getSwitchStatus() != newTrack.at(t).getSwitchStatus()){
+					redLine.at(r)->setSwitchStatus(newTrack.at(t).getSwitchStatus());
+				}
+				if(redLine.at(r)->getCrossingStatus() != newTrack.at(t).getCrossingStatus()){
+					redLine.at(r)->setCrossingStatus(newTrack.at(t).getCircuitStatus());
+				}
+				if(redLine.at(r)->getSuggestedSpeed() != newTrack.at(t).getSuggestedSpeed()){
+					redLine.at(r)->setSuggestedSpeed(newTrack.at(t).getSuggestedSpeed());
+				}
 			}
 		}
 	}
