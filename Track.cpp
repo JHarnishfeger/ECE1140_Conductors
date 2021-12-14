@@ -305,16 +305,24 @@ bool Track::loadTrack(string filename){
 		}else{
 			getline(inputFile, elevation);
 		}
+		int stationSDEG;
+		if(stationSide.find("/") == 4){
+			stationSDEG = 2;
+		}else if(stationSide.substr(0,2) == "Ri"){
+			stationSDEG = 1;
+		}else if(stationSide.substr(0,2) == "Le"){
+			stationSDEG = 0;
+		}else{
+			stationSide = -1;
+		}
 		if(line == "Green"){
 			std::stringstream ss2(blockNumber);
 			std::stringstream ss3(speedLimit);
-			std::stringstream ss4(stationSide);
-			int blockNumG, speedLimG, stationSDEG;
+			int blockNumG, speedLimG;
 			ss2 >> blockNumG;
 			ss3 >> speedLimG;
-			ss4 >> stationSDEG;
-			greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), suggSpeed));
-			if(type == "STATION"){
+			greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), 0.0));
+			if(type.substr(0,2) == "ST"){
 				greenLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
@@ -326,8 +334,8 @@ bool Track::loadTrack(string filename){
 			ss5 >> blockNumR;
 			ss6 >> speedLimR;
 			ss7 >> stationSDER;
-			redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), suggSpeed));
-			if(type == "STATION"){
+			redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), 0.0));
+			if(type.substr(0,2) == "ST"){
 				redLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
