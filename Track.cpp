@@ -498,29 +498,43 @@ uint64_t Track::handleTCTrainInfo(uint8_t currBlock, int ID, bool line){
 	
 	int blockNum = (currBlock) & 0xFF;
 	
+	if(line == 0){
+		greenLine.at(blockNum)->setTrainPresent(false);
+	}else{
+		redLine.at(blockNum)->setTrainPresent(false);
+	}
+	
 	if(blockNum == 0 && line == 1){
+		greenLine.at(63)->setTrainPresent(true);
 		return greenLine.at(63)->getTrackCircuitData();
 	}else if(blockNum == 0 && line == 0){
+		redLine.at(10)->setTrainPresent(true);
 		return redLine.at(10)->getTrackCircuitData();
 	}else{
 		if(line == 1){
 			if(greenLine.at(blockNum)->getType() == "SWITCH"){
 				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
+					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
 					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
 				}else{
+					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
 					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
 				}
 			}else{
+				greenLine.at(blockNum + 1)->setTrainPresent(true);
 				return greenLine.at(blockNum + 1)->getTrackCircuitData();
 			}
 		}else{
 			if(redLine.at(blockNum)->getType() == "SWITCH"){
 				if(redLine.at(blockNum)->getSwitchStatus() == 1){
+					redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
 					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
 				}else{
+					redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
 					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
 				}
 			}else{
+				redLine.at(blockNum+1)->setTrainPresent(true);
 				return redLine.at(blockNum+1)->getTrackCircuitData();
 			}
 		}
@@ -533,29 +547,43 @@ uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
 	
 	int blockNum = (currBlock) & 0xFF;
 	
+	if(line == 0){
+		greenLine.at(blockNum)->setTrainPresent(false);
+	}else{
+		redLine.at(blockNum)->setTrainPresent(false);
+	}
+	
 	if(blockNum == 0 && line == 1){
+		greenLine.at(63)->setTrainPresent(true);
 		return greenLine.at(63)->getBeaconData();
 	}else if(blockNum == 0 && line == 0){
+		redLine.at(10)->setTrainPresent(true);
 		return redLine.at(10)->getBeaconData();
 	}else{
 		if(line == 1){
 			if(greenLine.at(blockNum)->getType() == "SWITCH"){
 				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
+					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
 					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
 				}else{
+					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
 					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
 				}
 			}else{
+				greenLine.at(blockNum + 1)->setTrainPresent(true);
 				return greenLine.at(blockNum + 1)->getBeaconData();
 			}
 		}else{
 			if(redLine.at(blockNum)->getType() == "SWITCH"){
 				if(redLine.at(blockNum)->getSwitchStatus() == 1){
+					redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
 					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
 				}else{
+					redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
 					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
 				}
 			}else{
+				redLine.at(blockNum+1)->setTrainPresent(true);
 				return redLine.at(blockNum+1)->getBeaconData();
 			}
 		}
