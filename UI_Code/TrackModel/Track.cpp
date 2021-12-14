@@ -514,11 +514,21 @@ uint64_t Track::handleTCTrainInfo(uint8_t currBlock, int ID, bool line){
 		if(line == 1){
 			if(greenLine.at(blockNum)->getType() == "SWITCH"){
 				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
-					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
-					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+					if(greenLine.at(blockNum)->getNextBlocks().at(0) == 0){
+						greenLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+						return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+					}
 				}else{
-					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
-					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+					if(greenLine.at(blockNum)->getNextBlocks().at(1) == 0){
+						greenLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
+						return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+					}
 				}
 			}else{
 				greenLine.at(blockNum + 1)->setTrainPresent(true);
@@ -527,12 +537,22 @@ uint64_t Track::handleTCTrainInfo(uint8_t currBlock, int ID, bool line){
 		}else{
 			if(redLine.at(blockNum)->getType() == "SWITCH"){
 				if(redLine.at(blockNum)->getSwitchStatus() == 1){
-					redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
-					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+					if(redLine.at(blockNum)->getNextBlocks().at(0) == 0){
+						redLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+						return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+					}
 				}else{
-					redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
-					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
-				}
+					if(redLine.at(blockNum)->getNextBlocks().at(1) == 0){
+						redLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
+						return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+					}
+				}	
 			}else{
 				redLine.at(blockNum+1)->setTrainPresent(true);
 				return redLine.at(blockNum+1)->getTrackCircuitData();
@@ -563,11 +583,21 @@ uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
 		if(line == 1){
 			if(greenLine.at(blockNum)->getType() == "SWITCH"){
 				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
-					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
-					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+					if(greenLine.at(blockNum)->getNextBlocks().at(0) == 0){
+						greenLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+						return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+					}
 				}else{
-					greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
-					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+					if(greenLine.at(blockNum)->getNextBlocks().at(1) == 0){
+						greenLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
+						return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+					}
 				}
 			}else{
 				greenLine.at(blockNum + 1)->setTrainPresent(true);
@@ -576,11 +606,21 @@ uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
 		}else{
 			if(redLine.at(blockNum)->getType() == "SWITCH"){
 				if(redLine.at(blockNum)->getSwitchStatus() == 1){
-					redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
-					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+					if(redLine.at(blockNum)->getNextBlocks().at(0) == 0){
+						redLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+						return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+					}
 				}else{
-					redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
-					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+					if(redLine.at(blockNum)->getNextBlocks().at(1) == 0){
+						redLine.at(blockNum)->setTrainPresent(false);
+						return 0;
+					}else{
+						redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
+						return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+					}
 				}
 			}else{
 				redLine.at(blockNum+1)->setTrainPresent(true);
