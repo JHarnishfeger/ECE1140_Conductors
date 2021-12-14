@@ -136,6 +136,9 @@ class Block{
 		//beaconData:
 		void encodeBeaconData();
 		uint16_t getBeaconData();
+		//toStrings
+		string toString();
+		string toStringDetailed();
 };
 //End Block class
 #endif

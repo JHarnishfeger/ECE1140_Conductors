@@ -62,9 +62,9 @@ double Track::getSuggSpeed(){
 //Returns: Block*
 //Desc: searches for a block according to inputted line and id and returns it as a Block*
 Block* Track::searchBlock(string line, int id){
-	if(line == "green"){
+	if(line == "Green"){
 		return greenLine.at(id);
-	}else if(line == "red"){
+	}else if(line == "Red"){
 		return redLine.at(id);
 	}else{
 		return NULL;
@@ -74,13 +74,13 @@ Block* Track::searchBlock(string line, int id){
 //Returns: Block*
 //Desc:searches for a block according to inputted line and assigned id and returns it as a Block*
 Block* Track::searchBlockById(string line, int id){
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getBlockNumber() == id){
 				return greenLine.at(g);
 			}
 		}
-	}else if(line == "red"){
+	}else if(line == "Red"){
 		for(unsigned int r = 0; r < redLine.size(); r++){
 			if(redLine.at(r)->getBlockNumber() == id){
 				return redLine.at(r);
@@ -96,7 +96,7 @@ Block* Track::searchBlockById(string line, int id){
 //Desc: returns the Block* that is at the inputted distance away from the inputted Block id on the inputted line, otherwise returns NULL
 Block* Track::go(string line, int id, double distance){
 	double remainingDistance = distance;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = id; g < greenLine.size(); g++){
 			remainingDistance = remainingDistance - (greenLine.at(g)->getLength());
 			if(remainingDistance == 0 || remainingDistance - (greenLine.at(g + 1)->getLength()) < 0){
@@ -120,7 +120,7 @@ Block* Track::go(string line, int id, double distance){
 //Desc: searches for blocks on inputted line that match the inputted type and returns them as a vector<Block*>
 vector<Block*> Track::filterByType(string line, string type){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getType() == type){
 				retVect.push_back(greenLine.at(g));
@@ -140,7 +140,7 @@ vector<Block*> Track::filterByType(string line, string type){
 //Desc: searches for blocks on inputted line that match the inputted brach and returns them as a vector<Block*>
 vector<Block*> Track::filterByBranch(string line, string branch){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getBranch() == branch){
 				retVect.push_back(greenLine.at(g));
@@ -160,7 +160,7 @@ vector<Block*> Track::filterByBranch(string line, string branch){
 //Desc: searches for blocks on inputted line whose railStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterByRailStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getRailStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -180,7 +180,7 @@ vector<Block*> Track::filterByRailStatus(string line, bool status){
 //Desc: searches for blocks on inputted line whose circuitStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterByCircuitStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getCircuitStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -200,7 +200,7 @@ vector<Block*> Track::filterByCircuitStatus(string line, bool status){
 //Desc: searches for blocks on inputted line whose powerStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterByPowerStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getPowerStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -220,7 +220,7 @@ vector<Block*> Track::filterByPowerStatus(string line, bool status){
 //Desc: searches for blocks on inputted line whose heaterStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterByHeaterStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getHeaterStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -240,7 +240,7 @@ vector<Block*> Track::filterByHeaterStatus(string line, bool status){
 //Desc: searches for blocks on inputted line whose crossingStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterByCrossingStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getCrossingStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -260,7 +260,7 @@ vector<Block*> Track::filterByCrossingStatus(string line, bool status){
 //Desc: searches for blocks on inputted line whose switchStatus = inputted boolean and returns them as a vector<Block*>
 vector<Block*> Track::filterBySwitchStatus(string line, bool status){
 	vector<Block*> retVect;
-	if(line == "green"){
+	if(line == "Green"){
 		for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getSwitchStatus() == status){
 				retVect.push_back(greenLine.at(g));
@@ -314,7 +314,7 @@ bool Track::loadTrack(string filename){
 			ss3 >> speedLimG;
 			ss4 >> stationSDEG;
 			greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), suggSpeed));
-			if(type == "station"){
+			if(type == "STATION"){
 				greenLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
@@ -327,7 +327,7 @@ bool Track::loadTrack(string filename){
 			ss6 >> speedLimR;
 			ss7 >> stationSDER;
 			redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), suggSpeed));
-			if(type == "station"){
+			if(type == "STATION"){
 				redLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
@@ -421,6 +421,7 @@ bool Track::fixPower(string line, int id){
 		return false;
 	}
 }
+//integration ----------------------------------------------------------
 //Params: vector<Block>
 //Returns: None
 //Desc: takes in a vector of blocks and updates the track with inputted vector<Block>
@@ -443,6 +444,21 @@ void Track::updateTrack(vector<Block> newTrack){
 //Desc: initalizes a train to occupy the first block of the inputted line
 void Track::initalizeTrain(int lineCode){
 	//wIP
+}
+//toStrings ------------------------------------------------------------
+//Params: None
+//Returns: string
+//Desc: returns the red and green line details as a formatted string
+string Track::toString(){
+	string retString = "";
+	return retString;
+}
+//Params: None
+//Returns: string
+//Desc: returns ALL the red and green line details as a formatted string
+string Track::toStringDetailed(){
+	string retString = "";
+	return retString;
 }
 
 

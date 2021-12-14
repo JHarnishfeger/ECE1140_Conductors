@@ -562,59 +562,59 @@ void Block::encodeBeaconData(){
 		int stationCode, incomingCode;
 		bool headlights, stationHere;
 		
-		if(stationName == "shadyside"){
+		if(stationName == "SHADYSIDE"){
 			stationCode = 1;
-		}else if(stationName == "herron_ave"){
+		}else if(stationName == "HERRON_AVE"){
 			stationCode = 2;
-		}else if(stationName == "swissville"){
+		}else if(stationName == "SWISSVILLE"){
 			stationCode = 3;
-		}else if(stationName == "penn_station"){
+		}else if(stationName == "PENN_STATION"){
 			stationCode = 4;
-		}else if(stationName == "steel_plaza"){
+		}else if(stationName == "STEEL_PLAZA"){
 			stationCode = 5;
-		}else if(stationName == "first_ave"){
+		}else if(stationName == "FIRST_AVE"){
 			stationCode = 6;
-		}else if(stationName == "station_square"){
+		}else if(stationName == "STATION_SQUARE"){
 			stationCode = 7;
-		}else if(stationName == "south_hills_junction"){
+		}else if(stationName == "SOUTH_HILLS_JUNCTION"){
 			stationCode = 8;
-		}else if(stationName == "pioneer"){
+		}else if(stationName == "PIONEER"){
 			stationCode = 9;
-		}else if(stationName == "edgebrook"){
+		}else if(stationName == "EDGEBROOK"){
 			stationCode = 10;
-		}else if(stationName == "whited"){
+		}else if(stationName == "WHITED"){
 			stationCode = 11;
-		}else if(stationName == "south_bank"){
+		}else if(stationName == "SOUTH_BANK"){
 			stationCode = 12;
-		}else if(stationName == "central"){
+		}else if(stationName == "CENTRAL"){
 			stationCode = 13;
-		}else if(stationName == "inglewood"){
+		}else if(stationName == "INGLEWOOD"){
 			stationCode = 14;
-		}else if(stationName == "overbrook"){
+		}else if(stationName == "OVERBROOK"){
 			stationCode = 15;
-		}else if(stationName == "glenbury"){
+		}else if(stationName == "GLENBURY"){
 			stationCode = 16;
-		}else if(stationName == "dormont"){
+		}else if(stationName == "DORMONT"){
 			stationCode = 17;
-		}else if(stationName == "mt_lebanon"){
+		}else if(stationName == "MT_LEBANON"){
 			stationCode = 18;
-		}else if(stationName == "poplar"){
+		}else if(stationName == "POPLAR"){
 			stationCode = 19;
-		}else if(stationName == "castle_shannon"){
+		}else if(stationName == "CASTLE_SHANNON"){
 			stationCode = 20;
-		}else if(type == "yard"){
+		}else if(type == "YARD"){
 			stationCode = 21;
 		}else{
 			stationCode = 31;
 		}
 		
-		if(type == "underground"){
+		if(type == "UNDERGROUND"){
 			headlights = 1;
 		}else{
 			headlights = 0;
 		}
 		
-		if(type == "station"){
+		if(type == "STATION"){
 			stationHere = 1;
 		}else{
 			stationHere = 0;
@@ -641,4 +641,19 @@ void Block::encodeBeaconData(){
 //Desc: returns a unsigned 16-bit integer representation of the beacon data
 uint16_t Block::getBeaconData(){
 	return beaconData;
+}
+//toStrings ------------------------------------------------------------
+//Params: None
+//Returns: string
+//Desc: returns a representation of the block as a formatted string
+string Block::toString(){
+	string retString = "";
+	return retString;
+}
+//Params: None
+//Returns: string
+//Desc: returns ALL the data about the block as a formatted string
+string Block::toStringDetailed(){
+	string retString = "";
+	return retString;
 }
