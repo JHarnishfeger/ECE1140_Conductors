@@ -8,26 +8,27 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     hwMade = 0;
     selected = 0;
     ui->setupUi(this);
-    Block a(10,"g","a","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block b(10,"g","a","SWITCH","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block c(10,"g","a","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block d(10,"g","b","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block e(10,"g","b","CROSSING","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block f(10,"g","b","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,1,1,1,1,0,0,0);
-    Block g(10,"g","b","SWITCH","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block h(10,"g","b","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block i(10,"g","c","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block j(10,"g","c","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block k(10,"g","c","SWITCH","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block l(10,"g","d","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block m(10,"g","d","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block n(10,"r","d","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block o(10,"r","d","SWITCH","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block p(10,"r","e","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,1,1,1,1,0,0,0);
-    Block q(10,"r","e","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block r(10,"r","e","CROSSING","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
-    Block s(10,"r","f","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,1);
-    Block t(10,"r","f","RAIL","north","bc",10.0,0,0,1,5,50,45,45,0,0,1,1,1,0,0,0);
+    vector<int> nb(0,0);
+    Block a("g","a","RAIL","","bc",nb,0,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block b("g","a","SWITCH","","bc",nb,1,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block c("g","a","RAIL","","bc",nb,2,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,1,0,0,0);
+    Block d("g","a","CROSSING","","bc",nb,3,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block e("g","a","RAIL","","bc",nb,4,45,45,-1,-1,45,50,30,1,1,0,1,0,0,0,0,0,0,0,0,0);
+    Block f("g","a","SWITCH","","bc",nb,5,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block g("g","a","RAIL","","bc",nb,6,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,1,0,0,0);
+    Block h("g","a","CROSSING","","bc",nb,7,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block i("g","a","RAIL","","bc",nb,8,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block j("g","a","SWITCH","","bc",nb,9,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block k("g","a","RAIL","","bc",nb,10,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block l("r","a","CROSSING","","bc",nb,11,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block m("r","a","RAIL","","bc",nb,12,45,45,-1,-1,45,50,30,1,1,0,1,0,0,0,0,0,0,0,0,0);
+    Block n("r","a","RAIL","","bc",nb,13,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,1,0,0,0);
+    Block o("r","a","SWITCH","","bc",nb,14,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block p("r","a","RAIL","","bc",nb,15,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block q("r","a","CROSSING","","bc",nb,16,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block r("r","a","SWITCH","","bc",nb,17,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,1,0,0,0);
+    Block s("r","a","RAIL","","bc",nb,18,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
+    Block t("r","a","RAIL","","bc",nb,19,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
 
     vector<Block*> green{&a,&b,&c,&d,&e,&f,&g,&h,&i,&j,&k,&l,&m};
     vector<Block*> red{&n,&o,&p,&q,&r,&s,&t};
@@ -58,6 +59,11 @@ void SWTCInterface::update(){
         wui[i]->update();
 }
 
+void SWTCInterface::updateFromTrack(vector<Block*> red, vector<Block*> green)
+{
+    emit updateWaysidesFromTrack(red,green);
+}
+
 void SWTCInterface::on_CreateWaysides_clicked(){
     if(!waysidesMade&&ui->WaysideNum->value()>0){
         QString title;
@@ -71,7 +77,7 @@ void SWTCInterface::on_CreateWaysides_clicked(){
                 holder += "GREEN ";
             else
                 holder += "RED ";
-            holder += "LINE - Wayside " + std::to_string(i+1) + ": Blocks " + std::to_string(tc.waysides[i].sector[0].getId()) + " - " + std::to_string(tc.waysides[i].sector[tc.waysides[i].sector.size()-1].getId());
+            holder += "LINE - Wayside " + std::to_string(i+1) + ": Blocks " + std::to_string(tc.waysides[i].sector[0].getBlockNumber()) + " - " + std::to_string(tc.waysides[i].sector[tc.waysides[i].sector.size()-1].getBlockNumber());
             title = QString::fromStdString(holder);
             ui->WaysideList->addItem(title);
         }
@@ -83,6 +89,10 @@ void SWTCInterface::on_CreateWaysides_clicked(){
             wui[i]->show();
         }
         tc.updateWaysides();
+        for(int i=0;i<wui.size();i++)
+        {
+            QObject::connect(this,SIGNAL(updateWaysidesFromTrack(vector<Block*>, vector<Block*>)),wui[i],SLOT(updateFromTrack(vector<Block*>, vector<Block*>)));
+        }
     }
 }
 
@@ -90,7 +100,7 @@ void SWTCInterface::on_DesignateHWWayside_clicked(){
     if(!hwMade&&selected!=0){
         hwMade = 1;
         for(int i=0;i<wui.size();i++){
-            if(wui[i]->way->getID()==selected){
+            if(wui[i]->way->getBlockNumber()==selected){
                 for(int j=0;j<wui[i]->way->sector.size();j++){
                     tc.hwTrack.push_back(wui[i]->way->sector[j]);
                     hwTrack.push_back(wui[i]->way->sector[j]);

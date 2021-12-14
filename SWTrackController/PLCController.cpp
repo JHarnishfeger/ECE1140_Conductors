@@ -35,7 +35,7 @@ PLCController::PLCController(vector<Block> tr){
         auCheck = 0;
         auNext = 0;
         for(int j=0;j<auth.size();j++){
-            if(track[i].getBranch()==auth[j].branch&&(track[i].getId()<=auth[j].endBlock||auth[j].endBlock==-1))
+            if(track[i].getBranch()==auth[j].branch&&(track[i].getBlockNumber()<=auth[j].endBlock||auth[j].endBlock==-1))
                 auCheck = 1;
             if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
@@ -48,6 +48,8 @@ PLCController::PLCController(vector<Block> tr){
         }
         AU.push_back(auCheck); //AUTHORITY
         NB.push_back(auNext); //NEXT BRANCH
+        TL.push_back(track[i].getTrafficLightStatus()>=0); //TRAFFIC LIGHT POSITION
+        TC.push_back(track[i].getTrafficLightStatus()==1); //TRAFFIC LIGHT COLOR
     }
 }
 
@@ -97,7 +99,7 @@ void PLCController::importPLC(string file){
         auCheck = 0;
         auNext = 0;
         for(int j=0;j<auth.size();j++){
-            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
+            if(track[i].getBranch()==auth[j].branch&&track[i].getBlockNumber()<=auth[j].endBlock)
                 auCheck = 1;
             if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
@@ -110,6 +112,8 @@ void PLCController::importPLC(string file){
         }
         AU.push_back(auCheck);
         NB.push_back(auNext);
+        TL.push_back(track[i].getTrafficLightStatus()>=0); //TRAFFIC LIGHT POSITION
+        TC.push_back(track[i].getTrafficLightStatus()==1); //TRAFFIC LIGHT COLOR
     }
 }
 
@@ -466,7 +470,7 @@ bool PLCController::runPLC(){
                 else if(dataTarget=="ST"){
                     if(stretch==2){
                         argVals.push_back(0);
-                        for(int j=0;j<SR.size();j++)
+                        for(int j=0;j<ST.size();j++)
                                 argVals[i] = argVals[i] || ST[j];
                     }
                     else if(stretch==0){
@@ -522,6 +526,130 @@ bool PLCController::runPLC(){
                                 break;
                             if(pos+posOffset<SA.size()&&pos+posOffset>=0)
                                 argVals[i] = argVals[i] || SA[j];
+                        }
+                    }
+                }
+                else if(dataTarget=="AU"){
+                    if(stretch==2){
+                        argVals.push_back(0);
+                        for(int j=0;j<AU.size();j++)
+                                argVals[i] = argVals[i] || AU[j];
+                    }
+                    else if(stretch==0){
+                        if(pos+posOffset>=0&&pos+posOffset<AU.size())
+                            argVals.push_back(AU[pos+posOffset]);
+                        else
+                            argVals.push_back(0);
+                    }
+                    else if(stretch==1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j<AU.size();j++){
+                            if(pos+posOffset<AU.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || AU[j];
+                            if(SL[j]==1)
+                                break;
+                        }
+                    }
+                    else if(stretch==-1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j>=0;j--){
+                            if(SL[j]==1)
+                                break;
+                            if(pos+posOffset<AU.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || AU[j];
+                        }
+                    }
+                }
+                else if(dataTarget=="NB"){
+                    if(stretch==2){
+                        argVals.push_back(0);
+                        for(int j=0;j<NB.size();j++)
+                                argVals[i] = argVals[i] || NB[j];
+                    }
+                    else if(stretch==0){
+                        if(pos+posOffset>=0&&pos+posOffset<NB.size())
+                            argVals.push_back(NB[pos+posOffset]);
+                        else
+                            argVals.push_back(0);
+                    }
+                    else if(stretch==1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j<NB.size();j++){
+                            if(pos+posOffset<NB.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || NB[j];
+                            if(SL[j]==1)
+                                break;
+                        }
+                    }
+                    else if(stretch==-1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j>=0;j--){
+                            if(SL[j]==1)
+                                break;
+                            if(pos+posOffset<NB.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || NB[j];
+                        }
+                    }
+                }
+                else if(dataTarget=="TL"){
+                    if(stretch==2){
+                        argVals.push_back(0);
+                        for(int j=0;j<TL.size();j++)
+                                argVals[i] = argVals[i] || TL[j];
+                    }
+                    else if(stretch==0){
+                        if(pos+posOffset>=0&&pos+posOffset<TL.size())
+                            argVals.push_back(TL[pos+posOffset]);
+                        else
+                            argVals.push_back(0);
+                    }
+                    else if(stretch==1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j<TL.size();j++){
+                            if(pos+posOffset<TL.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || TL[j];
+                            if(SL[j]==1)
+                                break;
+                        }
+                    }
+                    else if(stretch==-1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j>=0;j--){
+                            if(SL[j]==1)
+                                break;
+                            if(pos+posOffset<TL.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || TL[j];
+                        }
+                    }
+                }
+                else if(dataTarget=="TC"){
+                    if(stretch==2){
+                        argVals.push_back(0);
+                        for(int j=0;j<TC.size();j++)
+                                argVals[i] = argVals[i] || TC[j];
+                    }
+                    else if(stretch==0){
+                        if(pos+posOffset>=0&&pos+posOffset<TC.size())
+                            argVals.push_back(TC[pos+posOffset]);
+                        else
+                            argVals.push_back(0);
+                    }
+                    else if(stretch==1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j<TC.size();j++){
+                            if(pos+posOffset<TC.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || TC[j];
+                            if(SL[j]==1)
+                                break;
+                        }
+                    }
+                    else if(stretch==-1){
+                        argVals.push_back(0);
+                        for(int j=pos+posOffset;j>=0;j--){
+                            if(SL[j]==1)
+                                break;
+                            if(pos+posOffset<TC.size()&&pos+posOffset>=0)
+                                argVals[i] = argVals[i] || TC[j];
                         }
                     }
                 }
@@ -830,6 +958,78 @@ bool PLCController::runPLC(){
                     }
                 }
             }
+            else if(dataTarget=="NB"){
+                if(stretch==2){
+                    for(int j=0;j<NB.size();j++)
+                        NB[j] = value;
+                }
+                else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<NB.size())
+                    NB[pos+posOffset] = value;
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<NB.size();j++){
+                        if(pos+posOffset>=0)
+                            NB[j] = value;
+                        if(SL[j]==1)
+                            break;
+                    }
+                }
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
+                        if(SL[j]==1)
+                            break;
+                        if(pos+posOffset<NB.size())
+                            NB[j] = value;
+                    }
+                }
+            }
+            else if(dataTarget=="TL"){
+                if(stretch==2){
+                    for(int j=0;j<TL.size();j++)
+                        TL[j] = value;
+                }
+                else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<TL.size())
+                    TL[pos+posOffset] = value;
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<TL.size();j++){
+                        if(pos+posOffset>=0)
+                            TL[j] = value;
+                        if(SL[j]==1)
+                            break;
+                    }
+                }
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
+                        if(SL[j]==1)
+                            break;
+                        if(pos+posOffset<TL.size())
+                            TL[j] = value;
+                    }
+                }
+            }
+            else if(dataTarget=="TC"){
+                if(stretch==2){
+                    for(int j=0;j<TC.size();j++)
+                        TC[j] = value;
+                }
+                else if(stretch==0&&pos+posOffset>=0&&pos+posOffset<TC.size())
+                    TC[pos+posOffset] = value;
+                else if(stretch==1){
+                    for(int j=pos+posOffset;j<TC.size();j++){
+                        if(pos+posOffset>=0)
+                            TC[j] = value;
+                        if(SL[j]==1)
+                            break;
+                    }
+                }
+                else if(stretch==-1){
+                    for(int j=pos+posOffset;j>=0;j--){
+                        if(SL[j]==1)
+                            break;
+                        if(pos+posOffset<TC.size())
+                            TC[j] = value;
+                    }
+                }
+            }
         }
         else if(command[0]=='#')
             continue;
@@ -853,6 +1053,8 @@ void PLCController::execute(){
     SA.clear();
     AU.clear();
     NB.clear();
+    TL.clear();
+    TC.clear();
     for(int i=0;i<track.size();i++){
         TR.push_back(track[i].getTrainPresent()); //TRAIN
         SL.push_back(track[i].getType()=="SWITCH"); //SWITCH LOCATION
@@ -867,7 +1069,7 @@ void PLCController::execute(){
         auCheck = 0;
         auNext = 0;
         for(int j=0;j<auth.size();j++){
-            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
+            if(track[i].getBranch()==auth[j].branch&&track[i].getBlockNumber()<=auth[j].endBlock)
                 auCheck = 1;
             if(track[i].getType()=="SWITCH"&&track[i].getBranch()==auth[j].branch){
                 if(std::to_string(track[i].getNextBranches()[0])==auth[j].nextBranch)
@@ -880,6 +1082,8 @@ void PLCController::execute(){
         }
         AU.push_back(auCheck);
         NB.push_back(auNext);
+        TL.push_back(track[i].getTrafficLightStatus()>=0); //TRAFFIC LIGHT POSITION
+        TC.push_back(track[i].getTrafficLightStatus()==1); //TRAFFIC LIGHT COLOR
     }
     checkVecs.clear();
     checkVecs.push_back(TR);
@@ -894,6 +1098,8 @@ void PLCController::execute(){
     checkVecs.push_back(SA);
     checkVecs.push_back(AU);
     checkVecs.push_back(NB);
+    checkVecs.push_back(TL);
+    checkVecs.push_back(TC);
     oldVecs.clear();
     oldVecs.push_back(TR);
     oldVecs.push_back(SL);
@@ -907,6 +1113,8 @@ void PLCController::execute(){
     oldVecs.push_back(SA);
     oldVecs.push_back(AU);
     oldVecs.push_back(NB);
+    oldVecs.push_back(TL);
+    oldVecs.push_back(TC);
 
     std::cout << "TR Values      : ";
     for(int i=0;i<TR.size();i++)
@@ -944,6 +1152,12 @@ void PLCController::execute(){
     std::cout << std::endl << "NB Values      : ";
     for(int i=0;i<NB.size();i++)
         std::cout << NB[i] << " ";
+    std::cout << std::endl << "TL Values      : ";
+    for(int i=0;i<TL.size();i++)
+        std::cout << TL[i] << " ";
+    std::cout << std::endl << "TC Values      : ";
+    for(int i=0;i<TC.size();i++)
+        std::cout << TC[i] << " ";
     std::cout << std::endl << std::endl;
 
     for(pos=0;pos<TR.size();pos++){
@@ -987,6 +1201,12 @@ void PLCController::execute(){
     std::cout << std::endl << "Final NB Values: ";
     for(int i=0;i<NB.size();i++)
         std::cout << NB[i] << " ";
+    std::cout << std::endl << "Final TL Values: ";
+    for(int i=0;i<TL.size();i++)
+        std::cout << TL[i] << " ";
+    std::cout << std::endl << "Final TC Values: ";
+    for(int i=0;i<TC.size();i++)
+        std::cout << TC[i] << " ";
     std::cout << std::endl << std::endl;
 }
 
@@ -1206,6 +1426,10 @@ bool PLCController::verifyPLC(){
                         index = 10;
                     else if(dataTarget=="NB")
                         index = 11;
+                    else if(dataTarget=="TL")
+                        index = 12;
+                    else if(dataTarget=="TC")
+                        index = 13;
 
                     if(stretch==2){
                         argVals.push_back(0);
@@ -1303,6 +1527,10 @@ bool PLCController::verifyPLC(){
                     index = 10;
                 else if(dataTarget=="NB")
                     index = 11;
+                else if(dataTarget=="TL")
+                    index = 12;
+                else if(dataTarget=="TC")
+                    index = 13;
 
                 if(stretch==2){
                     for(int j=0;j<checkVecs[index].size();j++)
@@ -1368,6 +1596,12 @@ bool PLCController::verifyPLC(){
     std::cout << std::endl << "Check NB Values: ";
     for(int i=0;i<checkVecs[11].size();i++)
         std::cout << checkVecs[11][i] << " ";
+    std::cout << std::endl << "Check TL Values: ";
+    for(int i=0;i<checkVecs[12].size();i++)
+        std::cout << checkVecs[12][i] << " ";
+    std::cout << std::endl << "Check TC Values: ";
+    for(int i=0;i<checkVecs[13].size();i++)
+        std::cout << checkVecs[13][i] << " ";
     std::cout << std::endl << std::endl;
 
     correct = correct && (checkVecs[0]==TR);
@@ -1382,6 +1616,8 @@ bool PLCController::verifyPLC(){
     correct = correct && (checkVecs[9]==SA);
     correct = correct && (checkVecs[10]==AU);
     correct = correct && (checkVecs[11]==NB);
+    correct = correct && (checkVecs[12]==TL);
+    correct = correct && (checkVecs[13]==TC);
     std::cout << "VALID: " << correct << std::endl;
     if(!correct){
         TR = oldVecs[0];
@@ -1396,6 +1632,8 @@ bool PLCController::verifyPLC(){
         SA = oldVecs[9];
         AU = oldVecs[10];
         NB = oldVecs[11];
+        TL = oldVecs[12];
+        TC = oldVecs[13];
     }
     return correct;
 }

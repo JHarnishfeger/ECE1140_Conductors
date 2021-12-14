@@ -32,7 +32,7 @@ public:
     void update(); //Sets current values upon being called, runs wayside in real time
     void updateNoPLC(); //Update method without running PLC (not in use)
     bool detectTrack(); //Detects any notable scenarios in the track using the PLC program
-    int getID(); //Gets the wayside's ID
+    int getBlockNumber(); //Gets the wayside's ID
     void setID(int); //Sets the wayside's ID
     bool getLine(); //Gets the line that the wayside is on (Red = 0, Green = 1)
     void setLine(bool); //Sets the line that the wayside is on (Red = 0, Green = 1)

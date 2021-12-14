@@ -26,13 +26,13 @@ void WaysideWin::updateFromTrack(vector<Block*> red, vector<Block*> green){
 
     if(way->getLine()){ //Green
         for(int i=0;i<greenLine.size();i++){
-            if(greenLine[i].getId()>=way->sector[0].getId()&&greenLine[i].getId()<=way->sector[way->sector.size()-1].getId())
+            if(greenLine[i].getBlockNumber()>=way->sector[0].getBlockNumber()&&greenLine[i].getBlockNumber()<=way->sector[way->sector.size()-1].getBlockNumber())
                 newSector.push_back((greenLine[i]));
         }
     }
     else{
         for(int i=0;i<redLine.size();i++){
-            if(redLine[i].getId()>=way->sector[0].getId()&&redLine[i].getId()<=way->sector[way->sector.size()-1].getId())
+            if(redLine[i].getBlockNumber()>=way->sector[0].getBlockNumber()&&redLine[i].getBlockNumber()<=way->sector[way->sector.size()-1].getBlockNumber())
                 newSector.push_back((redLine[i]));
         }
     }
@@ -46,7 +46,7 @@ void WaysideWin::initialize(Wayside &w,int i){
     way = &w;
     way->sector = w.sector;
     way->setID(i);
-    string title = "Wayside " + std::to_string(way->getID());
+    string title = "Wayside " + std::to_string(way->getBlockNumber());
     this->setWindowTitle(QString::fromStdString(title));
     fillLists();
 }
@@ -61,22 +61,22 @@ void WaysideWin::fillLists(){
     QString title;
     string holder;
     for(int i=0;i<way->swich.size();i++){
-        title = QString::fromStdString("Block " + std::to_string(way->swich[i].getId()) + " (" + std::to_string(way->swich[i].getSwitchStatus()) + ")");
+        title = QString::fromStdString("Block " + std::to_string(way->swich[i].getBlockNumber()) + " (" + std::to_string(way->swich[i].getSwitchStatus()) + ")");
         ui->SwitchList->addItem(title);
     }
 
     for(int i=0;i<way->crossing.size();i++){
-        title = QString::fromStdString("Block " + std::to_string(way->crossing[i].getId()) + " (" + std::to_string(way->crossing[i].getCrossingStatus()) + ")");
+        title = QString::fromStdString("Block " + std::to_string(way->crossing[i].getBlockNumber()) + " (" + std::to_string(way->crossing[i].getCrossingStatus()) + ")");
         ui->CrossingList->addItem(title);
     }
 
     for(int i=0;i<way->getTrackOccupancy().size();i++){
-        title = QString::fromStdString("Block " + std::to_string(way->getTrackOccupancy()[i].getId()));
+        title = QString::fromStdString("Block " + std::to_string(way->getTrackOccupancy()[i].getBlockNumber()));
         ui->TrainList->addItem(title);
     }
 
     for(int i=0;i<way->getBrokenRails().size();i++){
-        title = QString::fromStdString("Block " + std::to_string(way->getBrokenRails()[i].getId()));
+        title = QString::fromStdString("Block " + std::to_string(way->getBrokenRails()[i].getBlockNumber()));
         ui->BrokenRailList->addItem(title);
     }
 
@@ -114,7 +114,7 @@ void WaysideWin::on_CrossingList_itemClicked(QListWidgetItem *item){
 void WaysideWin::on_SwitchLeft_clicked(){
     if(type=="SWITCH"&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
-            if(way->sector[i].getId()==id){
+            if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setSwitchStatus(0);
                 break;
             }
@@ -128,7 +128,7 @@ void WaysideWin::on_SwitchLeft_clicked(){
 void WaysideWin::on_SwitchRight_clicked(){
     if(type=="SWITCH"&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
-            if(way->sector[i].getId()==id){
+            if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setSwitchStatus(1);
                 break;
             }
@@ -152,7 +152,7 @@ void WaysideWin::on_ImportPLC_clicked(){
 void WaysideWin::on_CrossingOn_clicked(){
     if(type=="CROSSING"&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
-            if(way->sector[i].getId()==id){
+            if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setCrossingStatus(1);
                 break;
             }
@@ -166,7 +166,7 @@ void WaysideWin::on_CrossingOn_clicked(){
 void WaysideWin::on_CrossingOff_clicked(){
     if(type=="CROSSING"&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
-            if(way->sector[i].getId()==id){
+            if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setCrossingStatus(0);
                 break;
             }

@@ -26,6 +26,7 @@ public:
 signals:
     void hwSet(vector<Block> hwtrk);
     void waysidesSet(vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
+    void updateWaysidesFromTrack(vector<Block*> red, vector<Block*> green);
 private slots:
     void on_CreateWaysides_clicked();
 
@@ -41,6 +42,8 @@ public slots:
     void getHWWaystruct(WayStruct* hwWaystr);
 
     void update();
+
+    void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
 private:
     Ui::SWTCInterface *ui;

@@ -60,53 +60,53 @@ int main()
         }
         else if(command=="redLine")
         {
-            std::cout << "The red line covers blocks " << tc.redLine[0].getId() << " to " << tc.redLine[tc.redLine.size()-1].getId() << "." << std::endl;
+            std::cout << "The red line covers blocks " << tc.redLine[0].getBlockNumber() << " to " << tc.redLine[tc.redLine.size()-1].getBlockNumber() << "." << std::endl;
             Sleep(2000);
         }
         else if(command=="greenLine")
         {
-            std::cout << "The green line covers blocks " << tc.greenLine[0].getId() << " to " << tc.greenLine[tc.greenLine.size()-1].getId() << "." << std::endl;
+            std::cout << "The green line covers blocks " << tc.greenLine[0].getBlockNumber() << " to " << tc.greenLine[tc.greenLine.size()-1].getBlockNumber() << "." << std::endl;
             Sleep(2000);
         }
         else if(command=="break"){
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.addBrokenRail(tc.waysides[i].sector[j]);
         }
         else if(command=="maintenance")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.addMaintenance(tc.waysides[i].sector[j]);
         }
         else if(command=="done")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.endMaintenance(tc.waysides[i].sector[j]);
         }
         else if(command=="SWITCH")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.waysides[i].switchTrack(tc.waysides[i].sector[j]);
         }
         else if(command=="CROSSING")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.waysides[i].toggleCrossing(tc.waysides[i].sector[j]);
         }
         else if(command=="setTrain")
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.waysides[i].sector[j].setTrainPresent(true);
             tc.getTrackOccupancy();
         }
@@ -114,7 +114,7 @@ int main()
         {
             for(int i=0;i<tc.waysides.size();i++)
                 for(int j=0;j<tc.waysides[i].sector.size();j++)
-                    if(tc.waysides[i].sector[j].getId()==value)
+                    if(tc.waysides[i].sector[j].getBlockNumber()==value)
                         tc.waysides[i].sector[j].setTrainPresent(false);
             tc.getTrackOccupancy();
         }
