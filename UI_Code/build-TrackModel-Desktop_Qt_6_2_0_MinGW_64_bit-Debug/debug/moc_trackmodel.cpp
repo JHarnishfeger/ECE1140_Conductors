@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TrackModel_t {
-    const uint offsetsAndSize[60];
-    char stringdata0[496];
+    const uint offsetsAndSize[62];
+    char stringdata0[510];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_TrackModel_t, stringdata0) + ofs), len 
@@ -52,13 +52,14 @@ QT_MOC_LITERAL(300, 29), // "on_circuitStatusBreak_clicked"
 QT_MOC_LITERAL(330, 25), // "on_powerStatusFix_clicked"
 QT_MOC_LITERAL(356, 27), // "on_powerStatusBreak_clicked"
 QT_MOC_LITERAL(384, 28), // "on_selectBlockButton_clicked"
-QT_MOC_LITERAL(413, 17), // "updateFromWayside"
-QT_MOC_LITERAL(431, 13), // "vector<Block>"
-QT_MOC_LITERAL(445, 14), // "wasysideBlocks"
-QT_MOC_LITERAL(460, 9), // "TrainInfo"
-QT_MOC_LITERAL(470, 7), // "uint8_t"
-QT_MOC_LITERAL(478, 12), // "currentBlock"
-QT_MOC_LITERAL(491, 4) // "line"
+QT_MOC_LITERAL(413, 13), // "updateDisplay"
+QT_MOC_LITERAL(427, 17), // "updateFromWayside"
+QT_MOC_LITERAL(445, 13), // "vector<Block>"
+QT_MOC_LITERAL(459, 14), // "wasysideBlocks"
+QT_MOC_LITERAL(474, 9), // "TrainInfo"
+QT_MOC_LITERAL(484, 7), // "uint8_t"
+QT_MOC_LITERAL(492, 12), // "currentBlock"
+QT_MOC_LITERAL(505, 4) // "line"
 
     },
     "TrackModel\0giveTrack\0\0vector<Block*>\0"
@@ -73,7 +74,7 @@ QT_MOC_LITERAL(491, 4) // "line"
     "on_circuitStatusBreak_clicked\0"
     "on_powerStatusFix_clicked\0"
     "on_powerStatusBreak_clicked\0"
-    "on_selectBlockButton_clicked\0"
+    "on_selectBlockButton_clicked\0updateDisplay\0"
     "updateFromWayside\0vector<Block>\0"
     "wasysideBlocks\0TrainInfo\0uint8_t\0"
     "currentBlock\0line"
@@ -86,7 +87,7 @@ static const uint qt_meta_data_TrackModel[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -94,24 +95,25 @@ static const uint qt_meta_data_TrackModel[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    2,  110,    2, 0x06,    1 /* Public */,
-       6,    2,  115,    2, 0x06,    4 /* Public */,
-       7,    2,  120,    2, 0x06,    7 /* Public */,
-      11,    2,  125,    2, 0x06,   10 /* Public */,
+       1,    2,  116,    2, 0x06,    1 /* Public */,
+       6,    2,  121,    2, 0x06,    4 /* Public */,
+       7,    2,  126,    2, 0x06,    7 /* Public */,
+      11,    2,  131,    2, 0x06,   10 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      13,    0,  130,    2, 0x08,   13 /* Private */,
-      14,    0,  131,    2, 0x08,   14 /* Private */,
-      15,    0,  132,    2, 0x08,   15 /* Private */,
-      16,    0,  133,    2, 0x08,   16 /* Private */,
-      17,    0,  134,    2, 0x08,   17 /* Private */,
-      18,    0,  135,    2, 0x08,   18 /* Private */,
-      19,    0,  136,    2, 0x08,   19 /* Private */,
-      20,    0,  137,    2, 0x08,   20 /* Private */,
-      21,    0,  138,    2, 0x08,   21 /* Private */,
-      22,    0,  139,    2, 0x08,   22 /* Private */,
-      23,    1,  140,    2, 0x0a,   23 /* Public */,
-      26,    3,  143,    2, 0x0a,   25 /* Public */,
+      13,    0,  136,    2, 0x08,   13 /* Private */,
+      14,    0,  137,    2, 0x08,   14 /* Private */,
+      15,    0,  138,    2, 0x08,   15 /* Private */,
+      16,    0,  139,    2, 0x08,   16 /* Private */,
+      17,    0,  140,    2, 0x08,   17 /* Private */,
+      18,    0,  141,    2, 0x08,   18 /* Private */,
+      19,    0,  142,    2, 0x08,   19 /* Private */,
+      20,    0,  143,    2, 0x08,   20 /* Private */,
+      21,    0,  144,    2, 0x08,   21 /* Private */,
+      22,    0,  145,    2, 0x08,   22 /* Private */,
+      23,    0,  146,    2, 0x08,   23 /* Private */,
+      24,    1,  147,    2, 0x0a,   24 /* Public */,
+      27,    3,  150,    2, 0x0a,   26 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, 0x80000000 | 3,    4,    5,
@@ -130,8 +132,9 @@ static const uint qt_meta_data_TrackModel[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 24,   25,
-    QMetaType::Void, 0x80000000 | 27, QMetaType::Int, QMetaType::Bool,   28,   10,   29,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 25,   26,
+    QMetaType::Void, 0x80000000 | 28, QMetaType::Int, QMetaType::Bool,   29,   10,   30,
 
        0        // eod
 };
@@ -156,8 +159,9 @@ void TrackModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 11: _t->on_powerStatusFix_clicked(); break;
         case 12: _t->on_powerStatusBreak_clicked(); break;
         case 13: _t->on_selectBlockButton_clicked(); break;
-        case 14: _t->updateFromWayside((*reinterpret_cast< vector<Block>(*)>(_a[1]))); break;
-        case 15: _t->TrainInfo((*reinterpret_cast< uint8_t(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
+        case 14: _t->updateDisplay(); break;
+        case 15: _t->updateFromWayside((*reinterpret_cast< vector<Block>(*)>(_a[1]))); break;
+        case 16: _t->TrainInfo((*reinterpret_cast< uint8_t(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -201,7 +205,7 @@ const QMetaObject TrackModel::staticMetaObject = { {
     nullptr,
 qt_incomplete_metaTypeArray<qt_meta_stringdata_TrackModel_t
 , QtPrivate::TypeAndForceComplete<TrackModel, std::true_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block*>, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block*>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block*>, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block*>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<uint64_t, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<uint16_t, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>
-, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<uint8_t, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>
+, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<vector<Block>, std::false_type>, QtPrivate::TypeAndForceComplete<void, std::false_type>, QtPrivate::TypeAndForceComplete<uint8_t, std::false_type>, QtPrivate::TypeAndForceComplete<int, std::false_type>, QtPrivate::TypeAndForceComplete<bool, std::false_type>
 
 
 >,
@@ -228,13 +232,13 @@ int TrackModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 17)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 16;
+        _id -= 17;
     }
     return _id;
 }
