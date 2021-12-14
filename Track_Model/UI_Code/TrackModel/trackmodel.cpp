@@ -13,6 +13,10 @@ TrackModel::~TrackModel()
     delete ui;
 }
 
+void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
+    t.updateTrack(waysideBlocks);
+}
+
 
 void TrackModel::on_loadTrackButton_clicked()
 {
