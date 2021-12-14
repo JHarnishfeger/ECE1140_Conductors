@@ -20,7 +20,7 @@ Block* WaysideManager::getBlock(int id){
         std::vector<Block>& sector = w->sector;
         for(unsigned int i = 0; i < sector.size(); i++){
             Block& b = sector[i];
-            if(b.getId() == id){
+            if(b.getBlockNumber() == id){
                 return &b;
             }
         }
@@ -35,7 +35,7 @@ std::list<std::string> WaysideManager::getBranchesWithTrainsPresent(){
         for(unsigned int i = 0; i < sector.size(); i++){
             Block& b = sector[i];
             if(b.getTrainPresent() == true){
-                std::string branch = track->getBranchOfBlock(b.getId());
+                std::string branch = track->getBranchOfBlock(b.getBlockNumber());
                 bool alreadyInList = false;
                 for(std::string br : list){
                     if(br == branch) alreadyInList = true;
@@ -82,7 +82,7 @@ void WaysideManager::setAuthority(Authority authority){
         bool includedInbranch = false;
         std::vector<Block>& sector = w->sector;
         for(unsigned int i = 0; i < sector.size(); i++){
-            if(track->getBranchOfBlock(sector[i].getId()) == authority.branch){
+            if(track->getBranchOfBlock(sector[i].getBlockNumber()) == authority.branch){
                 includedInbranch = true;
             }
         }
@@ -102,7 +102,7 @@ Authority WaysideManager::getAuthority(std::string branch){
     for(WayStruct* w : waysides){
         std::vector<Block>& sector = w->sector;
         for(unsigned int i = 0; i < sector.size(); i++){
-            if(track->getBranchOfBlock(sector[i].getId()) == branch){
+            if(track->getBranchOfBlock(sector[i].getBlockNumber()) == branch){
                 auto authorities = w->auth;
                 for(unsigned int i = 0; i < authorities.size(); i++){
                     if(authorities[i].branch == branch){
@@ -133,7 +133,7 @@ std::list<std::pair<std::string, int>> WaysideManager::getTrainsPerBranch(){
         for(unsigned int i = 0; i < sector.size(); i++){
             Block& b = sector[i];
             if(b.getTrainPresent() == true){
-                trainsPerBranch[track->getBranchOfBlock(b.getId())]++;
+                trainsPerBranch[track->getBranchOfBlock(b.getBlockNumber())]++;
             }
         }
     }

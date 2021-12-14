@@ -8,11 +8,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     //These are test values, not to be used in integration
+    int blockNumber = 1;
     std::vector<WayStruct> sw_controller;
     for(int i = 0; i < 13; i++){
         std::vector<Block> sector;
         for(int j = 0; j < 10; j++){
             sector.push_back(Block());
+            sector[j].setBlockNumber(blockNumber++);
             sector[j].setTrainPresent(false);
         }
         std::vector<Authority> authorities;
@@ -28,6 +30,7 @@ int main(int argc, char *argv[])
     std::vector<Block> sector;
     for(int j = 0; j < 11; j++){
         sector.push_back(Block());
+        sector[j].setBlockNumber(blockNumber++);
         sector[j].setTrainPresent(true);
     }
     std::vector<Authority> authorities;

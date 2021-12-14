@@ -34,7 +34,7 @@ ScheduleManager::ScheduleManager(){
 
 std::string ScheduleManager::displaySchedule(){
  	std::string rtn = "";
-    for(CTCSchedule s : schedule){
+    for(CTCSchedule& s : schedule){
         rtn += s.train + " ";
         rtn += "to Block " + std::to_string(s.destination) + " ";
         rtn += "at Time " + std::to_string(s.time) + "\n";
