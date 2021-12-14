@@ -1,5 +1,6 @@
 #include "Block.h"
 #include "Track.h"
+using namespace std;
 
 //Constructors:
 //Default constructor
@@ -282,7 +283,6 @@ vector<Block*> Track::filterBySwitchStatus(string line, bool status){
 bool Track::loadTrack(string filename){
 	std::ifstream inputFile;
 	inputFile.open(filename);
-	
 	string header, fsize, line, branch, blockNumber, length, grade, speedLimit, type,
 	stationSide, elevation, trash;
 	int fileSize;
@@ -331,19 +331,29 @@ bool Track::loadTrack(string filename){
 				redLine.at(i - 1)->setBeaconPresent(true);
 			}
 		}
-		for(unsigned int g = 0; g < greenLine.size(); g++){
+	}
+	for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getType() == "SWITCH"){
-				string Block1 = searchBlockById("green", greenLine.at(g)->getNextBlocks().at(0))->getBranch();
-				string Block2 = searchBlockById("green", greenLine.at(g)->getNextBlocks().at(1))->getBranch();
+				string Block1, Block2;
+				Block1 = searchBlockById("Green", greenLine.at(g)->getNextBlocks().at(0))->getBranch();
+				if(greenLine.at(g)->getNextBlocks().at(1) == 0){
+					Block2 = "YARD";
+				}else{
+					Block2 = searchBlockById("Green", greenLine.at(g)->getNextBlocks().at(1))->getBranch();
+				}
 				greenLine.at(g)->setNextBranches(Block1 + Block2);
 			}
 		}
-		for(unsigned int r = 0; r < redLine.size(); r++){
-			if(redLine.at(r)->getType() == "SWITCH"){
-				string Block1 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(0))->getBranch();
-				string Block2 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(1))->getBranch();
-				redLine.at(r)->setNextBranches(Block1 + Block2);
+	for(unsigned int r = 0; r < redLine.size(); r++){
+		if(redLine.at(r)->getType() == "SWITCH"){
+			string Block1, Block2;
+			Block1 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(0))->getBranch();
+			if(redLine.at(r)->getNextBlocks().at(1) == 0){
+					Block2 = "YARD";
+			}else{
+					Block2 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(1))->getBranch();
 			}
+			redLine.at(r)->setNextBranches(Block1 + Block2);
 		}
 	}
 	inputFile.close();
@@ -451,6 +461,14 @@ void Track::initalizeTrain(int lineCode){
 //Desc: returns the red and green line details as a formatted string
 string Track::toString(){
 	string retString = "";
+	retString = retString + "GREEN LINE: \n";
+	for(unsigned int g = 0; g < greenLine.size(); g++){
+		retString = retString + greenLine.at(g)->toString();
+	}
+	/*retString = retString + "\n RED LINE: \n";
+	for(unsigned int r = 0; r < redLine.size(); r++){
+		retString = retString + redLine.at(r)->toString();
+	}*/
 	return retString;
 }
 //Params: None
@@ -458,6 +476,14 @@ string Track::toString(){
 //Desc: returns ALL the red and green line details as a formatted string
 string Track::toStringDetailed(){
 	string retString = "";
+	retString = retString + "GREEN LINE: \n";
+	for(unsigned int g = 0; g < greenLine.size(); g++){
+		retString = retString + greenLine.at(g)->toStringDetailed();
+	}
+	/*retString = retString + "\n RED LINE: \n";
+	for(unsigned int r = 0; r < redLine.size(); r++){
+		retString = retString + redLine.at(r)->toStringDetailed();
+	}*/
 	return retString;
 }
 

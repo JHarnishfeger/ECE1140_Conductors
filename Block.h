@@ -10,6 +10,7 @@
 #include <vector>
 using std::string;
 using std::vector;
+using namespace std;
 
 //Block class
 class Block{

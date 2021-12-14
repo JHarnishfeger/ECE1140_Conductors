@@ -71,14 +71,13 @@ bool beaconPresentIN, uint32_t trackCircuitDataIN, uint16_t beaconDataIN){
 Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, double gradeIN, int speedLimitIN, string typeIN, int stationSideIN, double elevationIN, double suggestedSpeedIN){
 	line = lineIN;
 	branch = branchIN;
-	
 	nextBranches = "";
 	if(typeIN.substr(0,2) == "SW"){
 		string Block1 = typeIN.substr(7,(typeIN.find_first_of(":") - 7));
 		string Block2 =  typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_last_of(")") - (typeIN.find_first_of(":") + 1)));
+		int Block1int, Block2int;
 		std::stringstream ssB1(Block1);
 		std::stringstream ssB2(Block2);
-		int Block1int, Block2int;
 		ssB1 >> Block1int;
 		ssB2 >> Block2int;
 		vector<int> nb;
@@ -648,6 +647,7 @@ uint16_t Block::getBeaconData(){
 //Desc: returns a representation of the block as a formatted string
 string Block::toString(){
 	string retString = "";
+	retString = "[" + type + "," + branch + "," + std::to_string(number) + "," + std::to_string(length) + ",Train:" + std::to_string(trainPresent) + "]";
 	return retString;
 }
 //Params: None
@@ -655,5 +655,22 @@ string Block::toString(){
 //Desc: returns ALL the data about the block as a formatted string
 string Block::toStringDetailed(){
 	string retString = "";
+	retString = "[" + type + "," + branch + "," + std::to_string(number) + "," + std::to_string(length) + ",Train:" + std::to_string(trainPresent) + "]:\n";
+	retString = retString + "BLOCK STATS: \n";
+	retString = retString + "\t Line: " + line;
+	retString = retString + "\t Speed Limit: " + std::to_string(speedLimit);
+	retString = retString + "\t Station Name: " + stationName;
+	retString = retString + "\t Next Blocks: " + std::to_string(nextBlocks.at(0)) + "," + std::to_string(nextBlocks.at(1)) + "\n";;
+	retString = retString + "\t Authority: " + std::to_string(authority);
+	retString = retString + "\t Grade: " + std::to_string(grade);
+	retString = retString + "\t Elevation: " + std::to_string(elevation);
+	retString = retString + "\t Next Branches: " + nextBranches + "\n";
+	retString = retString + "\t Passengers: " + std::to_string(passengers);
+	retString = retString + "\t Suggested Speed: " + std::to_string(suggestedSpeed);
+	retString = retString + "\t Station Side: " + std::to_string(stationSide) + "\n";
+	retString = retString + "\t Traffic Light: " + std::to_string(trafficLightStatus);
+	retString = retString + "\t Crossing Status: " + std::to_string(crossingStatus);
+	retString = retString + "\t Switch Status: " + std::to_string(switchStatus);
+	retString = retString + "\t Beacon Present: " + std::to_string(beaconPresent);
 	return retString;
 }
