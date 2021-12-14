@@ -424,38 +424,26 @@ bool Track::fixPower(string line, int id){
 //Params: vector<Block>
 //Returns: None
 //Desc: takes in a vector of blocks and updates the track with inputted vector<Block>
-void updateTrack(vector<Block>){
-	//WIP
+void Track::updateTrack(vector<Block> newTrack){
+	for(unsigned int t = 0; t < newTrack.size(); t++){
+		for(unsigned int g = 0; g < greenLine.size(); g++){
+			if((newTrack.at(t).getLine() == "Green") && (newTrack.at(t).getBlockNumber() == greenLine.at(g)->getBlockNumber())){
+				greenLine.at(g) = &newTrack.at(t);
+			}
+		}
+		for(unsigned int r = 0; r < redLine.size(); r++){
+			if((newTrack.at(t).getLine() == "Red") && (newTrack.at(t).getBlockNumber() == redLine.at(r)->getBlockNumber())){
+				redLine.at(r) = &newTrack.at(t);
+			}
+		}
+	}
 }
-//Params: None
-//Returns string
-//Desc: returns a formatted string representation of the track
-string Track::toString(){
-	string retString = "";
-	retString = retString + "GREEN LINE: \n";
-	for(unsigned int g = 0; g < greenLine.size(); g++){
-		retString = retString + greenLine.at(g)->toString();
-	}
-	retString = retString + "\n RED LINE: \n";
-	for(unsigned int r = 0; r < redLine.size(); r++){
-		retString = retString + redLine.at(r)->toString();
-	}
-	return retString;
+//Params: int
+//Returns: None
+//Desc: initalizes a train to occupy the first block of the inputted line
+void Track::initalizeTrain(int lineCode){
+	//wIP
 }
-//Params: None
-//Returns: string
-//Desc: returns a detailed formatted string representation of the track
-string Track::toStringDetailed(){
-	string retString = "";
-	retString = retString + "GREEN LINE: \n";
-	for(unsigned int g = 0; g < greenLine.size(); g++){
-		retString = retString + greenLine.at(g)->toStringDetailed();
-	}
-	retString = retString + "\n RED LINE: \n";
-	for(unsigned int r = 0; r < redLine.size(); r++){
-		retString = retString + redLine.at(r)->toStringDetailed();
-	}
-	return retString;
-}
+
 
 
