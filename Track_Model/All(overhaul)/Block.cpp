@@ -534,16 +534,15 @@ bool Block::getBeaconPresent(){
 //Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
 void Block::encodeTrackCircuitData(){
 	
-	uint32_t speedLimitU, suggestedSpeedU, authorityU; 
-	//blockNumberU, lengthU;
+	uint64_t speedLimitU, suggestedSpeedU, authorityU, blockNumberU, lengthU;
 	
-	speedLimitU = (uint32_t)(speedLimit + 0.5);
-	suggestedSpeedU = (uint32_t)(suggestedSpeed + 0.5);
-	authorityU = (uint32_t)(authority + 0.5);
-	//blockNumberU = (uint32_t)(number);
-	//lengthU = (uint32_t)(length);
+	speedLimitU = (uint64_t)(speedLimit + 0.5);
+	suggestedSpeedU = (uint64_t)(suggestedSpeed + 0.5);
+	authorityU = (uint64_t)(authority + 0.5);
+	blockNumberU = (uint64_t)(number);
+	lengthU = (uint64_t)(length);
 	
-	trackCircuitData = ((((uint32_t)speedLimitU)<<16)+(((uint32_t)suggestedSpeedU)<<8)+(((uint32_t)authorityU)));
+	trackCircuitData = ((((uint64_t)lengthU)<<32)+(((uint64_t)blockNumberU)<<24)+(((uint64_t)speedLimitU)<<16)+(((uint64_t)suggestedSpeedU)<<8)+(((uint64_t)authorityU)));
 }
 //Params: None
 //Returns: uint32_t
