@@ -38,6 +38,8 @@ private slots:
 
     void on_selectBlockButton_clicked();
 
+    void updateDisplay();
+
 private:
     Ui::TrackModel *ui;
     Track t;
