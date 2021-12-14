@@ -52,7 +52,10 @@ class Track{
 		bool fixCircuit(string,int);
 		bool fixPower(string,int);
 		void updateTrack(vector<Block>);
+		//intergration:
 		void initalizeTrain(int);
+		uint64_t handleTCTrainInfo(uint8_t,int,bool);
+		uint16_t handleBeaconTrainInfo(uint8_t,int,bool);
 		//toStrings
 		string toString();
 		string toStringDetailed();

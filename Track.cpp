@@ -5,8 +5,9 @@ using namespace std;
 //Constructors:
 //Default constructor
 Track::Track(){
-	loadTrack("greenLine.txt");
-	suggSpeed = 45.0;
+	//cout << calling default constructor << endl;
+	//loadTrack("greenLine.txt");
+	//suggSpeed = 45.0;
 }
 //Full input constructor
 Track::Track(vector<Block*> greenLineIN, vector<Block*> redLineIN, double suggSpeedIN){
@@ -474,11 +475,75 @@ void Track::updateTrack(vector<Block> newTrack){
 		}
 	}
 }
-//Params: int
-//Returns: None
-//Desc: initalizes a train to occupy the first block of the inputted line
-void Track::initalizeTrain(int lineCode){
-	//wIP
+//Params: uint8_t, int
+//Returns: uint64_t
+//Desc: handles the train info sent to Track Model by the Train Model
+uint64_t Track::handleTCTrainInfo(uint8_t currBlock, int ID, bool line){
+	
+	int blockNum = (currBlock) & 0xFF;
+	
+	if(blockNum == 0 && line == 1){
+		return greenLine.at(63)->getTrackCircuitData();
+	}else if(blockNum == 0 && line == 0){
+		return redLine.at(10)->getTrackCircuitData();
+	}else{
+		if(line == 1){
+			if(greenLine.at(blockNum)->getType() == "SWITCH"){
+				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
+					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+				}else{
+					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+				}
+			}else{
+				return greenLine.at(blockNum + 1)->getTrackCircuitData();
+			}
+		}else{
+			if(redLine.at(blockNum)->getType() == "SWITCH"){
+				if(redLine.at(blockNum)->getSwitchStatus() == 1){
+					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+				}else{
+					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+				}
+			}else{
+				return redLine.at(blockNum+1)->getTrackCircuitData();
+			}
+		}
+	}
+}
+//Params: uint8_t, int
+//Returns: uint16_t
+//Desc: handles the train info sent to Track Model by the Train Model
+uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
+	
+	int blockNum = (currBlock) & 0xFF;
+	
+	if(blockNum == 0 && line == 1){
+		return greenLine.at(63)->getBeaconData();
+	}else if(blockNum == 0 && line == 0){
+		return redLine.at(10)->getBeaconData();
+	}else{
+		if(line == 1){
+			if(greenLine.at(blockNum)->getType() == "SWITCH"){
+				if(greenLine.at(blockNum)->getSwitchStatus() == 1){
+					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+				}else{
+					return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+				}
+			}else{
+				return greenLine.at(blockNum + 1)->getBeaconData();
+			}
+		}else{
+			if(redLine.at(blockNum)->getType() == "SWITCH"){
+				if(redLine.at(blockNum)->getSwitchStatus() == 1){
+					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
+				}else{
+					return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
+				}
+			}else{
+				return redLine.at(blockNum+1)->getBeaconData();
+			}
+		}
+	}
 }
 //toStrings ------------------------------------------------------------
 //Params: None

@@ -678,6 +678,6 @@ string Block::toStringDetailed(){
 	retString = retString + "\t Traffic Light: " + std::to_string(trafficLightStatus);
 	retString = retString + "\t Crossing Status: " + std::to_string(crossingStatus);
 	retString = retString + "\t Switch Status: " + std::to_string(switchStatus);
-	retString = retString + "\t Beacon Present: " + std::to_string(beaconPresent);
+	retString = retString + "\t Beacon Present: " + std::to_string(beaconPresent) + "\n\n";
 	return retString;
 }

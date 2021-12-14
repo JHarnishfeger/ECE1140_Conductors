@@ -51,6 +51,6 @@ signals:
     void BeaconData(uint16_t BeaconData, int ID);
 public slots:
     void updateFromWayside(vector<Block> wasysideBlocks);
-    void TrainInfo(uint8_t currentBlock, int ID);
+    void TrainInfo(uint8_t currentBlock, int ID, bool line);
 };
 #endif // TRACKMODEL_H

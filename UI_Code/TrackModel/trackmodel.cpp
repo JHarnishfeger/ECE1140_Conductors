@@ -19,6 +19,11 @@ void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
     t.updateTrack(waysideBlocks);
 }
 
+void TrackModel::TrainInfo(uint8_t currentBlock, int ID, bool line){
+    emit TCData(t.handleTCTrainInfo(currentBlock, ID, line), ID);
+    emit BeaconData(t.handleBeaconTrainInfo(currentBlock, ID, line), ID);
+}
+
 
 void TrackModel::on_loadTrackButton_clicked()
 {
