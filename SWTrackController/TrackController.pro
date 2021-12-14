@@ -9,15 +9,27 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Block.cpp \
+    PLCController.cpp \
+    SWTrackController.cpp \
+    Wayside.cpp \
     main.cpp \
-    swtcinterface.cpp
+    swtcinterface.cpp \
+    waysidewin.cpp
 
 HEADERS += \
+    Authority.h \
+    Block.h \
+    PLCController.h \
     SWTrackController.h \
-    swtcinterface.h
+    WayStruct.h \
+    Wayside.h \
+    swtcinterface.h \
+    waysidewin.h
 
 FORMS += \
-    swtcinterface.ui
+    swtcinterface.ui \
+    waysidewin.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

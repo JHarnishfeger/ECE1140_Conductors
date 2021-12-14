@@ -1,364 +1,659 @@
 #include "Block.h"
 
-//Initalizing count as 0 (should increase everytime a Block constructor is called)
-int Block::count = 0;
-
-//Method: Block()
-//Params: None
-//Returns: None
-//Desc: creates a Block with default values
+//Default Constructor
 Block::Block(){
-	line = 'g';
-	branch = 'a';
-	type = "rail";
-	length = 2.0;
-	trainPresent = false;
-	id = count;
-	count++;
-	grade = 5.0;
-	suggestedSpeed = 25.0;
-	speedLimit = 30.0;
-	direction = 'e';
+	line = "Green";
+	branch = "A";
+	type = "STATION";
+	stationName = "PIONEER";
+	nextBranches = "DA";
+	vector<int> nb{13,1};
+	nextBlocks = nb;
+	number = 2;
+	speedLimit = 45;
+	srand(time(0));
+	passengers = rand() % 100 + 1;
+	trafficLightStatus = -1;
+	stationSide = 1;
+	suggestedSpeed = 5;
 	temperature = 32.0;
-	beacons = 0;
-	height = 1.0;
-	brokenRail = false;
-	brokenCircuit = false;
-	powerFailure = false;
-	crossingActivated = false;
-	switchPosition = false;
+	length = 100.0;
+	grade = 1.0;
+	elevation = 1.0;
+	authority = true;
+	railStatus = true;
+	circuitStatus = true;
+	powerStatus = true;
+	heaterStatus = true;
+	crossingStatus = false;
+	switchStatus = false;
+	trainPresent = true;
+	beaconPresent = false;
+	encodeTrackCircuitData(); //trackCircuitData = (method sets trackCircuitData)
+	encodeBeaconData(); //beaconData = (method sets beaconData)
 }
 
-//Method Block(char line, char branch, string type, double length, bool trainPresent, double grade, double suggestedSpeed, double speedLimit, char direction, double temperature, int beacons, double height, bool brokenRail, bool brokenCircuit, bool powerFailure)
-//Params: charx2, string, doublex6, boolx4, int
-//Returns: None
-//Desc: creates a Block with inputted values;
-Block::Block(char lineIN, char branchIN, string typeIN, double lengthIN, bool trainPresentIN, double gradeIN, double suggestedSpeedIN, double speedLimitIN, char directionIN,
-double temperatureIN, int beaconsIN, double heightIN, bool brokenRailIN, bool brokenCircuitIN, bool powerFailureIN, bool crossingActivatedIN, bool switchPositionIN){
+//Full-input Constructor
+Block::Block(string lineIN, string branchIN, string typeIN, string stationNameIN, string nextBranchesIN, vector<int> nextBlocksIN, int numberIN, int speedLimitIN, int passengersIN,
+int trafficLightStatusIN, int stationSideIN, double suggestedSpeedIN, double temperatureIN, double lengthIN, double gradeIN, double elevationIN, bool authorityIN,
+bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN,
+bool beaconPresentIN, uint32_t trackCircuitDataIN, uint16_t beaconDataIN){
 	line = lineIN;
 	branch = branchIN;
 	type = typeIN;
-	length = lengthIN;
-	trainPresent = trainPresentIN;
-	id = count;
-	count++;
-	grade = gradeIN;
-	suggestedSpeed = suggestedSpeedIN;
+	stationName = stationNameIN;
+	nextBranches = nextBranchesIN;
+	nextBlocks = nextBlocksIN;
+	number = numberIN;
 	speedLimit = speedLimitIN;
-	direction = directionIN;
+	passengers = passengersIN;
+	trafficLightStatus = trafficLightStatusIN;
+	stationSide = stationSideIN;
+	suggestedSpeed = suggestedSpeedIN;
 	temperature = temperatureIN;
-	beacons = beaconsIN;
-	height = heightIN;
-	brokenRail = brokenRailIN;
-	brokenCircuit = brokenCircuitIN;
-	powerFailure = powerFailureIN;
-	crossingActivated = crossingActivatedIN;
-	switchPosition = switchPositionIN;
+	length = floor(lengthIN);
+	grade = gradeIN;
+	elevation = elevationIN;
+	authority = authorityIN;
+	railStatus = railStatusIN;
+	circuitStatus = circuitStatusIN;
+	powerStatus = powerStatusIN;
+	heaterStatus = heaterStatusIN;
+	crossingStatus = crossingStatusIN;
+	switchStatus = switchStatusIN;
+	trainPresent = trainPresentIN;
+	beaconPresent = beaconPresentIN;
+	trackCircuitData = trackCircuitDataIN;
+	beaconData = beaconDataIN;
 }
 
-//Method: getCount()
-//Params: None
-//Returns: int
-//Desc: returns the value of the member variable count as an int
-int Block::getCount() const{
-	return count;
-}
-
-//Method: setLine(char line)
-//Params: char
-//Returns: None
-//Desc: sets member variable line = to inputted char only accepts ('g' or 'r')(case sensitive) otherwise defaults to NULL
-void Block::setLine(char lineIN){
-	if(lineIN == 'g' || lineIN == 'r'){
-		line = lineIN;
-	}else{
-		line = ' ';
-	}
-}
-
-//Method: getLine()
-//Params: None
-//Returns: char
-//Desc: returns the value of the line member variable as a char
-char Block::getLine(){
-	return line;
-}
-
-//Method: setBranch(char branch)
-//Params: char
-//Returns: None
-//Desc: sets member variable branc = to inputted char
-void Block::setBranch(char branchIN){
+//Functional Constructor
+Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, double gradeIN, int speedLimitIN, string typeIN, int stationSideIN, double elevationIN, double suggestedSpeedIN){
+	line = lineIN;
 	branch = branchIN;
+
+	nextBranches = "";
+	if(typeIN.substr(0,2) == "SW"){
+		string Block1 = typeIN.substr(7,(typeIN.find_first_of(":") - 7));
+		string Block2 =  typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_last_of(")") - (typeIN.find_first_of(":") + 1)));
+		std::stringstream ssB1(Block1);
+		std::stringstream ssB2(Block2);
+		int Block1int, Block2int;
+		ssB1 >> Block1int;
+		ssB2 >> Block2int;
+		vector<int> nb;
+		nb.push_back(Block1int);
+		nb.push_back(Block2int);
+		nextBlocks = nb;
+		type = typeIN.substr(0,6);
+	}else if(typeIN.substr(0,2) == "ST"){
+		if(typeIN.find(";") == (unsigned int) -1){
+			string stationNameReg = typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.length() - (typeIN.find_first_of(":") + 1)));
+			stationName = stationNameReg;
+		}else{
+			string stationNameUnder = typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_first_of(";") - typeIN.find_first_of(":") - 1));
+			stationName = stationNameUnder;
+		}
+		type = typeIN.substr(0,7);
+	}else{
+		type = typeIN;
+	}
+	number = numberIN;
+	speedLimit = speedLimitIN;
+	if(type == "STATION"){
+		srand(time(0));
+		passengers = rand() % 100 + 1;
+	}else{
+		passengers = 0;
+	}
+	trafficLightStatus = -1;
+	stationSide = stationSideIN;
+	suggestedSpeed = suggestedSpeedIN;
+	temperature = 40.0;
+	length = floor(lengthIN);
+	grade = gradeIN;
+	elevation = elevationIN;
+	authority = false;
+	railStatus = true;
+	circuitStatus = true;
+	powerStatus = true;
+	heaterStatus = false;
+	crossingStatus = false;
+	switchStatus = true;
+	trainPresent = false;
+	beaconPresent = false;
+	encodeTrackCircuitData();
+	encodeBeaconData();
 }
 
-//Method: getBranch()
-//Params: None
-//Returns: char
-//Desc: returns the value of the branch member variable as a char
-char Block::getBranch(){
-	return branch;
-}
-
-//Method: setType(string type)
+//Attributes:
+//line -----------------------------------------------------------------
 //Params: string
 //Returns: None
-//Desc: sets member variable type = inputted string only accepts ("rail", "station", "yard", "crossing", "switch")(case sensitive) otherwise defaults to NULL
-void Block::setType(string typeIN){
-	if(typeIN == "rail" || typeIN == "station" || typeIN == "yard" || typeIN == "crossing" || typeIN == "switch"){
-		type = typeIN;
-	}else{
-		type = ' ';
-	}
+//Desc: sets the value of the attribute line = to inputted string
+//Notes: line should be set to "green" or "red" function assumes no user error
+void Block::setLine(string lineIN){
+	line = lineIN;
 }
-
-//Method: getType()
 //Params: None
 //Returns: string
-//Desc: returns the value of the type member variable as a string
+//Desc: returns the value of the attribute line as a string
+string Block::getLine(){
+	return line;
+}
+//branch ---------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute branch = to inputted string
+void Block::setBranch(string branchIN){
+	branch = branchIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute branch as a string
+string Block::getBranch(){
+	return branch;
+}
+//type -----------------------------------------------------------------
+//Params: string
+//Returns: None
+//Desc: sets the value of the attribute type = to inputted string
+//Notes: type should be set to "rail", "yard", "station", "switch", or "crossing" function assumes no user error
+void Block::setType(string typeIN){
+	type = typeIN;
+}
+//Params: None
+//Returns: string
+//Desc: returns the value of the attribute type as a string
 string Block::getType(){
 	return type;
 }
-
-//Method: setLength(double length)
-//Params: double
+//stationName ----------------------------------------------------------
+//Params: string
 //Returns: None
-//Desc: sets member variable length = inputted double
-void Block::setLength(double lengthIN){
-	length = lengthIN;
+//Desc: sets the value of the attribute stationName = to inputted string
+void Block::setStationName(string stationNameIN){
+	stationName = stationNameIN;
 }
 
-//Method: getLength()
 //Params: None
-//Returns: double
-//Desc: returns the value of the member variable length as a double
-double Block::getLength(){
-	return length;
+//Returns: string
+//Desc: returns the value of the attribute stationNAme as a string
+string Block::getStationName(){
+	return stationName;
 }
-
-//Method: setTrainPresent(bool trainPresent)
-//Params: bool
+//nextBranches ---------------------------------------------------------
+//Params: string
 //Returns: None
-//Desc: sets member variable trainPresent = to inputted bool
-void Block::setTrainPresent(bool trainPresentIN){
-	trainPresent = trainPresentIN;
+//Desc: sets the value of the attribute nextBranches = to inputted string
+void Block::setNextBranches(string nextBranchesIN){
+	nextBranches = nextBranchesIN;
 }
-
-//Method: getTrainPresent()
 //Params: None
-//Returns: bool
-//Desc: returns the value of the member variable trainPresent as a bool
-bool Block::getTrainPresent(){
-	return trainPresent;
+//Returns: string
+//Desc: returns the value of the attribute nextBranches as a string
+string Block::getNextBranches(){
+	return nextBranches;
 }
-
-//Method: setId(int)
+//nextBlocks -----------------------------------------------------------
+//Params: int x2
+//Returns: None
+//Desc: sets the value of the attribute nextBlocks = to inputted ints
+void Block::setNextBlocks(int block1,int block2){
+	vector<int> retVect;
+	retVect.push_back(block1);
+	retVect.push_back(block2);
+	nextBlocks = retVect;
+}
+//Params: None
+//Returns: vector<int>
+//Desc: returns the value of the attribute nextBlocks as a vector<int>
+vector<int> Block::getNextBlocks(){
+	return nextBlocks;
+}
+//number ---------------------------------------------------------------
 //Params: int
 //Returns: None
-//Desc: set the member variable id = to inputted int
-void Block::setId(int idIN){
-	id = idIN;
+//Desc: sets the value of the attribute number = to inputted int
+void Block::setBlockNumber(int numberIN){
+	number = numberIN;
 }
 
-//Method: getId()
 //Params: None
 //Returns: int
-//Desc: returns the value of the member variable Id as an int
-int Block::getId(){
-	return id;
+//Desc: returns the value of the attribute number as an int
+int Block::getBlockNumber(){
+	return number;
 }
-
-//Method: setGrade(double grade)
-//Params: double
+//speedLimit -----------------------------------------------------------
+//Params: int
 //Returns: None
-//Desc: set the member variable grade = to the inputted double
-void Block::setGrade(double gradeIN){
-	grade = gradeIN;
-}
-
-//Method: getGrade()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member varaible grade as a double
-double Block::getGrade(){
-	return grade;
-}
-
-//Method: setSuggestedSpeed(double suggestedSpeed)
-//Params:	double
-//Returns:	None
-//Desc: set the member variable suggestedSpeed = the the inputted double
-void Block::setSuggestedSpeed(double suggestedSpeedIN){
-	suggestedSpeed = suggestedSpeedIN;
-}
-
-//Method: getSuggestedSpeed()
-//Params: None
-//Returns: double
-//Desc: returns the value of the member variable suggestedSpeed as a double
-double Block::getSuggestedSpeed(){
-	return suggestedSpeed;
-}
-
-//Method: setSpeedLimit(double speedLimit)
-//Params: double
-//Returns: None
-//Desc: sets the member variable speedLimit = to the inputted double
-void Block::setSpeedLimit(double speedLimitIN){
+//Desc: sets the value of the attribute speedLimit = to inputted int
+void Block::setSpeedLimit(int speedLimitIN){
 	speedLimit = speedLimitIN;
 }
 
-//Method: getSpeedLimit()
 //Params: None
-//Returns: double
-//Desc: returns the value of the member variable speedLimit as a double
-double Block::getSpeedLimit(){
+//Returns: int
+//Desc: returns the value of the attribute speedLimit as an int
+int Block::getSpeedLimit(){
 	return speedLimit;
 }
-
-//Method: setDirection(char direction)
-//Params: char
+//passengers -----------------------------------------------------------
+//Params: int
 //Returns: None
-//Desc: set the member variable direction = to inputted char ('n', 'e', 's', 'w') ('n' = north, 'e' = east, 's' = south, 'w' = west) otherwise defaults to None
-void Block::setDirection(char directionIN){
-	if(directionIN == 'n' || directionIN == 'e' || directionIN == 's' || directionIN == 'w'){
-		direction = directionIN;
-	}else{
-		direction = ' ';
-	}
+//Desc: sets the value of the attribute passengers = to inputted int
+void Block::setPassengerCount(int passengersIN){
+	passengers = passengersIN;
 }
-
-//Method: getDirection()
 //Params: None
-//Returns: char
-//Desc: returns the value of the member variable direction as a char
-char Block::getDirection(){
-	return direction;
+//Returns: int
+//Desc: returns the value of the attribute passengers as an int
+int Block::getPassengerCount(){
+	return passengers;
 }
-
-//Method: setTemperature(double temperature)
+//trafficLightStatus ---------------------------------------------------
+//Notes: trafficLightStatus(TLS) = -1, no traffic light on block TLS = 0, red light TLS = 1 green light
+//Params:int
+//Returns: None
+//Desc: sets the value of the attribute trafficLightStatus = to inputted int
+void Block::setTrafficLightStatus(int trafficLightStatusIN){
+	trafficLightStatus = trafficLightStatusIN;
+}
+//Params: None
+//Returns: int
+//Desc: returns the value of trafficLightStatus as an int
+int Block::getTrafficLightStatus(){
+	return trafficLightStatus;
+}
+//stationSide ----------------------------------------------------------
+//Notes: stationSide = -1 no station, stationSide = 0 station on left, stationSide = 1 station on right, stationside = 2 station on both sides
+//Params: int
+//Returns: None
+//Desc: sets the value of the attribute stationSide = to inputted int
+void Block::setStationSide(int stationSideIN){
+	stationSide = stationSideIN;
+}
+//Params: None
+//Returns: int
+//Desc: returns the value of the attribute stationSide as an int
+int Block::getStationSide(){
+	return stationSide;
+}
+//suggestedSpeed -------------------------------------------------------
 //Params: double
 //Returns: None
-//Desc: set the member variable temperature = to the inputted double
+//Desc: sets the value of the attribute suggestedSpeed = to inputted double
+void Block::setSuggestedSpeed(double suggestedSpeedIN){
+	suggestedSpeed = suggestedSpeedIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute suggestedSpeed as a double
+double Block::getSuggestedSpeed(){
+	return suggestedSpeed;
+}
+//temperature ----------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute temperature = to inputted double
 void Block::setTemperature(double temperatureIN){
 	temperature = temperatureIN;
 }
-
-//Method: getTemperature()
 //Params: None
 //Returns: double
-//Desc: returns the value of the member variable temperature as a double
+//Desc: returns the value of the attribute temperature as a double
 double Block::getTemperature(){
 	return temperature;
 }
-
-//Method: setBeacons(int beacons)
-//Params: int
-//Returns: None
-//Desc: set the member variable beacons = to the inputted int
-void Block::setBeacons(int beaconsIN){
-	beacons = beaconsIN;
-}
-
-//Method: getBeacons()
-//Params: None
-//Returns: int
-//Desc: returns the value of the member variable beacons as an int
-int Block::getBeacons(){
-	return beacons;
-}
-
-//Method: setHeight(double height)
+//length ---------------------------------------------------------------
 //Params: double
 //Returns: None
-//Desc: set the member variable height = to the inputted double
-void Block::setHeight(double heightIN){
-	height = heightIN;
+//Desc: sets the value of the attribute length = to inputted double
+void Block::setLength(double lengthIN){
+	length = lengthIN;
 }
-
-//Method: getHeight()
 //Params: None
 //Returns: double
-//Desc: returns the value of the member variable height as a double
-double Block::getHeight(){
-	return height;
+//Desc: returns the value of the attribute length as a double
+double Block::getLength(){
+	return length;
 }
-
-//Method: setBrokenRail(bool brokenRailIN)
+//grade ----------------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute grade = to inputted double
+void Block::setGrade(double gradeIN){
+	grade = gradeIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute grade as a double
+double Block::getGrade(){
+	return grade;
+}
+//elevation ---------------------------------------------------------------
+//Params: double
+//Returns: None
+//Desc: sets the value of the attribute elevation = to inputted double
+void Block::setElevation(double elevationIN){
+	elevation = elevationIN;
+}
+//Params: None
+//Returns: double
+//Desc: returns the value of the attribute elevation as a double
+double Block::getElevation(){
+	return elevation;
+}
+//authority ------------------------------------------------------------
+//Notes: bool true = train has authority false = true has no authority
+//Params: bool
+//Returns None
+//Desc: sets the value of the attribute authority = to inputted bool
+void Block::setAuthority(bool authorityIN){
+	authority = authorityIN;
+}
+//Params: None
+//Returns bool
+//Desc: returns the value of the attribute authority as a bool
+bool Block::getAuthority(){
+	return authority;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute authority
+void Block::toggleAuthority(){
+	authority = !(authority);
+}
+//railStatus -----------------------------------------------------------
+//Notes: bool true = no rail failures bool false = rail failure
 //Params: bool
 //Returns: None
-//Desc: set the member variable brokenRail = to the inputted bool
-void Block::setBrokenRail(bool brokenRailIN){
-	brokenRail = brokenRailIN;
+//Desc: sets the value of the attribute railStatus = to inputted bool
+void Block::setRailStatus(bool railStatusIN){
+	railStatus = railStatusIN;
 }
-
-//Method: getBrokenRail()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable brokenRail as a bool
-bool Block::getBrokenRail(){
-	return brokenRail;
+//Desc: returns the value of the attribute railStatus as a bool
+bool Block::getRailStatus(){
+	return railStatus;
 }
-
-//Method: setBrokenCircuit(bool brokenCircuitIN)
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute railStatus
+void Block::toggleRailStatus(){
+	railStatus = !(railStatus);
+}
+//circuitStatus --------------------------------------------------------
+//Notes: bool true = no circuit failures bool false = circuit failure
 //Params: bool
 //Returns: None
-//Desc: set the member variable brokenCircuit = to the inputted bool
-void Block::setBrokenCircuit(bool brokenCircuitIN){
-	brokenCircuit = brokenCircuitIN;
+//Desc: sets the value of the attribute circuitStatus = to inputted bool
+void Block::setCircuitStatus(bool circuitStatusIN){
+	circuitStatus = circuitStatusIN;
 }
-
-//Method: getBrokenCircuit()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable brokenCircuit as a bool
-bool Block::getBrokenCircuit(){
-	return brokenCircuit;
+//Desc: returns the value of the attribute circuitStatus as a bool
+bool Block::getCircuitStatus(){
+	return circuitStatus;
 }
-
-//Method: setPowerFailure(bool powerFailureIN)
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute circuitStatus
+void Block::toggleCircuitStatus(){
+	circuitStatus = !(circuitStatus);
+}
+//powerStatus ----------------------------------------------------------
+//Notes: bool true = no power failures bool false = power failure
 //Params: bool
 //Returns: None
-//Desc: set the member variable powerFailure = to the inputted bool
-void Block::setPowerFailure(bool powerFailureIN){
-	powerFailure = powerFailureIN;
+//Desc: sets the value of the attribute powerStatus = to inputted bool
+void Block::setPowerStatus(bool powerStatusIN){
+	powerStatus = powerStatusIN;
 }
-
-//Method: getPowerFailure()
 //Params: None
 //Returns: bool
-//Desc: returns the value of the member variable powerFailure as a bool
-bool Block::getPowerFailure(){
-	return powerFailure;
+//Desc: returns the value of the attribute powerStatus as a bool
+bool Block::getPowerStatus(){
+	return powerStatus;
 }
-
-void Block::setCrossing(bool c){
-	crossingActivated = c;
-}
-
-bool Block::getCrossing(){
-	return crossingActivated;
-}
-
-void Block::setSwitch(bool s){
-	switchPosition = s;
-}
-
-bool Block::getSwitch(){
-	return switchPosition;
-}
-
-//Method: toConsole()
 //Params: None
 //Returns: None
-//Desc: prints the Blocks member variable values in a fromatted string to console
-void Block::toConsole(){
-	cout << "line: " << line << " direction: " << direction << endl;
-	cout << "type: " << type << " temperature: " << temperature << endl;
-	cout << "length: " << length << " beacons: " << beacons << endl;
-	cout << "trainPresent: " << trainPresent << " height: " << height << endl;
-	cout << "count: " << count << " brokenRail: " << brokenRail << endl;
-	cout << "id: " << id << " brokenCircuit: " << brokenCircuit << endl;
-	cout << "grade: " << grade << " powerFailure: " << powerFailure << endl;
-	cout << "suggestedSpeed: " << suggestedSpeed << " speedLimit: " << speedLimit << endl;
+//Desc: toggles the bool value of the attribute powerStatus
+void Block::togglePowerStatus(){
+	powerStatus = !(powerStatus);
+}
+//heaterStatus ---------------------------------------------------------
+//Notes: bool true = heater is active bool false = heater is inactive
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute heaterStatus = to inputted bool
+void Block::setHeaterStatus(bool heaterStatusIN){
+	heaterStatus = heaterStatusIN;
+	if(heaterStatus == true){
+		temperature = 50.0;
+	}else{
+		temperature = 40.0;
+	}
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute heaterStatus as a bool
+bool Block::getHeaterStatus(){
+	return heaterStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute heaterStatus
+void Block::toggleHeaterStatus(){
+	heaterStatus = !(heaterStatus);
+	if(heaterStatus == true){
+		temperature = 50.0;
+	}else{
+		temperature = 40.0;
+	}
+}
+//crossingStatus -------------------------------------------------------
+//Notes: bool true = crossing is active bool false = crossing is inactive
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute crossingStatus = to inputted bool
+void Block::setCrossingStatus(bool crossingStatusIN){
+	crossingStatus = crossingStatusIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute crossingStaus as a bool
+bool Block::getCrossingStatus(){
+	return crossingStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute crossingStatus
+void Block::toggleCrossingStatus(){
+	crossingStatus = !(crossingStatus);
+}
+//switchStatus ---------------------------------------------------------
+//Notes: bool true = crossing is pointed upwards towards nextBranch[0] bool false = crossing is pointed downwards towards nextBranch[1]
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute switchStatus = to inputted bool
+void Block::setSwitchStatus(bool switchStatusIN){
+	switchStatus = switchStatusIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute switchStatus as a bool
+bool Block::getSwitchStatus(){
+	return switchStatus;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute switchStatus
+void Block::toggleSwitchStatus(){
+	switchStatus = !(switchStatus);
+}
+//trainPresent ---------------------------------------------------------
+//Notes: bool true = train is present on block false = no train is present
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute trainPresent = to inputted bool
+void Block::setTrainPresent(bool trainPresentIN){
+	trainPresent = trainPresentIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute trainPresent as a bool
+bool Block::getTrainPresent(){
+	return trainPresent;
+}
+//Params: None
+//Returns: None
+//Desc: toggles the bool value of the attribute trainPresent
+void Block::toggleTrainPresent(){
+	trainPresent = !(trainPresent);
+}
+//beaconPresent --------------------------------------------------------
+//Notes: bool true = beacon is present on block false = no beacon present
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute beaconPresent = to inputted bool
+void Block::setBeaconPresent(bool beaconPresentIN){
+	beaconPresent = beaconPresentIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute beaconPresent as a bool
+bool Block::getBeaconPresent(){
+	return beaconPresent;
+}
+//trackCircuitData -----------------------------------------------------
+//Params: None
+//Returns: None
+//Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
+void Block::encodeTrackCircuitData(){
+
+	uint32_t speedLimitU, suggestedSpeedU, authorityU;
+	//blockNumberU, lengthU;
+
+	speedLimitU = (uint32_t)(speedLimit + 0.5);
+	suggestedSpeedU = (uint32_t)(suggestedSpeed + 0.5);
+	authorityU = (uint32_t)(authority + 0.5);
+	//blockNumberU = (uint32_t)(number);
+	//lengthU = (uint32_t)(length);
+
+	trackCircuitData = ((((uint32_t)speedLimitU)<<16)+(((uint32_t)suggestedSpeedU)<<8)+(((uint32_t)authorityU)));
+}
+//Params: None
+//Returns: uint32_t
+//Desc: returns a unsigned 32-bit integer representation of the track circuit data
+uint32_t Block::getTrackCircuitData(){
+	return trackCircuitData;
+}
+//beaconData -----------------------------------------------------------
+//Params: None
+//Returns: None
+//Dessc: encodes that that needs transfferred between modules into a decodable unsigned 16 bit integer
+void Block::encodeBeaconData(){
+	if(beaconPresent == 1){
+
+		int stationCode, incomingCode;
+		bool headlights, stationHere;
+
+		if(stationName == "SHADYSIDE"){
+			stationCode = 1;
+		}else if(stationName == "HERRON_AVE"){
+			stationCode = 2;
+		}else if(stationName == "SWISSVILLE"){
+			stationCode = 3;
+		}else if(stationName == "PENN_STATION"){
+			stationCode = 4;
+		}else if(stationName == "STEEL_PLAZA"){
+			stationCode = 5;
+		}else if(stationName == "FIRST_AVE"){
+			stationCode = 6;
+		}else if(stationName == "STATION_SQUARE"){
+			stationCode = 7;
+		}else if(stationName == "SOUTH_HILLS_JUNCTION"){
+			stationCode = 8;
+		}else if(stationName == "PIONEER"){
+			stationCode = 9;
+		}else if(stationName == "EDGEBROOK"){
+			stationCode = 10;
+		}else if(stationName == "WHITED"){
+			stationCode = 11;
+		}else if(stationName == "SOUTH_BANK"){
+			stationCode = 12;
+		}else if(stationName == "CENTRAL"){
+			stationCode = 13;
+		}else if(stationName == "INGLEWOOD"){
+			stationCode = 14;
+		}else if(stationName == "OVERBROOK"){
+			stationCode = 15;
+		}else if(stationName == "GLENBURY"){
+			stationCode = 16;
+		}else if(stationName == "DORMONT"){
+			stationCode = 17;
+		}else if(stationName == "MT_LEBANON"){
+			stationCode = 18;
+		}else if(stationName == "POPLAR"){
+			stationCode = 19;
+		}else if(stationName == "CASTLE_SHANNON"){
+			stationCode = 20;
+		}else if(type == "YARD"){
+			stationCode = 21;
+		}else{
+			stationCode = 31;
+		}
+
+		if(type == "UNDERGROUND"){
+			headlights = 1;
+		}else{
+			headlights = 0;
+		}
+
+		if(type == "STATION"){
+			stationHere = 1;
+		}else{
+			stationHere = 0;
+		}
+
+		if(headlights == 0 && stationHere == 0){
+			incomingCode = 1;
+		}else if(headlights == 1 && stationHere == 0){
+			incomingCode = 2;
+		}else if(headlights == 0 && stationHere == 1){
+			incomingCode = 3;
+		}else{
+			incomingCode = 4;
+		}
+
+		beaconData = (((uint16_t)stationCode<<8)+(((uint16_t)incomingCode)));
+
+	}else{
+		beaconData = 0;
+	}
+}
+//Params: None
+//Returns uint16_t
+//Desc: returns a unsigned 16-bit integer representation of the beacon data
+uint16_t Block::getBeaconData(){
+	return beaconData;
+}
+//toStrings ------------------------------------------------------------
+//Params: None
+//Returns: string
+//Desc: returns a representation of the block as a formatted string
+string Block::toString(){
+	string retString = "";
+	return retString;
+}
+//Params: None
+//Returns: string
+//Desc: returns ALL the data about the block as a formatted string
+string Block::toStringDetailed(){
+	string retString = "";
+	return retString;
 }

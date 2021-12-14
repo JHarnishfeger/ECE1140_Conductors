@@ -1,0 +1,10 @@
+release/serialport.o
+release/traincontroller.o
+release/hwtrainui.o
+release/main.o
+release/trainmodel.o
+release/trainui.o
+release/moc_serialport.o
+release/moc_traincontroller.o
+release/moc_hwtrainui.o
+release/moc_trainui.o
