@@ -21,7 +21,7 @@ public:
     int i=0;
 
     //main train
-    trainModel *mainTrain = new trainModel(HorS);
+    trainModel *mainTrain = new trainModel(HorS,RorG);
     UISWTrainController s;
     //train controller UI
 
@@ -30,15 +30,15 @@ public:
     QTimer *timer;
 
     //UI constructor and descructor
-    trainUI(QWidget *parent = nullptr, bool HardwareOrSoftware = 1);
+    trainUI(QWidget *parent = nullptr, bool HardwareOrSoftware = 1,int ID = 1,bool RorG = 1);
     ~trainUI();
 
 private slots:
 
     //Set Functions for display
-    QString setBFail(bool bf);
-    QString setEFail(bool ef);
-    QString setSFail(bool sf);
+    QString setBFail();
+    QString setEFail();
+    QString setSFail();
 
     //update functoin
     void updateTestUI();
@@ -56,6 +56,7 @@ private slots:
 
     //Get new track circuit data
     void callTCData();
+
 private:
 
     //UI
@@ -65,7 +66,9 @@ private:
     bool brakes;
     bool eBrakes;
     bool brakeFail,engineFail,signalFail;
-    bool HorS; // Software is value of 1 // Hardware is value of 0
+    bool HorS; //Software is value of 1 and Hardware is value of 0
+    int  ID;
+    bool RorG; //Red is 1 and Green is 0
 
 };
 #endif // TRAINUI_H

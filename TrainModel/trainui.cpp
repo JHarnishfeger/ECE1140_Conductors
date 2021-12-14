@@ -5,7 +5,7 @@
 #include <string.h>
 
 
-trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware)
+trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware,int ID,bool RedOrGreen)
     : QMainWindow(parent)
     , ui(new Ui::trainUI)
 {
@@ -24,10 +24,13 @@ trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware)
     //Connects train controller getTCData to train model GetTCData
     connect(&s,SIGNAL(getnewTCSignal()), this, SLOT(updateTestUI()));
 
+    RorG = RedOrGreen;
     HorS = HardwareOrSoftware;
+    mainTrain->setID(ID);
     ui->Height_2->display(3);
     ui->Length_2->display(20);
     ui->Width_2->display(3);
+
 }
 
 trainUI::~trainUI(){
@@ -37,7 +40,7 @@ trainUI::~trainUI(){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setBFail(bool bt){
+QString trainUI::setBFail(){
 
   if (brakeFail == true){
     return "FAIL";
@@ -52,7 +55,7 @@ QString trainUI::setBFail(bool bt){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setEFail(bool et){
+QString trainUI::setEFail(){
   if (engineFail == true){
     return "FAIL";
   }
@@ -65,7 +68,7 @@ QString trainUI::setEFail(bool et){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setSFail(bool st){
+QString trainUI::setSFail(){
   if (signalFail == true){
     return "FAIL";
   }
@@ -83,7 +86,7 @@ void trainUI::on_EngineFail_clicked()
     else {
          engineFail = true;
     }
-    ui->label->setText(setEFail(engineFail));
+    ui->label->setText(setEFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -97,7 +100,7 @@ void trainUI::on_BrakeFail_clicked()
          brakeFail = true;
     }
 
-    ui->label_2->setText(setBFail(brakeFail));
+    ui->label_2->setText(setBFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -110,7 +113,7 @@ void trainUI::on_SignalFail_clicked()
     else {
          signalFail = true;
     }
-    ui->label_3->setText(setSFail(signalFail));
+    ui->label_3->setText(setSFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 

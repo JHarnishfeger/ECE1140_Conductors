@@ -13,13 +13,17 @@ CONFIG += c++11
 SOURCES += \
     ../TrainControlSW/SWTrainController.cpp \
     ../TrainControlSW/uiswtraincontroller.cpp \
+    ../MBO/SMBA.cpp \
     main.cpp \
+    trainmaker.cpp \
     trainmodel.cpp \
     trainui.cpp
 
 HEADERS += \
     ../TrainControlSW/SWTrainController.h \
     ../TrainControlSW/uiswtraincontroller.h \
+    ../MBO/SMBA.h \
+    trainmaker.h \
     trainmodel.h \
     trainui.h
 
