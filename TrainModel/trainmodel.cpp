@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <iostream>
 #include "trainmodel.h"
+#include<QDebug>
 
 /*Function is the constructor with inputs of
   assigned crew and assigned number of cars
   that are connected to the train.
   */
-trainModel::trainModel() {
+trainModel::trainModel(bool HardwareOrSoftware) {
   authority = 0;
   numPassengers = 0;
   crewCount = 1;
   carCount = 2;
-  mass = carCount * modelMass;
-  actualSpeed = 0;
-  acceleration = 0;
+  mass = (carCount * modelMass) + (numPassengers * 70);
+  actualSpeed0 = 0;
+  actualSpeed1 = 1;
+  acceleration0 = 0;
+  acceleration1 = 0;
   leftDoor = false;
   rightDoor = false;
   interiorLights = true;
@@ -25,6 +28,9 @@ trainModel::trainModel() {
   signalFail = false;
   brakeFail = false;
   temperature = 60;
+  decelerationRateBrake = -0.2;
+  decelerationRateEmergencyBrake = -0.4;
+  HorS = HardwareOrSoftware;
 };
 
 /*Function is to act as the de-constructor
@@ -50,58 +56,82 @@ void trainModel::setSpeed(double inputPower){
   //setting power for display
   power = inputPower;
 
-  //Calculating speed
-  if(actualSpeed == 0){
-      actualSpeed = 1;
-  }
 
-  force = power/actualSpeed;
-  acceleration = force/mass;
-
-  if (acceleration > 2){
-      acceleration = 2;
-  }
-
-  //if the Brakes or Emergency-Brakes are on
   if(brakes == true){
-      acceleration = -1;
-      if(actualSpeed <= 1){
-          actualSpeed = 0;
-          acceleration = 0;
-      }
+      if(acceleration1 > 0)
+        acceleration1 = 0;
+    acceleration1 = acceleration1 + decelerationRateBrake;
+    if((actualSpeed1+acceleration1) <= 0){
+        actualSpeed1 = 0;
+        actualSpeed0 = 0;
+        acceleration0 = 0;
+        acceleration1 = 0;
+    }
   }
-
-  if(eBrakes == true){
-      acceleration = -2;
-      if(actualSpeed <= 2){
-          actualSpeed = 0;
-          acceleration = 0;
-          engineFail = false;
-          signalFail = false;
+  else if(eBrakes == true){
+        if(acceleration1 > 0)
+            acceleration1 = 0;
+        acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
+        if((actualSpeed1+acceleration1) <= 0){
+            engineFail = false;
+            signalFail = false;
+            actualSpeed1 = 0;
+            actualSpeed0 = 0;
+            acceleration0 = 0;
+            acceleration1 = 0;
+        }
       }
-  }
-
-  //Doesnt work well need to fix
-  if(brakeFail == true){
-      acceleration = -0.1;
-      if(actualSpeed <= 0.1){
-          actualSpeed = 0;
-          acceleration = 0;
+    //Doesnt work well need to fix
+    else if(brakeFail == true){
+        if(acceleration1 > 0)
+            acceleration1 = 0;
+        acceleration1 = acceleration1 - 0.01;
+        if((actualSpeed1+acceleration1) <= 0){
+            actualSpeed1 = 0;
+            actualSpeed0 = 0;
+            acceleration0 = 0;
+            acceleration1 = 0;
+            brakeFail = false;
+        }
+     }
+  else if(engineFail == true){
+      if(acceleration1 > 0)
+        acceleration1 = 0;
+      acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
+      if((actualSpeed1+acceleration1) <= 0){
+          actualSpeed1 = 0;
+          actualSpeed0 = 0;
+          acceleration0 = 0;
+          acceleration1 = 0;
           brakeFail = false;
       }
-  }
+   }
+    else {
+      if(actualSpeed1==0)
+        actualSpeed1=1;
+      force = power/actualSpeed1;
+      acceleration1 = force/mass;
+      if (acceleration1 > 2){
+          acceleration1 = 2;
+      }
+    }
 
-  actualSpeed = actualSpeed + acceleration;
+  actualSpeed1 = actualSpeed0 + ((.5) * (acceleration0 + acceleration1));
+  distanceTraveled += actualSpeed1;
+
+  //reinitializing the previous iterated acceleration and speed
+  acceleration0 = acceleration1;
+  actualSpeed0 = actualSpeed1;
 }
 
 /*Functions is to return the speed or accleration
  * of the train.*/
 double trainModel::getSpeed(){
-    return actualSpeed;
+    return actualSpeed1;
 }
 
 double trainModel::getAcceleration(){
-    return acceleration;
+    return acceleration1;
 }
 
 //speed limit functions
@@ -277,11 +307,11 @@ int trainModel::getID(){
 }
 
 //Track circuit get and set
-void trainModel::setTCData(uint32_t Data){
+void trainModel::setTCData(uint64_t Data){
     TCData = Data;
 }
 
-uint32_t trainModel::getTCData(){
+uint64_t trainModel::getTCData(){
     if(signalFail == true){
         return 0;
     }

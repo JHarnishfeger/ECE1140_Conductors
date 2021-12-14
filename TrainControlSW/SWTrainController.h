@@ -41,6 +41,8 @@ class SWTrainController{
         bool at_station = false;
         bool just_stopped = false;
         bool mode = true;
+        int blocknum = -1;
+        int blocklength = 0;
         //double gps = 0;
 
       public:

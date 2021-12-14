@@ -1,27 +1,35 @@
 #ifndef TRAINMODEL_H
 #define TRAINMODEL_H
 #include <iostream>
+#include <QObject>
+//#include "SMBA.h"
 
 class trainModel{
 
     private:
+
+        //Hardware 0 or Software 1
+        bool HorS;
+
         //ID of train and next station
         int ID;
         std::string nextStation;
 
         //speed variables
-        double actualSpeed;
+        double actualSpeed0,actualSpeed1;
         double suggestedSpeed;
-        double acceleration;
+        double acceleration0,acceleration1;
         double power;
         int speedLimit;
+        double decelerationRateBrake;
+        double decelerationRateEmergencyBrake;
 
         //passenger variable
         int numPassengers;	//number of passengers
 
         //metrics of the train
         double mass; //in Kg
-        double modelMass = 4000;
+        double modelMass = 4000; //kg
         double width,length,height;
         int carCount;
         int crewCount;
@@ -42,15 +50,15 @@ class trainModel{
         double distanceTraveled;
 
         //Track Circuit Data
-        uint32_t TCData;
+        uint64_t TCData;
 
         //Beacon Data
         uint16_t BeaconData;
 
     public:
-        trainModel();
-        trainModel(double sS,int t,int a);
+        trainModel(bool HardwareOfSoftware);
         ~trainModel();
+
 
         //IDs
         void setID(int id);
@@ -115,12 +123,20 @@ class trainModel{
         int getSpeedLimit();
 
         //send Track Circuit Data
-        void setTCData(uint32_t Data);
-        uint32_t getTCData();
+        void setTCData(uint64_t Data);
+        uint64_t getTCData();
 
         //send Beacon Data
         void setBeaconData(uint16_t Data);
         uint16_t getBeaconData();
+
+    signals:
+
+        //Signals for MBO
+        double getMovingBlockAuthority();
+        double getMovingBlockSpeed();
+        void receiveCoords(int trainID, double latitude, double longitude, double distanceTravelled);
+
 };
 
 #endif // TRAINMODEL_H

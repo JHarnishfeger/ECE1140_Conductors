@@ -180,8 +180,10 @@ void SWTrainController::decodeBeacon(){
 
 void SWTrainController::decodeTrackCircuit(){
 
-    uint32_t tcdata = train->getTCData();
+    int64_t tcdata = train->getTCData();
 
+    blocklength = (tcdata >> 32) & 0x1FF;
+    blocknum = (tcdata >> 24) & 0xFF;
     speed_limit = (tcdata >> 16) & 0xFF;
     setpoint_velocity = (tcdata >> 8) & 0xFF;
     authority = (tcdata) & 0xFF;

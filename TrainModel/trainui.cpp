@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <string.h>
 
-trainUI::trainUI(QWidget *parent)
+
+trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware)
     : QMainWindow(parent)
     , ui(new Ui::trainUI)
 {
@@ -12,12 +13,18 @@ trainUI::trainUI(QWidget *parent)
     //timer set up and updateUI running function
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(updateTestUI()));
+    timer->start(1000);
 
     //Connects traincontroller to train and train timer to TC timer
     s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
     s.show();
     connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
     timer ->start(1000);
+
+    HorS = HardwareOrSoftware;
+    ui->Height_2->display(3);
+    ui->Length_2->display(20);
+    ui->Width_2->display(3);
 }
 
 trainUI::~trainUI(){
@@ -29,7 +36,6 @@ trainUI::~trainUI(){
   */
 QString trainUI::setBFail(bool bt){
 
-  brakeFail = bt;
   if (brakeFail == true){
     return "FAIL";
   }
@@ -44,7 +50,6 @@ QString trainUI::setBFail(bool bt){
   failures at any point in time.
   */
 QString trainUI::setEFail(bool et){
-  engineFail = et;
   if (engineFail == true){
     return "FAIL";
   }
@@ -58,7 +63,6 @@ QString trainUI::setEFail(bool et){
   failures at any point in time.
   */
 QString trainUI::setSFail(bool st){
-  signalFail = st;
   if (signalFail == true){
     return "FAIL";
   }
@@ -70,21 +74,40 @@ QString trainUI::setSFail(bool st){
 
 void trainUI::on_EngineFail_clicked()
 {
-    ui->label->setText(setEFail(true));
+    if (engineFail == true){
+        engineFail = false;
+    }
+    else {
+         engineFail = true;
+    }
+    ui->label->setText(setEFail(engineFail));
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
 
 void trainUI::on_BrakeFail_clicked()
 {
-    ui->label_2->setText(setBFail(true));
+    if (brakeFail == true){
+        brakeFail = false;
+    }
+    else {
+         brakeFail = true;
+    }
+
+    ui->label_2->setText(setBFail(brakeFail));
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
 
 void trainUI::on_SignalFail_clicked()
 {
-    ui->label_3->setText(setSFail(true));
+    if (signalFail == true){
+        signalFail = false;
+    }
+    else {
+         signalFail = true;
+    }
+    ui->label_3->setText(setSFail(signalFail));
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -120,6 +143,8 @@ void trainUI::updateTestUI(){
     ui->lcdNumber_5->display(mainTrain->getCrew());
     ui->lcdNumber_6->display(mainTrain->getTemperature());
     ui->lcdNumber_7->display(mainTrain->getPower());
+
+
 
     //Brakes
     if(mainTrain->getBrakes() == true){
