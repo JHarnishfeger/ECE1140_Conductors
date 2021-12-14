@@ -20,8 +20,6 @@ public:
 private slots:
     void on_loadTrackButton_clicked();
 
-    void on_searchBlockButton_clicked();
-
     void on_trackHeaterOnButton_clicked();
 
     void on_trackHeaterOffButton_clicked();

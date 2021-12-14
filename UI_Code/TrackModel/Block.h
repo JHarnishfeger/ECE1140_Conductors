@@ -10,6 +10,7 @@
 #include <vector>
 using std::string;
 using std::vector;
+using namespace std;
 
 //Block class
 class Block{
@@ -136,6 +137,9 @@ class Block{
 		//beaconData:
 		void encodeBeaconData();
 		uint16_t getBeaconData();
+		//toStrings
+		string toString();
+		string toStringDetailed();
 };
 //End Block class
 #endif

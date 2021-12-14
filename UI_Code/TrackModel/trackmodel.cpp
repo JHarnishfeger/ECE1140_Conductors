@@ -17,6 +17,7 @@ TrackModel::~TrackModel()
 void TrackModel::on_loadTrackButton_clicked()
 {
     QString filename = ui->loadTrackTextBox->text();
+    cout << "clicked" << endl;
     t.loadTrack(filename.toStdString());
     int lineSize = t.getGreenLine().size();
     QStringList lineList;
@@ -28,63 +29,6 @@ void TrackModel::on_loadTrackButton_clicked()
         lineList << blockString;
     }
     ui->selectBlockDropdownBox->addItems(lineList);
-}
-
-
-void TrackModel::on_searchBlockButton_clicked()
-{
-    QString lineInput = ui->searchBlockTextBoxLine->text();
-    QString idInput = ui->searchBlockTextBoxId->text();
-    Block* searchedBlock = t.searchBlock(lineInput.toStdString(),idInput.toInt());
-
-    //Update searchedBlock current block display
-    QString currBlockLine = QString::fromStdString(searchedBlock->getLine());
-    QString currBlockBranch = QString::fromStdString(searchedBlock->getBranch());
-    QString currBlockId = QString::number(searchedBlock->getBlockNumber());
-    ui->currentBlockTextBoxLine->setText(currBlockLine);
-    ui->currentBlockTextBoxBranch->setText(currBlockBranch);
-    ui->currentBlockTextBoxId->setText(currBlockId);
-
-    //get stats for searchedBlock
-    QString currBlockRailStatus = QString::number(searchedBlock->getRailStatus());
-    QString currBlockCircuitStatus = QString::number(searchedBlock->getCircuitStatus());
-    QString currBlockPowerStatus = QString::number(searchedBlock->getPowerStatus());
-    QString currBlockHeaterStatus = QString::number(searchedBlock->getHeaterStatus());
-    QString currBlockHeaterTemp = QString::number(searchedBlock->getTemperature());
-    QString currBlockType = QString::fromStdString(searchedBlock->getType());
-    QString currBlockLength = QString::number(searchedBlock->getLength());
-    QString currBlockGrade = QString::number(searchedBlock->getGrade());
-    QString currBlockHeight = QString::number(searchedBlock->getElevation());
-    QString currBlockSpeedLimit = QString::number(searchedBlock->getSpeedLimit());
-    QString currBlockSuggestedSpeed = QString::number(searchedBlock->getSuggestedSpeed());
-    QString currBlockStationName = QString::fromStdString(searchedBlock->getStationName());
-    QString currBlockAuthority = QString::number(searchedBlock->getAuthority());
-    QString currBlockCrossingStatus = QString::number(searchedBlock->getCrossingStatus());
-    QString currBlockSwitchStatus = QString::number(searchedBlock->getSwitchStatus());
-    QString currBlockTrainPresent = QString::number(searchedBlock->getTrainPresent());
-    QString currBlockPassengers = QString::number(searchedBlock->getPassengerCount());
-
-    //update stats for searchedBlock
-    ui->lineTextBox->setText(currBlockLine);
-    ui->branchTextBox->setText(currBlockBranch);
-    ui->idTextBox->setText(currBlockId);
-    ui->railStatusTextBox->setText(currBlockRailStatus);
-    ui->circuitStatusTextBox->setText(currBlockCircuitStatus);
-    ui->powerStatusTextBox->setText(currBlockPowerStatus);
-    ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
-    ui->trackHeaterTemperatureTextBox->setText(currBlockHeaterTemp);
-    ui->typeTextBox->setText(currBlockType);
-    ui->lengthTextBox->setText(currBlockLength);
-    ui->gradeTextBox->setText(currBlockGrade);
-    ui->heightTextBox->setText(currBlockHeight);
-    ui->speedLimitTextBox->setText(currBlockSpeedLimit);
-    ui->suggestedSpeedTextBox->setText(currBlockSuggestedSpeed);
-    ui->stationNameTextBox->setText(currBlockStationName);
-    ui->authorityTextBox->setText(currBlockAuthority);
-    ui->crossingStatusTextBox->setText(currBlockCrossingStatus);
-    ui->switchStatusTextBox->setText(currBlockSwitchStatus);
-    ui->trainPresentTextBox->setText(currBlockTrainPresent);
-    ui->passengersTextBox->setText(currBlockPassengers);
 }
 
 void TrackModel::on_trackHeaterOnButton_clicked()
@@ -207,7 +151,7 @@ void TrackModel::on_selectBlockButton_clicked()
    QString currBlockType = QString::fromStdString(searchedBlock->getType());
    QString currBlockLength = QString::number(searchedBlock->getLength());
    QString currBlockGrade = QString::number(searchedBlock->getGrade());
-   QString currBlockHeight = QString::number(searchedBlock->getElevation());
+   QString currBlockElevation = QString::number(searchedBlock->getElevation());
    QString currBlockSpeedLimit = QString::number(searchedBlock->getSpeedLimit());
    QString currBlockSuggestedSpeed = QString::number(searchedBlock->getSuggestedSpeed());
    QString currBlockStationName = QString::fromStdString(searchedBlock->getStationName());
@@ -216,6 +160,9 @@ void TrackModel::on_selectBlockButton_clicked()
    QString currBlockSwitchStatus = QString::number(searchedBlock->getSwitchStatus());
    QString currBlockTrainPresent = QString::number(searchedBlock->getTrainPresent());
    QString currBlockPassengers = QString::number(searchedBlock->getPassengerCount());
+   QString currBlockStationSide = QString::number(searchedBlock->getStationSide());
+   QString currBlockTrafficLightStatus = QString::number(searchedBlock->getTrafficLightStatus());
+   QString currBlockBeaconPresent = QString::number(searchedBlock->getBeaconPresent());
 
    //update stats for searchedBlock
    ui->lineTextBox->setText(currBlockLine);
@@ -229,7 +176,7 @@ void TrackModel::on_selectBlockButton_clicked()
    ui->typeTextBox->setText(currBlockType);
    ui->lengthTextBox->setText(currBlockLength);
    ui->gradeTextBox->setText(currBlockGrade);
-   ui->heightTextBox->setText(currBlockHeight);
+   ui->elevationTextBox->setText(currBlockElevation);
    ui->speedLimitTextBox->setText(currBlockSpeedLimit);
    ui->suggestedSpeedTextBox->setText(currBlockSuggestedSpeed);
    ui->stationNameTextBox->setText(currBlockStationName);
@@ -238,5 +185,8 @@ void TrackModel::on_selectBlockButton_clicked()
    ui->switchStatusTextBox->setText(currBlockSwitchStatus);
    ui->trainPresentTextBox->setText(currBlockTrainPresent);
    ui->passengersTextBox->setText(currBlockPassengers);
+   ui->stationSideTextBox->setText(currBlockStationSide);
+   ui->trafficLightStatusTextBox->setText(currBlockTrafficLightStatus);
+   ui->beaconPresentTextBox->setText(currBlockBeaconPresent);
 }
 

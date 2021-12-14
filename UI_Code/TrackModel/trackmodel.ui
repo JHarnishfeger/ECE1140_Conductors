@@ -209,19 +209,6 @@
      <string>Load Track</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="searchBlockButton">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>420</y>
-      <width>111</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Search Block:</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="loadTrackTextBox">
     <property name="geometry">
      <rect>
@@ -233,19 +220,6 @@
     </property>
     <property name="text">
      <string>Enter filename.txt</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="searchBlockTextBoxLine">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>420</y>
-      <width>61</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>line</string>
     </property>
    </widget>
    <widget class="QLabel" name="currentBlockLabel">
@@ -278,9 +252,9 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>390</y>
+      <y>400</y>
       <width>161</width>
-      <height>22</height>
+      <height>31</height>
      </rect>
     </property>
    </widget>
@@ -443,7 +417,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Id:</string>
+      <string>Number:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="idTextBox">
@@ -479,29 +453,6 @@
       <string>Type:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="directionLabel">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>230</y>
-       <width>55</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Direction:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="directionTextBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>250</y>
-       <width>113</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLineEdit" name="lengthTextBox">
      <property name="geometry">
       <rect>
@@ -535,7 +486,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="heightLabel">
+    <widget class="QLabel" name="elevationLabel">
      <property name="geometry">
       <rect>
        <x>140</x>
@@ -545,30 +496,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Height:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="xCordLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>30</y>
-       <width>55</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Xcord:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="xCordTextBox">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>50</y>
-       <width>113</width>
-       <height>22</height>
-      </rect>
+      <string>Elevation:</string>
      </property>
     </widget>
     <widget class="QLabel" name="suggestedSpeedLabel">
@@ -584,29 +512,6 @@
       <string>Suggested Speed:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="yCordLabel">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>80</y>
-       <width>55</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Ycord:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="yCordTextBox">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>100</y>
-       <width>113</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLineEdit" name="suggestedSpeedTextBox">
      <property name="geometry">
       <rect>
@@ -617,7 +522,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="heightTextBox">
+    <widget class="QLineEdit" name="elevationTextBox">
      <property name="geometry">
       <rect>
        <x>140</x>
@@ -630,7 +535,7 @@
     <widget class="QLineEdit" name="speedLimitTextBox">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>10</x>
        <y>250</y>
        <width>113</width>
        <height>22</height>
@@ -640,7 +545,7 @@
     <widget class="QLabel" name="speedLimitLabel">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>10</x>
        <y>230</y>
        <width>81</width>
        <height>21</height>
@@ -702,8 +607,8 @@
     <widget class="QLineEdit" name="passengersTextBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>300</y>
+       <x>140</x>
+       <y>250</y>
        <width>113</width>
        <height>22</height>
       </rect>
@@ -735,8 +640,8 @@
     <widget class="QLabel" name="passengersLabel">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>280</y>
+       <x>140</x>
+       <y>230</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -748,7 +653,7 @@
     <widget class="QLabel" name="stationNameLabel">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>140</x>
        <y>30</y>
        <width>101</width>
        <height>21</height>
@@ -761,7 +666,7 @@
     <widget class="QLineEdit" name="stationNameTextBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>140</x>
        <y>50</y>
        <width>113</width>
        <height>22</height>
@@ -771,7 +676,7 @@
     <widget class="QLabel" name="authorityLabel">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>140</x>
        <y>80</y>
        <width>55</width>
        <height>21</height>
@@ -784,7 +689,7 @@
     <widget class="QLineEdit" name="authorityTextBox">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>140</x>
        <y>100</y>
        <width>113</width>
        <height>22</height>
@@ -801,32 +706,75 @@
       </rect>
      </property>
     </widget>
-   </widget>
-   <widget class="QLineEdit" name="searchBlockTextBoxId">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>420</y>
-      <width>61</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>id</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="searchBlockCommaLabel">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>440</y>
-      <width>55</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>,</string>
-    </property>
+    <widget class="QLineEdit" name="trafficLightStatusTextBox">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>100</y>
+       <width>113</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="trafficLightStatusLabel">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>80</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Traffic Light:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="stationSideLabel">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>30</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Station Side:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="stationSideTextBox">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>50</y>
+       <width>113</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="beaconPresentLabel">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>280</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Beacon Present:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="beaconPresentTextBox">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>300</y>
+       <width>113</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QLineEdit" name="currentBlockTextBoxBranch">
     <property name="geometry">
@@ -851,7 +799,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>id</string>
+     <string>num</string>
     </property>
    </widget>
    <widget class="QPushButton" name="selectBlockButton">
@@ -860,7 +808,7 @@
       <x>220</x>
       <y>390</y>
       <width>111</width>
-      <height>31</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">

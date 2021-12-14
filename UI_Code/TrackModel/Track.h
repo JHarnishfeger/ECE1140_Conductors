@@ -53,6 +53,9 @@ class Track{
 		bool fixPower(string,int);
 		void updateTrack(vector<Block>);
 		void initalizeTrain(int);
+		//toStrings
+		string toString();
+		string toStringDetailed();
 };
 //End Track class
 #endif

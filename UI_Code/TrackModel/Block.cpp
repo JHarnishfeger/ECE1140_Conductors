@@ -71,14 +71,13 @@ bool beaconPresentIN, uint32_t trackCircuitDataIN, uint16_t beaconDataIN){
 Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, double gradeIN, int speedLimitIN, string typeIN, int stationSideIN, double elevationIN, double suggestedSpeedIN){
 	line = lineIN;
 	branch = branchIN;
-	
 	nextBranches = "";
 	if(typeIN.substr(0,2) == "SW"){
 		string Block1 = typeIN.substr(7,(typeIN.find_first_of(":") - 7));
 		string Block2 =  typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_last_of(")") - (typeIN.find_first_of(":") + 1)));
+		int Block1int, Block2int;
 		std::stringstream ssB1(Block1);
 		std::stringstream ssB2(Block2);
-		int Block1int, Block2int;
 		ssB1 >> Block1int;
 		ssB2 >> Block2int;
 		vector<int> nb;
@@ -562,59 +561,59 @@ void Block::encodeBeaconData(){
 		int stationCode, incomingCode;
 		bool headlights, stationHere;
 		
-		if(stationName == "shadyside"){
+		if(stationName == "SHADYSIDE"){
 			stationCode = 1;
-		}else if(stationName == "herron_ave"){
+		}else if(stationName == "HERRON_AVE"){
 			stationCode = 2;
-		}else if(stationName == "swissville"){
+		}else if(stationName == "SWISSVILLE"){
 			stationCode = 3;
-		}else if(stationName == "penn_station"){
+		}else if(stationName == "PENN_STATION"){
 			stationCode = 4;
-		}else if(stationName == "steel_plaza"){
+		}else if(stationName == "STEEL_PLAZA"){
 			stationCode = 5;
-		}else if(stationName == "first_ave"){
+		}else if(stationName == "FIRST_AVE"){
 			stationCode = 6;
-		}else if(stationName == "station_square"){
+		}else if(stationName == "STATION_SQUARE"){
 			stationCode = 7;
-		}else if(stationName == "south_hills_junction"){
+		}else if(stationName == "SOUTH_HILLS_JUNCTION"){
 			stationCode = 8;
-		}else if(stationName == "pioneer"){
+		}else if(stationName == "PIONEER"){
 			stationCode = 9;
-		}else if(stationName == "edgebrook"){
+		}else if(stationName == "EDGEBROOK"){
 			stationCode = 10;
-		}else if(stationName == "whited"){
+		}else if(stationName == "WHITED"){
 			stationCode = 11;
-		}else if(stationName == "south_bank"){
+		}else if(stationName == "SOUTH_BANK"){
 			stationCode = 12;
-		}else if(stationName == "central"){
+		}else if(stationName == "CENTRAL"){
 			stationCode = 13;
-		}else if(stationName == "inglewood"){
+		}else if(stationName == "INGLEWOOD"){
 			stationCode = 14;
-		}else if(stationName == "overbrook"){
+		}else if(stationName == "OVERBROOK"){
 			stationCode = 15;
-		}else if(stationName == "glenbury"){
+		}else if(stationName == "GLENBURY"){
 			stationCode = 16;
-		}else if(stationName == "dormont"){
+		}else if(stationName == "DORMONT"){
 			stationCode = 17;
-		}else if(stationName == "mt_lebanon"){
+		}else if(stationName == "MT_LEBANON"){
 			stationCode = 18;
-		}else if(stationName == "poplar"){
+		}else if(stationName == "POPLAR"){
 			stationCode = 19;
-		}else if(stationName == "castle_shannon"){
+		}else if(stationName == "CASTLE_SHANNON"){
 			stationCode = 20;
-		}else if(type == "yard"){
+		}else if(type == "YARD"){
 			stationCode = 21;
 		}else{
 			stationCode = 31;
 		}
 		
-		if(type == "underground"){
+		if(type == "UNDERGROUND"){
 			headlights = 1;
 		}else{
 			headlights = 0;
 		}
 		
-		if(type == "station"){
+		if(type == "STATION"){
 			stationHere = 1;
 		}else{
 			stationHere = 0;
@@ -641,4 +640,37 @@ void Block::encodeBeaconData(){
 //Desc: returns a unsigned 16-bit integer representation of the beacon data
 uint16_t Block::getBeaconData(){
 	return beaconData;
+}
+//toStrings ------------------------------------------------------------
+//Params: None
+//Returns: string
+//Desc: returns a representation of the block as a formatted string
+string Block::toString(){
+	string retString = "";
+	retString = "[" + type + "," + branch + "," + std::to_string(number) + "," + std::to_string(length) + ",Train:" + std::to_string(trainPresent) + "]";
+	return retString;
+}
+//Params: None
+//Returns: string
+//Desc: returns ALL the data about the block as a formatted string
+string Block::toStringDetailed(){
+	string retString = "";
+	retString = "[" + type + "," + branch + "," + std::to_string(number) + "," + std::to_string(length) + ",Train:" + std::to_string(trainPresent) + "]:\n";
+	retString = retString + "BLOCK STATS: \n";
+	retString = retString + "\t Line: " + line;
+	retString = retString + "\t Speed Limit: " + std::to_string(speedLimit);
+	retString = retString + "\t Station Name: " + stationName;
+	retString = retString + "\t Next Blocks: " + std::to_string(nextBlocks.at(0)) + "," + std::to_string(nextBlocks.at(1)) + "\n";;
+	retString = retString + "\t Authority: " + std::to_string(authority);
+	retString = retString + "\t Grade: " + std::to_string(grade);
+	retString = retString + "\t Elevation: " + std::to_string(elevation);
+	retString = retString + "\t Next Branches: " + nextBranches + "\n";
+	retString = retString + "\t Passengers: " + std::to_string(passengers);
+	retString = retString + "\t Suggested Speed: " + std::to_string(suggestedSpeed);
+	retString = retString + "\t Station Side: " + std::to_string(stationSide) + "\n";
+	retString = retString + "\t Traffic Light: " + std::to_string(trafficLightStatus);
+	retString = retString + "\t Crossing Status: " + std::to_string(crossingStatus);
+	retString = retString + "\t Switch Status: " + std::to_string(switchStatus);
+	retString = retString + "\t Beacon Present: " + std::to_string(beaconPresent);
+	return retString;
 }
