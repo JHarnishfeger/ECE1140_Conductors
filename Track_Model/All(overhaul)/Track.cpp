@@ -330,10 +330,19 @@ bool Track::loadTrack(string filename){
 			std::stringstream ss5(blockNumber);
 			std::stringstream ss6(speedLimit);
 			std::stringstream ss7(stationSide);
-			int blockNumR, speedLimR, stationSDER;
+			int stationSDER;
+			if(stationSide.find("/") == 4){
+				stationSDER = 2;
+			}else if(stationSide.substr(0,2) == "Ri"){
+				stationSDER = 1;
+			}else if(stationSide.substr(0,2) == "Le"){
+				stationSDER = 0;
+			}else{
+				stationSide = -1;
+			}
+			int blockNumR, speedLimR;
 			ss5 >> blockNumR;
 			ss6 >> speedLimR;
-			ss7 >> stationSDER;
 			redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), 0.0));
 			if(type.substr(0,2) == "ST"){
 				redLine.at(i - 1)->setBeaconPresent(true);
@@ -351,15 +360,19 @@ bool Track::loadTrack(string filename){
 				}
 				greenLine.at(g)->setNextBranches(Block1 + Block2);
 			}
-		}
+		}	
 	for(unsigned int r = 0; r < redLine.size(); r++){
 		if(redLine.at(r)->getType() == "SWITCH"){
 			string Block1, Block2;
-			Block1 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(0))->getBranch();
-			if(redLine.at(r)->getNextBlocks().at(1) == 0){
-					Block2 = "YARD";
+			if(redLine.at(r)->getNextBlocks().at(0) == 0){
+				Block1 = "YARD";
 			}else{
-					Block2 = searchBlockById("red", redLine.at(r)->getNextBlocks().at(1))->getBranch();
+				Block1 = searchBlockById("Red", redLine.at(r)->getNextBlocks().at(0))->getBranch();
+			}
+			if(redLine.at(r)->getNextBlocks().at(1) == 0){
+				Block2 = "YARD";
+			}else{
+				Block2 = searchBlockById("Red", redLine.at(r)->getNextBlocks().at(1))->getBranch();
 			}
 			redLine.at(r)->setNextBranches(Block1 + Block2);
 		}
@@ -473,10 +486,10 @@ string Track::toString(){
 	for(unsigned int g = 0; g < greenLine.size(); g++){
 		retString = retString + greenLine.at(g)->toString();
 	}
-	/*retString = retString + "\n RED LINE: \n";
+	retString = retString + "\n RED LINE: \n";
 	for(unsigned int r = 0; r < redLine.size(); r++){
 		retString = retString + redLine.at(r)->toString();
-	}*/
+	}
 	return retString;
 }
 //Params: None
@@ -486,12 +499,12 @@ string Track::toStringDetailed(){
 	string retString = "";
 	retString = retString + "GREEN LINE: \n";
 	for(unsigned int g = 0; g < greenLine.size(); g++){
-		retString = retString + greenLine.at(g)->toStringDetailed();
+		retString = retString + greenLine.at(g)->Block::toStringDetailed();
 	}
-	/*retString = retString + "\n RED LINE: \n";
+	retString = retString + "\n RED LINE: \n";
 	for(unsigned int r = 0; r < redLine.size(); r++){
-		retString = retString + redLine.at(r)->toStringDetailed();
-	}*/
+		retString = retString + redLine.at(r)->Block::toStringDetailed();
+	}
 	return retString;
 }
 

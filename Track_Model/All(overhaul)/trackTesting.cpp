@@ -15,6 +15,7 @@ int main(){
 	
 	srand(time(0));
 	Track t1("greenLine.txt", 45.0);
+	t1.loadTrack("redLine.txt");
 	cout << "\n START toString()------------------------------------------ \n" << endl;
 	cout << t1.toString() << endl;
 	cout << "\n END toString()------------------------------------------ \n" << endl;
