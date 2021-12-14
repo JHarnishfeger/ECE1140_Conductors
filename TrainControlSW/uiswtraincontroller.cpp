@@ -51,6 +51,7 @@ void UISWTrainController::decodeSignals(){
 
 void UISWTrainController::updateUI()
 {
+    ui->IDLabel->setText(QString::number(swtraincontroller.getTrainID()));
     ui->currentVelocity->setText(QString::number(swtraincontroller.getCurrentVelocity()));
     ui->suggestedVelocity->setText(QString::number(swtraincontroller.getSetpointVelocity()));
     ui->speedLimit->setText(QString::number(swtraincontroller.getSpeedLimit()));

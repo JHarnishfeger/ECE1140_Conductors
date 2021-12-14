@@ -9,10 +9,7 @@ class trainModel{
     private:
 
         //Hardware 0 or Software 1
-        bool HardwareOrSoftware;
-
-        //Red (1) or Green line (0)
-        bool RedOrGreen;
+        bool HorS;
 
         //ID of train and next station
         int ID;
@@ -60,7 +57,7 @@ class trainModel{
         uint16_t BeaconData;
 
     public:
-        trainModel(bool HorS,bool RorG);
+        trainModel(bool HardwareOfSoftware);
         ~trainModel();
 
         //IDs
@@ -100,7 +97,7 @@ class trainModel{
 
         //authority
         void setAuthority(double Distance,double Speed);
-        double getAuthority();
+        int getAuthority();
 
         //lights
         void setInteriorLights(bool interiorLights);
@@ -132,6 +129,12 @@ class trainModel{
         //send Beacon Data
         void setBeaconData(uint16_t Data);
         uint16_t getBeaconData();
+
+    signals:
+        //Signals for MBO
+        double getMovingBlockAuthority();
+        double getMovingBlockSpeed();
+        void receiveCoords(int trainID, double latitude, double longitude, double distanceTravelled);
 
 };
 

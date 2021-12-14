@@ -8,7 +8,7 @@
   assigned crew and assigned number of cars
   that are connected to the train.
   */
-trainModel::trainModel(bool HorS,bool RorG) {
+trainModel::trainModel(bool HardwareOrSoftware) {
   authDistance = 0;
   authSpeed = 0;
   numPassengers = 0;
@@ -29,10 +29,9 @@ trainModel::trainModel(bool HorS,bool RorG) {
   signalFail = false;
   brakeFail = false;
   temperature = 60;
-  decelerationRateBrake = -0.2;
-  decelerationRateEmergencyBrake = -0.4;
-  HardwareOrSoftware = HorS;
-  RedOrGreen = RorG;
+  decelerationRateBrake = -1.2;
+  decelerationRateEmergencyBrake = -2.73;
+  HorS = HardwareOrSoftware;
 };
 
 /*Function is to act as the de-constructor
@@ -58,8 +57,9 @@ void trainModel::setSpeed(double inputPower){
   //setting power for display
   power = inputPower;
 
+
   if(brakes == true){
-    if(acceleration1 > 0)
+      if(acceleration1 > 0)
         acceleration1 = 0;
     acceleration1 = acceleration1 + decelerationRateBrake;
     if((actualSpeed1+acceleration1) <= 0){
@@ -232,7 +232,7 @@ void trainModel::setAuthority(double Distance,double Speed){
 /*Function is to access the authority of
   the train.
   */
-double trainModel::getAuthority(){
+int trainModel::getAuthority(){
   return authDistance;
 }
 

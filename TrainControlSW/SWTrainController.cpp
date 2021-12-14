@@ -376,6 +376,10 @@ void SWTrainController::failureCheck(){
     }
 }
 
+int SWTrainController::getTrainID(){
+    return train->getID();
+}
+
 int SWTrainController::getblocknum(){
     return blocknum;
 }
@@ -394,7 +398,7 @@ bool SWTrainController::newBlock(){
         distTraveledOnBlock=0;
         return 1;
     }else{
-        distTraveledOnBlock+=((current_velocity/3.6)/T); //Converts km/hr to m/s then divides by clock speed
+        distTraveledOnBlock+=((current_velocity/3.6)*T); //Converts km/hr to m/s then divides by clock speed
         return 0;
     }
 }

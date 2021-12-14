@@ -2,48 +2,37 @@
 #define TRAINMAKER_H
 
 #include <QObject>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
 #include <vector>
 #include "trainui.h"
 
 class trainMaker : public QObject
 {
     Q_OBJECT
-    public:
-        explicit trainMaker(QObject *parent = nullptr);
-        trainMaker();
-        ~trainMaker();
-        void makeTrain(bool HorS,bool RorG);
+public:
+    explicit trainMaker(QObject *parent = nullptr);
+    void newTrain(bool HardwareOrSoftware,bool RedOrGreen);
 
-    private:
+private:
+    int ID = 1;
+    std::vector<trainUI*> HardwareTrains;
+    std::vector<trainUI*> SoftwareTrains;
 
-        //train pointers
-        trainUI *mainTrainUI = new trainUI(nullptr,HorS,ID);
+signals:
 
-        //strage for software trains and one hardware train
-        std::vector<trainUI> SoftwareTrains;
-        std::vector<trainUI> HardwareTrain;
+    //Signals to send to Track Circuit and MBO
+    void TrainInfo(uint8_t currentBlock,int ID);
+    void transferCoords(int trainID,int currentBlock,double distance);
 
-        //variables to determine if hardware or software and ID
-        int ID;
-        bool HorS;
+public slots:
 
-    signals:
+    //Track Model slots
+    void TCData(uint64_t TrackCircuitData,int ID);
+    void BeaconData(uint16_t BeaconData,int ID);
 
-        //Signals to send to Track Circuit and MBO
-        void TrainInfo(uint8_t currentBlock,int ID);
-        void transferCoords(int trainID,int currentBlock,double distance);
+    //MBO slots
+    void setAuth(double authDistance,double authSpeed,int ID);
+signals:
 
-    public slots:
-
-        //Track Model slots
-        void TCData(uint64_t TrackCircuitData,int ID);
-        void BeaconData(uint32_t BeaconData,int ID);
-
-        //MBO slots
-        void setAuth(double authDistance,double authSpeed,int ID);
 };
 
 #endif // TRAINMAKER_H

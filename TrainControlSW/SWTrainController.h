@@ -95,6 +95,7 @@ class SWTrainController{
         void setExteriorLights(bool);
         bool getExteriorLights();
 
+        int getTrainID();
         bool getAtStation();
         void setMode(bool);
         bool getMode();
