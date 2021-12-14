@@ -5,6 +5,8 @@ TrackModel::TrackModel(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TrackModel)
 {
+    greenCreated = 0;
+    redCreated = 0;
     ui->setupUi(this);
 }
 
@@ -20,8 +22,6 @@ void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
 
 void TrackModel::on_loadTrackButton_clicked()
 {
-    bool greenCreated = 0;
-    bool redCreated = 0;
     QString filename = ui->loadTrackTextBox->text();
     if(filename == "greenLine.txt"){
         greenCreated = true;

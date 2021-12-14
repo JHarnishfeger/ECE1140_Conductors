@@ -352,7 +352,11 @@ bool Track::loadTrack(string filename){
 	for(unsigned int g = 0; g < greenLine.size(); g++){
 			if(greenLine.at(g)->getType() == "SWITCH"){
 				string Block1, Block2;
-				Block1 = searchBlockById("Green", greenLine.at(g)->getNextBlocks().at(0))->getBranch();
+				if(greenLine.at(g)->getNextBlocks().at(0) == 0){
+					Block1 = "YARD";
+				}else{
+					Block1 = searchBlockById("Green", greenLine.at(g)->getNextBlocks().at(0))->getBranch();
+				}
 				if(greenLine.at(g)->getNextBlocks().at(1) == 0){
 					Block2 = "YARD";
 				}else{
