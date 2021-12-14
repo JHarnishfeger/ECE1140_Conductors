@@ -313,8 +313,8 @@ void SWTrackController::createWaysides(int waysideNum){
     std::cout << "Creating Waysides" << std::endl;
     int id=0;
     int trackSize = redLine.size() + greenLine.size(); //Finding most effective way to set waysides
-    int redWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(redLine.size()) / trackSize);
-    int greenWaysideNum = std::ceil(static_cast<double>(waysideNum) * static_cast<double>(greenLine.size()) / trackSize);
+    int redWaysideNum = waysideNum/2;
+    int greenWaysideNum = waysideNum/2;
     while(waysideNum>(redWaysideNum+greenWaysideNum)){
         if(redLine.size()>greenLine.size())
             redWaysideNum++;
@@ -327,53 +327,89 @@ void SWTrackController::createWaysides(int waysideNum){
         else
             greenWaysideNum--;
     }
-    //std::cout << "RED: " << redWaysideNum << ", GREEN: " << greenWaysideNum << std::endl;
+
+    std::cout << "RED: " << redWaysideNum << ", GREEN: " << greenWaysideNum << std::endl;
     waysideNum = redWaysideNum + greenWaysideNum;
     //std::cout << "Wayside Number Calculated" << std::endl;
 
     int redWaysideSectorSize = redLine.size() / redWaysideNum; //Dividing up each line equally with waysides
     int greenWaysideSectorSize = greenLine.size() / greenWaysideNum;
+    int redLeftovers = redLine.size() - (redWaysideSectorSize * redWaysideNum);
+    int greenLeftovers = greenLine.size() - (greenWaysideSectorSize * greenWaysideNum);
+    std::cout << "Red size: " << redWaysideSectorSize << ", Leftovers: " << redLeftovers << std::endl;
+    std::cout << "Green size: " << greenWaysideSectorSize << ", Leftovers: " << greenLeftovers << std::endl;
 
-    int nextSector = redWaysideSectorSize;
-    if(nextSector>redLine.size()-1)
-        nextSector = redLine.size()-1;
-    vector<Block> sector;
-    for(int i=0;i<redLine.size();i++){
-        //std::cout << i << std::endl;
-        if(i<nextSector){
-            sector.push_back(redLine[i]);
+    vector<int> sectorTracker;
+    for(int i=0;i<waysideNum;i++){
+        if(i<redWaysideNum){
+            sectorTracker.push_back(redWaysideSectorSize);
+            if(redLeftovers>0){
+                sectorTracker[i]++;
+                redLeftovers--;
+            }
         }
         else{
-            //std::cout << "Pushing" << std::endl;
+            sectorTracker.push_back(greenWaysideSectorSize);
+            if(greenLeftovers>0){
+                sectorTracker[i]++;
+                greenLeftovers--;
+            }
+        }
+    }
+
+    int targetSector=0;
+
+    for(int i=0;i<sectorTracker.size();i++)
+        std::cout << sectorTracker[i] << std::endl;
+
+    for(int i=0;i<redLine.size();i++)
+        std::cout << redLine[i].getBlockNumber() << " ";
+    std::cout << std::endl;
+    for(int i=0;i<greenLine.size();i++)
+        std::cout << greenLine[i].getBlockNumber() << " ";
+    std::cout << std::endl;
+
+    vector<Block> sector;
+    for(int i=0;i<redLine.size();i++){
+        std::cout << "Block " << redLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
+        sectorTracker[targetSector]--;
+        if(sectorTracker[targetSector]>0){
             sector.push_back(redLine[i]);
+        }
+        else
+        {
+            std::cout << "pushin" << std::endl;
+            sector.push_back(redLine[i]);
+            std::cout << sector.size() << std::endl;
             Wayside newOne(sector,0);
             waysides.push_back(newOne);
             sector.clear();
-            nextSector += redWaysideSectorSize;
-            if(nextSector>redLine.size()-1)
-                nextSector = redLine.size()-1;
+            targetSector++;
         }
     }
-    //std::cout << "Redline Waysides Done" << std::endl;
-    nextSector = greenWaysideSectorSize;
-    if(nextSector>greenLine.size()-1)
-        nextSector = greenLine.size()-1;
     for(int i=0;i<greenLine.size();i++){
-        //std::cout << i << std::endl;
-        if(i<nextSector){
+        std::cout << "Block " << greenLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
+        sectorTracker[targetSector]--;
+        if(sectorTracker[targetSector]>0){
             sector.push_back(greenLine[i]);
         }
-        else{
-            //std::cout << "Pushing" << std::endl;
+        /*else if(i==greenLine.size()-1&&waysides.size()<waysideNum){
+            std::cout << sector.size() << std::endl;
+            Wayside newOne(sector,1);
+            waysides.push_back(newOne);
+        }*/
+        else
+        {
+            std::cout << "pushin" << std::endl;
             sector.push_back(greenLine[i]);
+            std::cout << sector.size() << std::endl;
             Wayside newOne(sector,1);
             waysides.push_back(newOne);
             sector.clear();
-            nextSector += greenWaysideSectorSize;
-            if(nextSector>greenLine.size()-1)
-                nextSector = greenLine.size()-1;
+            targetSector++;
         }
     }
+
     //std::cout << "Greenline Waysides Done" << std::endl;
     std::cout << waysides.size() << " waysides created!" << std::endl;
     for(int i=0;i<waysides.size();i++){

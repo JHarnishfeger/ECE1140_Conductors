@@ -22,6 +22,8 @@ Binary Strings:
         SA: Binary string representing station location (1 = Station, 0 = Not Station)
         AU: Binary string representing authority (1 = Auth on Block, 2 = No Auth on Block)
         NB: Binary string representing next branch to be taken (0 = Switch Pos 0, 1 = Switch Pos 1)
+        TL: Binary string representing traffic light location (0 = Not Light, 1 = Light)
+        TC: Binary string representing traffic light color (0 = Red, 1 = Green)
 
     During the execution of the PLC script, the compiler will iterate through each block of the track, running the imported file at each
     index of the track. The way that specific values or groups of values can be targeted is in reference to the current position of the
