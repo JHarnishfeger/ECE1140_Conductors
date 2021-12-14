@@ -17,7 +17,6 @@ TrackModel::~TrackModel()
 void TrackModel::on_loadTrackButton_clicked()
 {
     QString filename = ui->loadTrackTextBox->text();
-    cout << "clicked" << endl;
     t.loadTrack(filename.toStdString());
     int lineSize = t.getGreenLine().size();
     QStringList lineList;
