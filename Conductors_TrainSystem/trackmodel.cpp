@@ -5,6 +5,9 @@ TrackModel::TrackModel(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TrackModel)
 {
+    std::cout << "right up in there" << std::endl;
+    greenCreated = 0;
+    redCreated = 0;
     ui->setupUi(this);
 }
 
@@ -13,21 +16,51 @@ TrackModel::~TrackModel()
     delete ui;
 }
 
+void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
+    t.updateTrack(waysideBlocks);
+}
+
 
 void TrackModel::on_loadTrackButton_clicked()
 {
     QString filename = ui->loadTrackTextBox->text();
-    t.loadTrack(filename.toStdString());
-    int lineSize = t.getGreenLine().size();
-    QStringList lineList;
-    for(int i = 0; i < lineSize; i++){
-        QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
-        QString branch = QString::fromStdString(t.getGreenLine().at(i)->getBranch());
-        QString id = QString::number(t.getGreenLine().at(i)->getBlockNumber());
-        QString blockString = line+","+branch+","+id;
-        lineList << blockString;
+    if(filename == "greenLine.txt"){
+        greenCreated = true;
     }
-    ui->selectBlockDropdownBox->addItems(lineList);
+    if(filename == "redLine.txt"){
+        redCreated = true;
+    }
+    t.loadTrack(filename.toStdString());
+    if(filename == "greenLine.txt"){
+        QStringList lineList;
+        int lineSize = t.getGreenLine().size();
+        for(int i = 0; i < lineSize; i++){
+            QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
+            QString branch = QString::fromStdString(t.getGreenLine().at(i)->getBranch());
+            QString id = QString::number(t.getGreenLine().at(i)->getBlockNumber());
+            QString blockString = line+","+branch+","+id;
+            lineList << blockString;
+        }
+        ui->selectBlockDropdownBox->clear();
+        ui->selectBlockDropdownBox->addItems(lineList);
+    }
+    if(filename == "redLine.txt"){
+        QStringList lineList;
+        int lineSize = t.getRedLine().size();
+        for(int i = 0; i < lineSize; i++){
+            QString line = QString::fromStdString(t.getRedLine().at(i)->getLine());
+            QString branch = QString::fromStdString(t.getRedLine().at(i)->getBranch());
+            QString id = QString::number(t.getRedLine().at(i)->getBlockNumber());
+            QString blockString = line+","+branch+","+id;
+            lineList << blockString;
+        }
+        ui->selectBlockDropdownBox->clear();
+        ui->selectBlockDropdownBox->addItems(lineList);
+    }
+    if(greenCreated && redCreated){
+        std::cout << "Sending!" << std::endl;
+        emit giveTrack(t.getRedLine(), t.getGreenLine());
+    }
 }
 
 void TrackModel::on_trackHeaterOnButton_clicked()
@@ -40,6 +73,7 @@ void TrackModel::on_trackHeaterOnButton_clicked()
     ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
     QString currBlockTemp = QString::number(currBlock->getTemperature());
     ui->trackHeaterTemperatureTextBox->setText(currBlockTemp);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -53,6 +87,7 @@ void TrackModel::on_trackHeaterOffButton_clicked()
     ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
     QString currBlockTemp = QString::number(currBlock->getTemperature());
     ui->trackHeaterTemperatureTextBox->setText(currBlockTemp);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -66,6 +101,7 @@ void TrackModel::on_railStatusFixButton_clicked()
     currBlock->setRailStatus(true);
     QString currBlockRailStatus = QString::number(currBlock->getRailStatus());
     ui->railStatusTextBox->setText(currBlockRailStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -77,6 +113,7 @@ void TrackModel::on_railStatusBreakButton_clicked()
     currBlock->setRailStatus(false);
     QString currBlockRailStatus = QString::number(currBlock->getRailStatus());
     ui->railStatusTextBox->setText(currBlockRailStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -88,6 +125,7 @@ void TrackModel::on_circuitStatusFix_clicked()
     currBlock->setCircuitStatus(true);
     QString currBlockCircuitStatus = QString::number(currBlock->getCircuitStatus());
     ui->circuitStatusTextBox->setText(currBlockCircuitStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -99,6 +137,7 @@ void TrackModel::on_circuitStatusBreak_clicked()
     currBlock->setCircuitStatus(false);
     QString currBlockCircuitStatus = QString::number(currBlock->getCircuitStatus());
     ui->circuitStatusTextBox->setText(currBlockCircuitStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -110,6 +149,7 @@ void TrackModel::on_powerStatusFix_clicked()
     currBlock->setPowerStatus(true);
     QString currBlockPowerStatus = QString::number(currBlock->getPowerStatus());
     ui->powerStatusTextBox->setText(currBlockPowerStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -121,6 +161,7 @@ void TrackModel::on_powerStatusBreak_clicked()
     currBlock->setPowerStatus(false);
     QString currBlockPowerStatus = QString::number(currBlock->getPowerStatus());
     ui->powerStatusTextBox->setText(currBlockPowerStatus);
+    emit updateWaysides(t.getRedLine(),t.getGreenLine());
 }
 
 
@@ -188,4 +229,3 @@ void TrackModel::on_selectBlockButton_clicked()
    ui->trafficLightStatusTextBox->setText(currBlockTrafficLightStatus);
    ui->beaconPresentTextBox->setText(currBlockBeaconPresent);
 }
-

@@ -119,8 +119,8 @@ void PLCController::importPLC(string file){
 
 bool PLCController::runPLC(){
     std::ifstream plc(filename);
-    /*if(!plc.good())
-        return 0;*/
+    if(!plc)
+        std::cout << "File not found!" << std::endl;
     string line;
     string command;
     string arg;

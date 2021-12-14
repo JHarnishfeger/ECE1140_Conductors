@@ -183,7 +183,6 @@ void CTCWindow::on_pushButton_openCloseSwitch_clicked()
 
 void CTCWindow::initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct){
     delete ctc;
-    std::cout << "We made it!" << std::endl;
     ctc = new CTC(sw_waystructs, hw_waystruct);
 }
 

@@ -185,7 +185,6 @@ void HWTCInterface::updateHWTrackController(){
 }
 
 void HWTCInterface::setTrack(vector<Block> track){
-    cout << "hahaha0" << endl;
     setHWTrack(track);
     emit sendHWWayStruct(hwtc.getWayStructHW());
 }

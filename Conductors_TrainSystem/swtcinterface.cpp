@@ -8,7 +8,7 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     hwMade = 0;
     selected = 0;
     ui->setupUi(this);
-    vector<int> nb(0,0);
+    /*vector<int> nb(0,0);
     Block a("g","a","RAIL","","bc",nb,1,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
     Block b("g","a","SWITCH","","bc",nb,2,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
     Block c("g","a","RAIL","","bc",nb,3,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,1,0,0,0);
@@ -31,9 +31,9 @@ SWTCInterface::SWTCInterface(QWidget *parent)
     Block t("r","a","RAIL","","bc",nb,20,45,45,-1,-1,45,50,30,1,1,0,0,0,0,0,0,0,0,0,0,0);
 
     vector<Block*> green{&a,&b,&c,&d,&e,&f,&g,&h,&i,&j,&k,&l,&m};
-    vector<Block*> red{&n,&o,&p,&q,&r,&s,&t};
-    //ui->CreateWaysides->setEnabled(0);
-    tc.initialize(red,green,1);
+    vector<Block*> red{&n,&o,&p,&q,&r,&s,&t};*/
+    ui->CreateWaysides->setEnabled(0);
+    //tc.initialize(red,green,1);
     //fillLists();
 }
 
@@ -47,7 +47,6 @@ void SWTCInterface::setTrack(vector<Block*> rl,vector<Block*> gl){
 }
 
 void SWTCInterface::getHWWaystruct(WayStruct* hwWaystr){
-    std::cout << "Sending to CTC..." << std::endl;
     emit waysidesSet(tc.wayPtr,hwWaystr);
 }
 
@@ -120,8 +119,7 @@ void SWTCInterface::on_DesignateHWWayside_clicked(){
         //tc.wayPtr = &swWayPtr;
         WayStruct hWay = tc.waysides[tc.hwWay].wayStr;
         //CTC ctcMod(tc.wayPtr,&hWay);
-        std::cout << "sending..." << std::endl;
-        this->emit hwSet(hwTrack);
+        emit hwSet(hwTrack);
     }
 }
 
@@ -148,4 +146,3 @@ void SWTCInterface::on_autoMode_stateChanged(int arg1){
         tc.setMode(0);
     tc.updateWaysides();
 }
-
