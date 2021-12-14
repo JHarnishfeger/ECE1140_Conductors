@@ -98,17 +98,12 @@ void HWTCInterface::on_pushButton_clicked() // Mode button
 
 }
 
-
-
-
 void HWTCInterface::on_blockList_itemClicked(QListWidgetItem *item)
 {
     QString b = item->text();
     b.remove(0,6);
-    //qDebug() << b;
-    //QChar id = b.back();
     int idd = b.toInt();
-
+    idd--;
     vector<bool> ifSwitch = hwWaysidePtr->getIfBlockHasSwitch();
     vector<bool> ifCross = hwWaysidePtr->getIfBlockHasCrossing();
 
@@ -136,7 +131,7 @@ void HWTCInterface::on_blockList_itemClicked(QListWidgetItem *item)
 void HWTCInterface::on_pushButton_2_clicked() //Update button
 {
     int successfulReveive = 0;
-    hwtc.selectBlock_Manual(blockSelected);
+    hwtc.selectBlock_Manual(blockSelected+1);
     successfulReveive = hwWaysidePtr->receiveFromArduino();
     if(successfulReveive == 1){
         updateSwitchToUI(blockSelected);

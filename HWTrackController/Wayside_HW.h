@@ -5,9 +5,7 @@
 #include<vector>
 #include<string>
 #include<fstream>
-//#include"Block.h"
 #include<stdlib.h>
-//#include"serialCommunication.h"
 #include"WayStruct.h"
 #include"PLCController.h"
 using namespace std;
@@ -36,24 +34,15 @@ class Wayside_HW{
   public:
     void initWayside(vector<Block>); //Initialize Wayside
     int getTrackSize();
-    //vector<Block> getSector();
     vector<int> getId();
     string getLine();
     void setMode(bool); //Set manual/auto mode
     bool getMode();
     void sendToArduino(int);
     int receiveFromArduino();
-    string encode();
-    void decode(string);
     void updateWayside();
-    void calculateCommandedSpeed();
     vector<bool> getIfBlockHasSwitch();
     vector<bool> getIfBlockHasCrossing();
-    void setSuggestedSpeed(double);
-    double getSuggestedSpeed();
-    double getCommandedSpeed();
-    void setAuthority(vector<Authority>);
-    vector<Authority> getAuthority();
     vector<bool> getBlockSwitchPosition();
     vector<bool> getBlockCrossingState();
     vector<bool> getBrokenRail();

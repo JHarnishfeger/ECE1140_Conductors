@@ -21,19 +21,11 @@ public:
   ~HWTrackController();
   void initializeHW(vector<Block>);
   Wayside_HW* getWayside();
-  void setSuggestedSpeed(double);
-  double getCommandedSpeed();
-  void setAuthority(vector<Authority>);
-  vector<Authority> getAuthority();
   int getTrackSize();
   void setControlMode(bool);
   void selectBlock_Manual(int);
   WayStruct* getWayStructHW();
   void updateHWWayside();
-  //void updateTrack();
-  //void updateFromWayStruc();
-  //void updateToWayStruc();
-  //importPLC();
 };
 
 #endif

@@ -6,8 +6,6 @@
 #include <QListWidget>
 #include <QDebug>
 #include <QMessageBox>
-#include <QPalette>
-#include <QFileDialog>
 QT_BEGIN_NAMESPACE
 namespace Ui { class HWTCInterface; }
 QT_END_NAMESPACE

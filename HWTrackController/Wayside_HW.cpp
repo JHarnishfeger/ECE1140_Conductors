@@ -29,8 +29,8 @@ void receiveFromArdu(){
 
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Wayside_HW::initWayside(vector<Block> track){
@@ -50,7 +50,7 @@ void Wayside_HW::initWayside(vector<Block> track){
   authority.resize(trackSize);
 
   for(int i = 0; i < trackSize; i++){
-    int id = track[i].getId();
+    int id = track[i].getBlockNumber();
     blockIDs.push_back(id);
     bool po = track[i].getSwitchStatus();
     blockSwitchPosition.push_back(po);
@@ -61,21 +61,21 @@ void Wayside_HW::initWayside(vector<Block> track){
     bool bro = track[i].getRailStatus();
     brokenRail.push_back(bro);
 
-    if(sector[i].getType()=="switch"){
+    if(sector[i].getType()=="SWITCH"){
         ifBlockHasSwitch.push_back(1);
     }else{
         ifBlockHasSwitch.push_back(0);
     }
 
-    if(sector[i].getType()=="crossing"){
+    if(sector[i].getType()=="CROSSING"){
         ifBlockHasCrossing.push_back(1);
     }else{
         ifBlockHasCrossing.push_back(0);
     }
 
-    if(sector[i].getType()=="switch")
+    if(sector[i].getType()=="SWITCH")
         swich.push_back(sector[i]);
-    else if(sector[i].getType()=="crossing")
+    else if(sector[i].getType()=="CROSSING")
         crossing.push_back(sector[i]);
 
 
@@ -171,11 +171,6 @@ int Wayside_HW::receiveFromArduino(){
   return 1;
 }
 
-void Wayside_HW::calculateCommandedSpeed(){
-
-    commandedSpeed = suggestedSpeed - 1.1;
-
-}
 
 vector<bool> Wayside_HW::getIfBlockHasSwitch(){
     return ifBlockHasSwitch;
@@ -183,32 +178,6 @@ vector<bool> Wayside_HW::getIfBlockHasSwitch(){
 
 vector<bool> Wayside_HW::getIfBlockHasCrossing(){
     return ifBlockHasCrossing;
-}
-
-void Wayside_HW::setSuggestedSpeed(double sugg){
-
-    suggestedSpeed = sugg;
-
-}
-
-double Wayside_HW::getSuggestedSpeed(){
-  return suggestedSpeed;
-}
-
-double Wayside_HW::getCommandedSpeed(){
-  calculateCommandedSpeed();
-  return commandedSpeed;
-}
-
-void Wayside_HW::setAuthority(vector<Authority> au){
-  int size = au.size();
-  for(int i = 0; i < size; i++){
-    authority[i] = au[i];
-  }
-}
-
-vector<Authority> Wayside_HW::getAuthority(){
-  return authority;
 }
 
 vector<bool> Wayside_HW::getBlockSwitchPosition(){
@@ -233,7 +202,6 @@ vector<bool> Wayside_HW::getBlockOccupancy(){
   return blockOccupany;
 }
 
-//void runPLC();
 
 void Wayside_HW::setMaintenanceMode(bool m){
   maintenanceMode = m;
@@ -320,15 +288,15 @@ bool Wayside_HW::detectTrack(){
         cout << "From detectTrack: PLC output was incorrect. Track wasnot changed." << endl;
     for(int i = 0; i < sector.size(); i++){
         for(int j = 0; j < swich.size(); j++){
-            if(swich[j].getSwitchStatus() != sector[i].getSwitchStatus() && swich[j].getId() == sector[i].getId()){
-                cout << "Switch " << to_string(swich[j].getId()) << " Toggled." << endl;
+            if(swich[j].getSwitchStatus() != sector[i].getSwitchStatus() && swich[j].getBlockNumber() == sector[i].getBlockNumber()){
+                cout << "Switch " << to_string(swich[j].getBlockNumber()) << " Toggled." << endl;
                 swich[j].setSwitchStatus(sector[i].getSwitchStatus());
                 blockSwitchPosition[i] = swich[j].getSwitchStatus();
             }
         }
         for(int j = 0; j < crossing.size(); j++){
-            if(crossing[j].getCrossingStatus() != sector[i].getCrossingStatus() && crossing[j].getId() == sector[i].getId()){
-                cout << "Crossing " << to_string(crossing[j].getId()) << " Toggled." << endl;
+            if(crossing[j].getCrossingStatus() != sector[i].getCrossingStatus() && crossing[j].getBlockNumber() == sector[i].getBlockNumber()){
+                cout << "Crossing " << to_string(crossing[j].getBlockNumber()) << " Toggled." << endl;
                 crossing[j].setCrossingStatus(sector[i].getCrossingStatus());
                 blockCrossingState[i] = crossing[j].getCrossingStatus();
             }
