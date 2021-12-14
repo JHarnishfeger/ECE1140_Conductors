@@ -55,8 +55,11 @@ vector<Block> SWTCInterface::getHWTrack(){
 }
 
 void SWTCInterface::update(){
-    for(int i=0;i<wui.size();i++)
+    std::cout << "Updating!" << std::endl;
+    for(int i=0;i<wui.size();i++){
         wui[i]->update();
+        emit updateToTrack(wui[i]->way->sector);
+    }
 }
 
 void SWTCInterface::updateFromTrack(vector<Block*> red, vector<Block*> green){
@@ -88,10 +91,6 @@ void SWTCInterface::on_CreateWaysides_clicked(){
             wui[i]->show();
         }
         tc.updateWaysides();
-        for(int i=0;i<wui.size();i++)
-        {
-            QObject::connect(this,SIGNAL(updateWaysidesFromTrack(vector<Block*>, vector<Block*>)),wui[i],SLOT(updateFromTrack(vector<Block*>, vector<Block*>)));
-        }
     }
 }
 

@@ -87,7 +87,6 @@ void WaysideWin::fillLists(){
 
 void WaysideWin::update(){
     way->update();
-    emit updateToTrack(way->sector);
     fillLists();
 }
 

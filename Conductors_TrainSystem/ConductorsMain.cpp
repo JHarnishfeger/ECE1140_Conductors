@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QTimer>
 //using std::byte;
+#include "Clock.h"
 #include "ctcwindow.h"
 #include "swtcinterface.h"
 #include "trackmodel.h"
@@ -29,16 +30,20 @@ int main(int argc, char *argv[])
     //Init SWTrain
     //Init HWTrain
     //Init MBO
-    std::cout << "Here" << std::endl;
+    //std::cout << "Here" << std::endl;
 
-    QTimer* clock = new QTimer;
-    clock->start(interval);
+    Clock sysTimer;
     //Connect signals/slots
 
-    QObject::connect(&trmodel,SIGNAL(giveTrack(vector<Block*>, vector<Block*>)),&swtrack,SLOT(setTrack(vector<Block*>, vector<Block*>)));
+    QObject::connect(&sysTimer,SIGNAL(tick()),&swtrack,SLOT(update()));
+    QObject::connect(&trmodel,SIGNAL(updateWaysides(vector<Block*>,vector<Block*>)),&swtrack,SLOT(updateFromTrack(vector<Block*>,vector<Block*>)));
+    QObject::connect(&trmodel,SIGNAL(updateWaysides(vector<Block*>,vector<Block*>)),&hwtrack,SLOT(updateFromHWTrack(vector<Block*>,vector<Block*>)));
+    QObject::connect(&swtrack,SIGNAL(updateToTrack(vector<Block>)),&trmodel,SLOT(updateFromWayside(vector<Block>)));
+    QObject::connect(&hwtrack,SIGNAL(updateToHWTrack(vector<Block>)),&trmodel,SLOT(updateFromWayside(vector<Block>)));
+    QObject::connect(&trmodel,SIGNAL(giveTrack(vector<Block*>,vector<Block*>)),&swtrack,SLOT(setTrack(vector<Block*>,vector<Block*>)));
     QObject::connect(&swtrack,SIGNAL(hwSet(vector<Block>)),&hwtrack,SLOT(setTrack(vector<Block>)));
     QObject::connect(&hwtrack,SIGNAL(sendHWWayStruct(WayStruct*)),&swtrack,SLOT(getHWWaystruct(WayStruct*)));
-    QObject::connect(&swtrack,SIGNAL(waysidesSet(std::vector<WayStruct>*, WayStruct*)),&cwin,SLOT(initializeWaystructs(std::vector<WayStruct>*, WayStruct*)));
+    QObject::connect(&swtrack,SIGNAL(waysidesSet(std::vector<WayStruct>*,WayStruct*)),&cwin,SLOT(initializeWaystructs(std::vector<WayStruct>*,WayStruct*)));
 
 
     /* UI SIDE

@@ -54,6 +54,7 @@ HEADERS += \
     Block.h \
     Branch.h \
     CTC.hpp \
+    Clock.h \
     HWTrackController.h \
     Node.hpp \
     PLCController.h \

@@ -27,6 +27,7 @@ signals:
     void hwSet(vector<Block> hwtrk);
     void waysidesSet(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
     void updateWaysidesFromTrack(vector<Block*> red, vector<Block*> green);
+    void updateToTrack(vector<Block>);
 private slots:
     void on_CreateWaysides_clicked();
 

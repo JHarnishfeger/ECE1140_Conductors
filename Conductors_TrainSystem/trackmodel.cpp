@@ -8,6 +8,7 @@ TrackModel::TrackModel(QWidget *parent)
     std::cout << "right up in there" << std::endl;
     greenCreated = 0;
     redCreated = 0;
+    trackSent = 0;
     ui->setupUi(this);
 }
 
@@ -20,19 +21,35 @@ void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
     t.updateTrack(waysideBlocks);
 }
 
+void TrackModel::TrainInfo(uint8_t currentBlock, int ID, bool line){
+    emit TCData(t.handleTCTrainInfo(currentBlock, ID, line), ID);
+    emit BeaconData(t.handleBeaconTrainInfo(currentBlock, ID, line), ID);
+}
 
 void TrackModel::on_loadTrackButton_clicked()
 {
     QString filename = ui->loadTrackTextBox->text();
+    std::cout << " before red: " << redCreated << " green: " << greenCreated << std::endl;
+    if(filename == "greenLine.txt" && greenCreated == 0){
+        std::cout << "loading green" << std::endl;
+        t.loadTrack(filename.toStdString());
+    }
+    if(filename == "redLine.txt" && redCreated == 0){
+        std::cout << "loading red" << std::endl;
+        t.loadTrack(filename.toStdString());
+    }
     if(filename == "greenLine.txt"){
         greenCreated = true;
     }
     if(filename == "redLine.txt"){
         redCreated = true;
     }
-    t.loadTrack(filename.toStdString());
+    std::cout << "after red: " << redCreated << " green: " << greenCreated << std::endl;
     if(filename == "greenLine.txt"){
+        std::cout << "filling green list" << std::endl;
         QStringList lineList;
+        lineList.clear();
+        std::cout << lineList.isEmpty() << std::endl;
         int lineSize = t.getGreenLine().size();
         for(int i = 0; i < lineSize; i++){
             QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
@@ -45,7 +62,10 @@ void TrackModel::on_loadTrackButton_clicked()
         ui->selectBlockDropdownBox->addItems(lineList);
     }
     if(filename == "redLine.txt"){
+        std::cout << "filling red list" << std::endl;
         QStringList lineList;
+        lineList.clear();
+        std::cout << lineList.isEmpty() << std::endl;
         int lineSize = t.getRedLine().size();
         for(int i = 0; i < lineSize; i++){
             QString line = QString::fromStdString(t.getRedLine().at(i)->getLine());
@@ -57,9 +77,10 @@ void TrackModel::on_loadTrackButton_clicked()
         ui->selectBlockDropdownBox->clear();
         ui->selectBlockDropdownBox->addItems(lineList);
     }
-    if(greenCreated && redCreated){
+    if(greenCreated && redCreated && !trackSent){
         std::cout << "Sending!" << std::endl;
         emit giveTrack(t.getRedLine(), t.getGreenLine());
+        trackSent = 1;
     }
 }
 

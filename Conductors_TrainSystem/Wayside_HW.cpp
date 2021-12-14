@@ -352,15 +352,3 @@ void Wayside_HW::updateHW(){
     //}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

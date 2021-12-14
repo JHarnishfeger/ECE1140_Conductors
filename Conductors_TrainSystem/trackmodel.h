@@ -41,12 +41,15 @@ private slots:
 private:
     Ui::TrackModel *ui;
     Track t;
-    bool greenCreated, redCreated;
+    bool greenCreated, redCreated, trackSent;
 
 signals:
     void giveTrack(vector<Block*> red, vector<Block*> green);
     void updateWaysides(vector<Block*> red, vector<Block*> green);
+    void TCData(uint64_t TrackCircuitData, int ID);
+    void BeaconData(uint16_t BeaconData, int ID);
 public slots:
     void updateFromWayside(vector<Block> wasysideBlocks);
+    void TrainInfo(uint8_t currentBlock, int ID, bool line);
 };
 #endif // TRACKMODEL_H

@@ -1116,7 +1116,7 @@ void PLCController::execute(){
     oldVecs.push_back(TL);
     oldVecs.push_back(TC);
 
-    std::cout << "TR Values      : ";
+    /*std::cout << "TR Values      : ";
     for(int i=0;i<TR.size();i++)
         std::cout << TR[i] << " ";
     std::cout << std::endl << "SL Values      : ";
@@ -1158,14 +1158,14 @@ void PLCController::execute(){
     std::cout << std::endl << "TC Values      : ";
     for(int i=0;i<TC.size();i++)
         std::cout << TC[i] << " ";
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
 
     for(pos=0;pos<TR.size();pos++){
         //std::cout << "Executing " << filename << " at position " << pos << std::endl;
         runPLC();
     }
 
-    std::cout << "Final TR Values: ";
+    /*std::cout << "Final TR Values: ";
     for(int i=0;i<TR.size();i++)
         std::cout << TR[i] << " ";
     std::cout << std::endl << "Final SL Values: ";
@@ -1207,7 +1207,7 @@ void PLCController::execute(){
     std::cout << std::endl << "Final TC Values: ";
     for(int i=0;i<TC.size();i++)
         std::cout << TC[i] << " ";
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
 }
 
 /*void PLCController::runPLCOnce(){
@@ -1560,7 +1560,7 @@ bool PLCController::verifyPLC(){
         }
         plc.close();
     }
-    std::cout << "Check TR Values: ";
+    /*std::cout << "Check TR Values: ";
     for(int i=0;i<checkVecs[0].size();i++)
         std::cout << checkVecs[0][i] << " ";
     std::cout << std::endl << "Check SL Values: ";
@@ -1602,7 +1602,7 @@ bool PLCController::verifyPLC(){
     std::cout << std::endl << "Check TC Values: ";
     for(int i=0;i<checkVecs[13].size();i++)
         std::cout << checkVecs[13][i] << " ";
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl << std::endl;*/
 
     correct = correct && (checkVecs[0]==TR);
     correct = correct && (checkVecs[1]==SL);

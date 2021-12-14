@@ -336,8 +336,8 @@ void SWTrackController::createWaysides(int waysideNum){
     int greenWaysideSectorSize = greenLine.size() / greenWaysideNum;
     int redLeftovers = redLine.size() - (redWaysideSectorSize * redWaysideNum);
     int greenLeftovers = greenLine.size() - (greenWaysideSectorSize * greenWaysideNum);
-    std::cout << "Red size: " << redWaysideSectorSize << ", Leftovers: " << redLeftovers << std::endl;
-    std::cout << "Green size: " << greenWaysideSectorSize << ", Leftovers: " << greenLeftovers << std::endl;
+    //std::cout << "Red size: " << redWaysideSectorSize << ", Leftovers: " << redLeftovers << std::endl;
+    //std::cout << "Green size: " << greenWaysideSectorSize << ", Leftovers: " << greenLeftovers << std::endl;
 
     vector<int> sectorTracker;
     for(int i=0;i<waysideNum;i++){
@@ -359,28 +359,27 @@ void SWTrackController::createWaysides(int waysideNum){
 
     int targetSector=0;
 
-    for(int i=0;i<sectorTracker.size();i++)
+    /*for(int i=0;i<sectorTracker.size();i++)
         std::cout << sectorTracker[i] << std::endl;
-
     for(int i=0;i<redLine.size();i++)
         std::cout << redLine[i].getBlockNumber() << " ";
     std::cout << std::endl;
     for(int i=0;i<greenLine.size();i++)
         std::cout << greenLine[i].getBlockNumber() << " ";
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 
     vector<Block> sector;
     for(int i=0;i<redLine.size();i++){
-        std::cout << "Block " << redLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
+        //std::cout << "Block " << redLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
         sectorTracker[targetSector]--;
         if(sectorTracker[targetSector]>0){
             sector.push_back(redLine[i]);
         }
         else
         {
-            std::cout << "pushin" << std::endl;
+            //std::cout << "pushin" << std::endl;
             sector.push_back(redLine[i]);
-            std::cout << sector.size() << std::endl;
+            //std::cout << sector.size() << std::endl;
             Wayside newOne(sector,0);
             waysides.push_back(newOne);
             sector.clear();
@@ -388,7 +387,7 @@ void SWTrackController::createWaysides(int waysideNum){
         }
     }
     for(int i=0;i<greenLine.size();i++){
-        std::cout << "Block " << greenLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
+        //std::cout << "Block " << greenLine[i].getBlockNumber() << ", Wayside " << targetSector+1 << std::endl;
         sectorTracker[targetSector]--;
         if(sectorTracker[targetSector]>0){
             sector.push_back(greenLine[i]);
@@ -400,9 +399,9 @@ void SWTrackController::createWaysides(int waysideNum){
         }*/
         else
         {
-            std::cout << "pushin" << std::endl;
+            //std::cout << "pushin" << std::endl;
             sector.push_back(greenLine[i]);
-            std::cout << sector.size() << std::endl;
+            //std::cout << sector.size() << std::endl;
             Wayside newOne(sector,1);
             waysides.push_back(newOne);
             sector.clear();
@@ -411,7 +410,7 @@ void SWTrackController::createWaysides(int waysideNum){
     }
 
     //std::cout << "Greenline Waysides Done" << std::endl;
-    std::cout << waysides.size() << " waysides created!" << std::endl;
+    //std::cout << waysides.size() << " waysides created!" << std::endl;
     for(int i=0;i<waysides.size();i++){
         //std::cout << i << std::endl;
         waysides[i].wayStrInit();

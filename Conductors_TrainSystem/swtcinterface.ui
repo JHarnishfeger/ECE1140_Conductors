@@ -14,78 +14,42 @@
    <string>SWTCInterface</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="DesignateHWWayside">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>131</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Designate HW Wayside</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="CreateWaysides">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Create Waysides</string>
-    </property>
-   </widget>
-   <widget class="QSpinBox" name="WaysideNum">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>10</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="WaysideList">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>201</width>
-      <height>141</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>131</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Waysides</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="autoMode">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Automatic Mode</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="CreateWaysides">
+      <property name="text">
+       <string>Create Waysides</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QSpinBox" name="WaysideNum"/>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QPushButton" name="DesignateHWWayside">
+      <property name="text">
+       <string>Designate HW Wayside</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QCheckBox" name="autoMode">
+      <property name="text">
+       <string>Automatic Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Waysides</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QListWidget" name="WaysideList"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -93,7 +57,7 @@
      <x>0</x>
      <y>0</y>
      <width>219</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
