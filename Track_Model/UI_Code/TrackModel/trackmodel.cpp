@@ -30,16 +30,32 @@ void TrackModel::on_loadTrackButton_clicked()
         redCreated = true;
     }
     t.loadTrack(filename.toStdString());
-    int lineSize = t.getGreenLine().size();
-    QStringList lineList;
-    for(int i = 0; i < lineSize; i++){
-        QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
-        QString branch = QString::fromStdString(t.getGreenLine().at(i)->getBranch());
-        QString id = QString::number(t.getGreenLine().at(i)->getBlockNumber());
-        QString blockString = line+","+branch+","+id;
-        lineList << blockString;
+    if(filename == "greenLine.txt"){
+        QStringList lineList;
+        int lineSize = t.getGreenLine().size();
+        for(int i = 0; i < lineSize; i++){
+            QString line = QString::fromStdString(t.getGreenLine().at(i)->getLine());
+            QString branch = QString::fromStdString(t.getGreenLine().at(i)->getBranch());
+            QString id = QString::number(t.getGreenLine().at(i)->getBlockNumber());
+            QString blockString = line+","+branch+","+id;
+            lineList << blockString;
+        }
+        ui->selectBlockDropdownBox->clear();
+        ui->selectBlockDropdownBox->addItems(lineList);
     }
-    ui->selectBlockDropdownBox->addItems(lineList);
+    if(filename == "redLine.txt"){
+        QStringList lineList;
+        int lineSize = t.getRedLine().size();
+        for(int i = 0; i < lineSize; i++){
+            QString line = QString::fromStdString(t.getRedLine().at(i)->getLine());
+            QString branch = QString::fromStdString(t.getRedLine().at(i)->getBranch());
+            QString id = QString::number(t.getRedLine().at(i)->getBlockNumber());
+            QString blockString = line+","+branch+","+id;
+            lineList << blockString;
+        }
+        ui->selectBlockDropdownBox->clear();
+        ui->selectBlockDropdownBox->addItems(lineList);
+    }
     if(greenCreated && redCreated){
         emit giveTrack(t.getRedLine(), t.getGreenLine());
     }

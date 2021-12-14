@@ -72,6 +72,7 @@ Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, doub
 	line = lineIN;
 	branch = branchIN;
 	nextBranches = "";
+	number = numberIN;
 	if(typeIN.substr(0,2) == "SW"){
 		string Block1 = typeIN.substr(7,(typeIN.find_first_of(":") - 7));
 		string Block2 =  typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_last_of(")") - (typeIN.find_first_of(":") + 1)));
@@ -93,11 +94,18 @@ Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, doub
 			string stationNameUnder = typeIN.substr((typeIN.find_first_of(":") + 1), (typeIN.find_first_of(";") - typeIN.find_first_of(":") - 1));
 			stationName = stationNameUnder;
 		}
+		vector<int> nb;
+		nb.push_back(number + 1);
+		nb.push_back(number + 1);
+		nextBlocks = nb;
 		type = typeIN.substr(0,7);
 	}else{
+		vector<int> nb;
+		nb.push_back(number + 1);
+		nb.push_back(number + 1);
+		nextBlocks = nb;
 		type = typeIN;
 	}
-	number = numberIN;
 	speedLimit = speedLimitIN;
 	if(type == "STATION"){
 		srand(time(0));
@@ -659,7 +667,7 @@ string Block::toStringDetailed(){
 	retString = retString + "\t Line: " + line;
 	retString = retString + "\t Speed Limit: " + std::to_string(speedLimit);
 	retString = retString + "\t Station Name: " + stationName;
-	retString = retString + "\t Next Blocks: " + std::to_string(nextBlocks.at(0)) + "," + std::to_string(nextBlocks.at(1)) + "\n";;
+	retString = retString + "\t Next Blocks: " + std::to_string(nextBlocks.at(0)) + "," + std::to_string(nextBlocks.at(1)) + "\n";
 	retString = retString + "\t Authority: " + std::to_string(authority);
 	retString = retString + "\t Grade: " + std::to_string(grade);
 	retString = retString + "\t Elevation: " + std::to_string(elevation);
