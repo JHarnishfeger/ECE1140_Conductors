@@ -376,3 +376,25 @@ void SWTrainController::failureCheck(){
     }
 }
 
+int SWTrainController::getblocknum(){
+    return blocknum;
+}
+
+int SWTrainController::getblocklength(){
+    return blocklength;
+}
+
+double SWTrainController::getdistTraveledOnBlock(){
+    return distTraveledOnBlock;
+}
+
+bool SWTrainController::newBlock(){
+    qDebug()<<distTraveledOnBlock;
+    if(blocklength<=distTraveledOnBlock){
+        distTraveledOnBlock=0;
+        return 1;
+    }else{
+        distTraveledOnBlock+=((current_velocity/3.6)/T); //Converts km/hr to m/s then divides by clock speed
+        return 0;
+    }
+}

@@ -54,6 +54,8 @@ private slots:
     //Emergency Brake Button
     void on_pushButton_clicked();
 
+    //Get new track circuit data
+    void callTCData();
 private:
 
     //UI

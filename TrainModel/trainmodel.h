@@ -59,7 +59,6 @@ class trainModel{
         trainModel(bool HardwareOfSoftware);
         ~trainModel();
 
-
         //IDs
         void setID(int id);
         int getID();
@@ -131,7 +130,6 @@ class trainModel{
         uint16_t getBeaconData();
 
     signals:
-
         //Signals for MBO
         double getMovingBlockAuthority();
         double getMovingBlockSpeed();

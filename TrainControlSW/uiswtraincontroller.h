@@ -19,11 +19,14 @@ public:
     UISWTrainController(QWidget *parent = nullptr);
     ~UISWTrainController();
 
-public slots:
+signals:
 
-    void timerInst();
+    void getnewTCSignal();
+
 
 private slots:
+
+    void timerInst();
 
     void updateUI();
 
@@ -52,6 +55,7 @@ private slots:
     void on_kp_returnPressed();
 
     void on_ki_returnPressed();
+
 
 private:
     Ui::UISWTrainController *ui;

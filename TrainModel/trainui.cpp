@@ -21,6 +21,9 @@ trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware)
     connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
     timer ->start(1000);
 
+    //Connects train controller getTCData to train model GetTCData
+    connect(&s,SIGNAL(getnewTCSignal()), this, SLOT(updateTestUI()));
+
     HorS = HardwareOrSoftware;
     ui->Height_2->display(3);
     ui->Length_2->display(20);
@@ -143,7 +146,6 @@ void trainUI::updateTestUI(){
     ui->lcdNumber_5->display(mainTrain->getCrew());
     ui->lcdNumber_6->display(mainTrain->getTemperature());
     ui->lcdNumber_7->display(mainTrain->getPower());
-
 
 
     //Brakes

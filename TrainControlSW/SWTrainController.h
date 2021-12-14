@@ -43,7 +43,7 @@ class SWTrainController{
         bool mode = true;
         int blocknum = -1;
         int blocklength = 0;
-        //double gps = 0;
+        double distTraveledOnBlock = 0;
 
       public:
         trainModel* train;
@@ -102,6 +102,11 @@ class SWTrainController{
         bool getTCFailure();
         bool getBrakeFailure();
         void failureCheck();
+        int getblocknum();
+        int getblocklength();
+        double getdistTraveledOnBlock();
+        bool newBlock();
+
 
 };
 

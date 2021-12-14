@@ -23,7 +23,10 @@ void UISWTrainController::timerInst()
     updateUI();
     swtraincontroller.calculatePower();
     swtraincontroller.failureCheck();
+    if(swtraincontroller.newBlock())
+        getnewTCSignal();
 }
+
 
 /*
 void UISWTrainController::failureCheck()
