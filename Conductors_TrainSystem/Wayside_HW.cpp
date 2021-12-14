@@ -1,12 +1,29 @@
 #include"Wayside_HW.h"
 #include"SerialPort.h"
 
-char *port = "\\\\.\\COM4";
+char* unconstchar(const char* s) {
+    if(!s)
+      return NULL;
+    int i;
+    char* res = NULL;
+    res = (char*) malloc(strlen(s)+1);
+    if(!res){
+        fprintf(stderr, "Memory Allocation Failed! Exiting...\n");
+        exit(EXIT_FAILURE);
+    } else{
+        for (i = 0; s[i] != '\0'; i++) {
+            res[i] = s[i];
+        }
+        res[i] = '\0';
+        return res;
+    }
+}
+
+const char *port0 = "\\\\.\\COM4";
 char output[MAX_DATA_LENGTH];
 char incoming[MAX_DATA_LENGTH];
-
+char *port = unconstchar(port0);
 SerialPort ardu(port);
-
 
 bool ifArduConnected(){
   return ardu.isConnected();

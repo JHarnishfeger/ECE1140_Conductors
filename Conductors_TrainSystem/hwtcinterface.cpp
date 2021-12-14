@@ -203,3 +203,7 @@ void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
     hwWaysidePtr->updateTrack(track);
     emit updateToHWTrack(hwWaysidePtr->sector);
 }
+
+void HWTCInterface::runHWPLC(){
+    hwWaysidePtr->detectTrack();
+}

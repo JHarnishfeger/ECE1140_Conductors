@@ -1,5 +1,6 @@
 #include "SerialPort.h"
 
+
 SerialPort::SerialPort(char *portName)
 {
     this->connected = false;

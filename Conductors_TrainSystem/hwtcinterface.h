@@ -37,6 +37,7 @@ private slots:
 public slots:
     void setTrack(vector<Block> track);
     void updateFromHWTrack(vector<Block*> red, vector<Block*> green);
+    void runHWPLC();
 
 
 signals:
