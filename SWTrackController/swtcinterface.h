@@ -23,27 +23,12 @@ public:
     ~SWTCInterface();
     void fillLists();
     vector<Block> getHWTrack();
-signals:
-    void hwSet(vector<Block> hwtrk);
-    void waysidesSet(vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
-    void updateWaysidesFromTrack(vector<Block*> red, vector<Block*> green);
 private slots:
     void on_CreateWaysides_clicked();
 
     void on_DesignateHWWayside_clicked();
 
     void on_WaysideList_itemClicked(QListWidgetItem *item);
-
-    void on_autoMode_stateChanged(int arg1);
-
-public slots:
-    void setTrack(vector<Block*> rl,vector<Block*> gl);
-
-    void getHWWaystruct(WayStruct* hwWaystr);
-
-    void update();
-
-    void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
 private:
     Ui::SWTCInterface *ui;

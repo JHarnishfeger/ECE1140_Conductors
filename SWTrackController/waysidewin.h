@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QWidgetList>
 #include <QListWidgetItem>
-#include <QDir>
 #include "Wayside.h"
 
 namespace Ui {
@@ -36,12 +35,6 @@ private slots:
     void on_CrossingOn_clicked();
 
     void on_CrossingOff_clicked();
-
-signals:
-    void updateToTrack(vector<Block> wayTrack);
-
-public slots:
-    void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
 private:
     Ui::WaysideWin *ui;

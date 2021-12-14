@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <iostream>
 #include "trainmodel.h"
+#include<QDebug>
 
 /*Function is the constructor with inputs of
   assigned crew and assigned number of cars
   that are connected to the train.
   */
 trainModel::trainModel(bool HardwareOrSoftware) {
-  authority = 0;
+  authDistance = 0;
+  authSpeed = 0;
   numPassengers = 0;
   crewCount = 1;
   carCount = 2;
@@ -27,8 +29,8 @@ trainModel::trainModel(bool HardwareOrSoftware) {
   signalFail = false;
   brakeFail = false;
   temperature = 60;
-  decelerationRateBrake = -0.2;
-  decelerationRateEmergencyBrake = -0.4;
+  decelerationRateBrake = -1.2;
+  decelerationRateEmergencyBrake = -2.73;
   HorS = HardwareOrSoftware;
 };
 
@@ -55,10 +57,10 @@ void trainModel::setSpeed(double inputPower){
   //setting power for display
   power = inputPower;
 
-  if (acceleration1 > 2){
-      acceleration1 = 2;
-  }
+
   if(brakes == true){
+      if(acceleration1 > 0)
+        acceleration1 = 0;
     acceleration1 = acceleration1 + decelerationRateBrake;
     if((actualSpeed1+acceleration1) <= 0){
         actualSpeed1 = 0;
@@ -68,6 +70,8 @@ void trainModel::setSpeed(double inputPower){
     }
   }
   else if(eBrakes == true){
+        if(acceleration1 > 0)
+            acceleration1 = 0;
         acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
         if((actualSpeed1+acceleration1) <= 0){
             engineFail = false;
@@ -80,6 +84,8 @@ void trainModel::setSpeed(double inputPower){
       }
     //Doesnt work well need to fix
     else if(brakeFail == true){
+        if(acceleration1 > 0)
+            acceleration1 = 0;
         acceleration1 = acceleration1 - 0.01;
         if((actualSpeed1+acceleration1) <= 0){
             actualSpeed1 = 0;
@@ -90,6 +96,8 @@ void trainModel::setSpeed(double inputPower){
         }
      }
   else if(engineFail == true){
+      if(acceleration1 > 0)
+        acceleration1 = 0;
       acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
       if((actualSpeed1+acceleration1) <= 0){
           actualSpeed1 = 0;
@@ -100,9 +108,14 @@ void trainModel::setSpeed(double inputPower){
       }
    }
     else {
+      if(actualSpeed1==0)
+        actualSpeed1=1;
       force = power/actualSpeed1;
       acceleration1 = force/mass;
-     }
+      if (acceleration1 > 2){
+          acceleration1 = 2;
+      }
+    }
 
   actualSpeed1 = actualSpeed0 + ((.5) * (acceleration0 + acceleration1));
   distanceTraveled += actualSpeed1;
@@ -211,15 +224,16 @@ bool trainModel::getBrakeFail(){
 /*Function is to set the authority using
   an input from the MBO, moving block authority.
   */
-void trainModel::setAuthority(int mba){
-  authority = mba;
+void trainModel::setAuthority(double Distance,double Speed){
+  authDistance = Distance;
+  authSpeed = Speed;
 }
 
 /*Function is to access the authority of
   the train.
   */
 int trainModel::getAuthority(){
-  return authority;
+  return authDistance;
 }
 
 /*Function is to set the interior lights
@@ -295,11 +309,11 @@ int trainModel::getID(){
 }
 
 //Track circuit get and set
-void trainModel::setTCData(uint32_t Data){
+void trainModel::setTCData(uint64_t Data){
     TCData = Data;
 }
 
-uint32_t trainModel::getTCData(){
+uint64_t trainModel::getTCData(){
     if(signalFail == true){
         return 0;
     }

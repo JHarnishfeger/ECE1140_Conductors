@@ -8,7 +8,9 @@
 #include <math.h>
 using std::vector;
 //#include "Block.cpp"
+#include "Block.h"
 #include "PLCController.h"
+#include "Authority.h"
 #include "WayStruct.h"
 //#include "PLCController.cpp"
 
@@ -29,10 +31,10 @@ public:
     Wayside(); //Initialize Empty Wayside
     Wayside& operator=(Wayside&); //Copy wayside
     void initialize(); //Sets up module and initializes sub-modules and GUI
-    void update(); //Sets current values upon being called, runs wayside in real time
-    void updateNoPLC(); //Update method without running PLC (not in use)
+    void update(); //Sets current values upon being called
+    void updateNoPLC();
     bool detectTrack(); //Detects any notable scenarios in the track using the PLC program
-    int getBlockNumber(); //Gets the wayside's ID
+    int getID(); //Gets the wayside's ID
     void setID(int); //Sets the wayside's ID
     bool getLine(); //Gets the line that the wayside is on (Red = 0, Green = 1)
     void setLine(bool); //Sets the line that the wayside is on (Red = 0, Green = 1)
@@ -56,16 +58,16 @@ public:
     bool switchTrack(Block&); //Switches a track
     bool toggleCrossing(Block&); //Toggles a crossing
     vector<Block> getTrackOccupancy(); //Fetches track occupancy over sector
-    void importPLC(string); //Imports given filename to PLC
-    bool runPLC(); //Runs PLC over all blocks
+    void importPLC(string);
+    void runPLC();
     //void runPLCOnce(int);
-    bool updateFromPLC(); //Retrieve updated data from PLCController
-    void wayStrInit(); //Sets up WayStruct
+    bool updateFromPLC();
+    void wayStrInit();
     vector<Block> trackOccupancy; //Holds the blocks of where any trains are currently on the track
     vector<Block> swich; //Holds the block number of any blocks with broken rails
     vector<Block> crossing; //Holds the block number of any blocks with broken rails
     vector<Block> sector; //Holds all info about each block associated with the current wayside
-    WayStruct wayStr; //WayStruct for this wayside
+    WayStruct wayStr;
     PLCController plc; //Controller for the PLC program
 };
 

@@ -16,6 +16,16 @@
   <widget class="QListWidget" name="TrainList">
    <property name="geometry">
     <rect>
+     <x>310</x>
+     <y>260</y>
+     <width>131</width>
+     <height>81</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="MaintenanceList">
+   <property name="geometry">
+    <rect>
      <x>170</x>
      <y>260</y>
      <width>131</width>
@@ -40,7 +50,7 @@
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>240</y>
+     <y>350</y>
      <width>131</width>
      <height>16</height>
     </rect>
@@ -75,7 +85,7 @@
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>310</x>
      <y>240</y>
      <width>131</width>
      <height>16</height>
@@ -95,13 +105,26 @@
     </rect>
    </property>
   </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>240</y>
+     <width>131</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Maintenance</string>
+   </property>
+  </widget>
   <widget class="QListWidget" name="BrokenRailList">
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>260</y>
+     <y>370</y>
      <width>131</width>
-     <height>201</height>
+     <height>91</height>
     </rect>
    </property>
   </widget>

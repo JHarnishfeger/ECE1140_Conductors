@@ -18,11 +18,9 @@ SOURCES += \
     waysidewin.cpp
 
 HEADERS += \
-    Authority.h \
     Block.h \
     PLCController.h \
     SWTrackController.h \
-    WayStruct.h \
     Wayside.h \
     swtcinterface.h \
     waysidewin.h

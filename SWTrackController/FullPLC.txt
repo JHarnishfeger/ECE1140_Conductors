@@ -1,7 +1,20 @@
+#TASK Switch_All_Test
+OPP (SL0)
+OUT SW0 1
+ENDTASK
+
+TASK Safety_Switch
+OPP (TR1+) & (SL0) & (!TR0)
+OUT SW0 1
+ENDTASK
+
 TASK Activate_Crossing
-OPP (TR) & (CL0) & (!TR0)
+OPP (TR0-) & (CL0)
 OUT CR0 1
-OPP (!TR) & (CL0) & (!TR0)
+ENDTASK
+
+TASK Deactivate_Crossing
+OPP (!TR0-) & (CL0)
 OUT CR0 0
 ENDTASK
 
@@ -10,44 +23,27 @@ OPP (SS0)
 OUT SR 1
 ENDTASK
 
-TASK Rail_Broken
-OPP (BR0) | (BR1) | (BR-1)
+TASK Rail_Broken_Brake
+OPP (BR0+)
 OUT ST0 1
-OPP (!BR0) & (!BR1) & (!BR-1)
+ENDTASK
+
+TASK Rail_Fixed
+OPP (!BR0+)
 OUT ST0 0
+ENDTASK
+
+#TASK Stop_For_Station
+OPP (SA1) | (SA2)
+OUT ST0 1
 ENDTASK
 
 TASK Collision_Protection
-OPP (TR1) & (TR0)
+OPP (TR1) | (TR2) & (TR0)
 OUT ST0 1
-OPP (TR2) & (TR0)
-OUT ST0 1
-OPP (!TR1) & (TR0)
+ENDTASK
+
+TASK Revert_Protection
+OPP (!TR1) & (!TR2) & (TR0)
 OUT ST0 0
-OPP (!TR2) & (TR0)
-OUT ST0 0
-ENDTASK
-
-TASK Enforce_Authority
-OPP (TR0) & (!AU0)
-OUT ST0 1
-ENDTASK
-
-TASK Reset_Speed_From_Stop
-OPP (!ST0)
-OUT SR0 1
-ENDTASK
-
-#TASK Next_Branch
-OPP (NB0) & (SL0)
-OUT SW0 1
-OPP (!NB0) & (SL0)
-OUT SW0 0
-ENDTASK
-
-TASK Traffic_Lights
-OPP (TL0) & (AU0)
-OUT TC0 1
-OPP (TL0) & (!AU0)
-OUT TC0 0
 ENDTASK

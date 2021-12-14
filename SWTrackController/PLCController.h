@@ -34,13 +34,11 @@ public:
     vector<bool> ST; //Binary string representing blocks that the commanded speed should be 0 (1 = Set 0, 0 = Keep)
     vector<bool> SA; //Binary string representing station location (1 = Station, 0 = Not Station)
     vector<bool> AU; //Binary string representing authority (1 = Auth on Block, 2 = No Auth on Block)
-    vector<bool> NB; //Binary string representing next branch to be taken (0 = Switch Pos 0, 1 = Switch Pos 1)
-    vector<bool> TL; //Binary string representing traffic light location (0 = Not Light, 1 = Light)
-    vector<bool> TC; //Binary string representing traffic light color (0 = Red, 1 = Green)
-    vector<vector<bool>> checkVecs; //Vectors to be filled with the results of checking each value a second time
-    vector<vector<bool>> oldVecs; //Vectors holding the previous values of the PLC execution
+    vector<vector<bool>> checkVecs;
+    vector<vector<bool>> oldVecs;
     vector<Block> track; //All blocks controlled by wayside, in order to create boolean vectors
-    vector<Authority> auth; //Authority data for all applicable branches
+    vector<Authority> auth;
+    vector<string> branchOccupancy; //All branches in the sector that are occupied
     int getPos(); //Retrieves iterator
     void setPos(int); //Sets iterator
     string getFilename();

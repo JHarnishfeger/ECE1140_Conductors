@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <string.h>
 
-trainUI::trainUI(QWidget *parent,bool HardwareOrSoftware)
+
+trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware,int ID, bool RedOrGreen)
     : QMainWindow(parent)
     , ui(new Ui::trainUI)
 {
@@ -12,15 +13,30 @@ trainUI::trainUI(QWidget *parent,bool HardwareOrSoftware)
     //timer set up and updateUI running function
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(updateTestUI()));
-    timer->start(1000);
 
     //Connects traincontroller to train and train timer to TC timer
-    //s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
-    //s.show();
-    //connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
-    //timer ->start(1000);
+    if (HardwareOrSoftware == 1){
+        s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
+        s.show();
+        connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
+
+//        //Connects train controller getTCData to train model GetTCData
+//        connect(&s,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+    }
+    else if (HardwareOrSoftware == 0){
+        hw.trainController.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
+        hw.show();
+        connect(timer, SIGNAL(timeout()),&hw,SLOT(updates()));
+
+//        //Connects train controller getTCData to train model GetTCData
+//        connect(&hw,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+    }
+
+    timer ->start(1000);
 
     HorS = HardwareOrSoftware;
+    RorG = RedOrGreen;
+    mainTrain->setID(ID);
     ui->Height_2->display(3);
     ui->Length_2->display(20);
     ui->Width_2->display(3);
@@ -142,7 +158,6 @@ void trainUI::updateTestUI(){
     ui->lcdNumber_5->display(mainTrain->getCrew());
     ui->lcdNumber_6->display(mainTrain->getTemperature());
     ui->lcdNumber_7->display(mainTrain->getPower());
-
 
 
     //Brakes

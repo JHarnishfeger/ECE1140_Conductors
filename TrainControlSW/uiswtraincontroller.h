@@ -21,8 +21,7 @@ public:
 
 signals:
 
-    void getnewTCSignal();
-
+    void getnewTCSignal(uint8_t encodedBlock);
 
 private slots:
 
