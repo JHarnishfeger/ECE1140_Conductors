@@ -9,6 +9,8 @@ trainTracker(&track, &waysideManager){
 
     if(sw_waystructs == nullptr || hw_waystruct == nullptr){
         std::cout << "CTC: WayStructs are being recieved as null!\n";
+    }else{
+        std::cout << "CTC: WayStructs are OK\n";
     }
 
 	//Give the waystructs to WaysideManager
@@ -64,6 +66,13 @@ void CTC::update(int current_time){
         dispatchTrain(nextSchedule);
         scheduleManager.popNextSchedule();
     }
+
+    try{
+        auto trainsPerBranch = waysideManager.getTrainsPerBranch();
+        trainTracker.update(trainsPerBranch); //This line is crashing
+    }catch(std::exception& e){
+        std::cout << e.what() << std::endl;
+    }
 }
 
 /*
@@ -80,7 +89,6 @@ void CTC::setTrackMaintenence(int blockId, bool isBroken){
  * Set a single block switch to a given direction (See Block.cpp)
  */
 void CTC::setTrackSwitch(int blockId, bool direction){
-    //THIS IMPLEMENTATION IS WRONG. CTC NEEDS TO USE AUTHORITY TO FLIP SWITCHES.
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
         if(getTrackMaintenence(blockId) == true){
@@ -114,12 +122,21 @@ void CTC::dispatchTrain(CTCSchedule schedule){
     //TODO
     //Get the route
 
+    std::string startingBranch;
+    if(!trainTracker.trainExists(schedule.train)){
+        startingBranch = "YARD";
+        //Create the train here
+        //TODO
+    }else{
+        startingBranch = trainTracker.getTrainLocation(schedule.train);
+    }
+
     int destinationBlock = schedule.destination;
     std::list<std::string> route = track.getBranchRoute(
-        trainTracker.getTrainLocation(schedule.train),
+        startingBranch,
         track.getBranchOfBlock(schedule.destination)
     );
-    
+
     //Send Authorities to each wayside
     std::list<Authority> authorities;
     for(auto itr = route.begin(); itr != route.end(); itr++){

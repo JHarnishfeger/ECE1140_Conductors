@@ -93,8 +93,8 @@ void WaysideManager::setAuthority(Authority authority){
 }
 
 void WaysideManager::addNewRouteToQueues(std::list<Authority> route){
-    for(Authority authority : route){
-        setAuthority(authority);
+    for(Authority& authority : route){
+        authorityQueues[authority.branch].push(authority);
     }
 }
 
@@ -113,4 +113,34 @@ Authority WaysideManager::getAuthority(std::string branch){
         }
     }
     return Authority{};
+}
+
+void WaysideManager::setNextAuthorityFromQueue(std::string branch){
+    std::cout << "Made it to here!\n";
+    if(authorityQueues[branch].empty()){
+        return;
+    }
+    setAuthority(authorityQueues[branch].front());
+    authorityQueues[branch].pop();
+}
+
+std::list<std::pair<std::string, int>> WaysideManager::getTrainsPerBranch(){
+    std::list<std::pair<std::string, int>> list;
+    std::unordered_map<std::string, int> trainsPerBranch;
+
+    for(WayStruct* w : waysides){
+        std::vector<Block>& sector = w->sector;
+        for(unsigned int i = 0; i < sector.size(); i++){
+            Block& b = sector[i];
+            if(b.getTrainPresent() == true){
+                trainsPerBranch[track->getBranchOfBlock(b.getId())]++;
+            }
+        }
+    }
+
+    for(auto branch : trainsPerBranch){
+        list.push_back(std::pair<std::string, int>(branch.first, branch.second));
+    }
+
+    return list;
 }

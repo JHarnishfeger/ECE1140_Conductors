@@ -39,6 +39,10 @@ class WaysideManager{
 
         Authority getAuthority(std::string branch);
 	
+        void setNextAuthorityFromQueue(std::string branch);
+
+        std::list<std::pair<std::string, int>> getTrainsPerBranch();
+
 	private:
 	
 		//This is a hard-coded list of all the switches' block ids on the green line
@@ -47,8 +51,8 @@ class WaysideManager{
 		//This should be given by Track Controller
         std::list<WayStruct*> waysides;
 		
-		//The int is the block ID of a switch. Each switch has a queue associated with it.
-		std::unordered_map<int, std::queue<Authority>> authorityQueues;
+        //The key is the Branch name. Each branch has a queue associated with it.
+        std::unordered_map<std::string, std::queue<Authority>> authorityQueues;
 
         TrackNodes* track;
 
