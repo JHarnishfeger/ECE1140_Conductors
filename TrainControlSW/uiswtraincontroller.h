@@ -19,17 +19,20 @@ public:
     UISWTrainController(QWidget *parent = nullptr);
     ~UISWTrainController();
 
-    QTimer *timer;
+signals:
+
+    void getnewTCSignal();
+
 
 private slots:
+
+    void timerInst();
 
     void updateUI();
 
     void decodeSignals();
 
-    void failureCheck();
-
-    void timerInst();
+//    void failureCheck();
 
     void on_driverEmergencyBrake_clicked();
 
@@ -53,10 +56,12 @@ private slots:
 
     void on_ki_returnPressed();
 
+
 private:
     Ui::UISWTrainController *ui;
-
-    bool prevCycleFail = false;
+    double pow = 0.0;
+    double pow1 = 0.0;
+    double pow2 = 0.0;
 
 };
 #endif // UISWTRAINCONTROLLER_H

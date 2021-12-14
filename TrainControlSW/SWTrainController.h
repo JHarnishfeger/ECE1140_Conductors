@@ -26,7 +26,7 @@ class SWTrainController{
         double speed_limit = 0;
         std::string incommingStation = "None";
         double commanded_velocity = 0.0;
-        double setpoint_velocity = 10.0;
+        double setpoint_velocity = 0.0;
         double current_velocity = 0.0;
 
         //Utilities variables
@@ -41,7 +41,9 @@ class SWTrainController{
         bool at_station = false;
         bool just_stopped = false;
         bool mode = true;
-        //double gps = 0;
+        int blocknum = -1;
+        int blocklength = 0;
+        double distTraveledOnBlock = 0;
 
       public:
         trainModel* train;
@@ -99,6 +101,12 @@ class SWTrainController{
         bool getEngineFailure();
         bool getTCFailure();
         bool getBrakeFailure();
+        void failureCheck();
+        int getblocknum();
+        int getblocklength();
+        double getdistTraveledOnBlock();
+        bool newBlock();
+
 
 };
 
