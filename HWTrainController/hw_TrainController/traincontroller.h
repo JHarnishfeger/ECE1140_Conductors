@@ -89,9 +89,9 @@ public:
     QByteArray encodeData();
     void decodeTrackCircuit();
     void decodeBeacon();
-    bool getEngineFailure();
-    bool getTCFailure();
-    bool getBrakeFailure();
+    QString getEngineFailure();
+    QString getTCFailure();
+    QString getBrakeFailure();
     void setLeftDoors(bool ld);
     void setRightDoors(bool rd);
     void setInteriorLights(bool il);

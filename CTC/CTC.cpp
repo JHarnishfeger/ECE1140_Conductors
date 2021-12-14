@@ -2,18 +2,14 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
-#include "WaysideManager.h"
+#include <WaysideManager.h>
 
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) {
-
-    if(sw_waystructs == nullptr || hw_waystruct == nullptr){
-        std::cout << "CTC: WayStructs are being recieved as null!\n";
-    }
 
 	//Give the waystructs to WaysideManager
 	std::list<WayStruct*> waystructs;
     if(sw_waystructs != nullptr && hw_waystruct != nullptr){
-        for(unsigned int i = 0; i < sw_waystructs->size(); i++){
+        for(int i = 0; i < sw_waystructs->size(); i++){
             waystructs.push_back(&(*sw_waystructs)[i]);
         }
         waystructs.push_back(hw_waystruct);
@@ -58,11 +54,6 @@ void CTC::update(int current_time){
     time = current_time;
 
     //TODO stuff here
-    auto nextSchedule = scheduleManager.loadNextSchedule();
-    if(mode == true && time >= nextSchedule.time && nextSchedule.train != ""){
-        dispatchTrain(nextSchedule);
-        scheduleManager.popNextSchedule();
-    }
 }
 
 /*
@@ -82,7 +73,7 @@ void CTC::setTrackSwitch(int blockId, bool direction){
     //THIS IMPLEMENTATION IS WRONG. CTC NEEDS TO USE AUTHORITY TO FLIP SWITCHES.
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        block->setSwitchStatus(direction);
+        return block->setSwitch(direction);
     }
 }
 
@@ -105,9 +96,6 @@ std::list<int> CTC::getSwitches(){
  * Dispatch a single schedule
  */
 void CTC::dispatchTrain(CTCSchedule schedule){
-    std::cout << "Dispatched train " << schedule.train << " to block " <<
-                 schedule.destination << " at time " << time << std::endl;
-
     //TODO
     //Get the route
     
@@ -171,7 +159,7 @@ bool CTC::getBlockDirection(int blockId){
     //THIS IS OK, unlike the setSwitch() implementation
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
-        return block->getSwitchStatus();
+        return block->getSwitch();
     }else{
         return false;
     }

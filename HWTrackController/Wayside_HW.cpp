@@ -26,22 +26,48 @@ void writeToArdu(string com){
 void receiveFromArdu(){
   ardu.readSerialPort(output, MAX_DATA_LENGTH);
 
+  //cout << "zhe" <<output << endl;
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Wayside_HW::initWayside(vector<Block> track){
+/*
+int char_to_int(char c){
+  int re = -1;
+  if(c == '0'){
+    re = 0;
+  }else if(c == '1'){
+    re = 1;
+  }else if(c == '2'){
+    re = 2;
+  }else if(c == '3'){
+    re = 3;
+  }else if(c == '4'){
+    re = 4;
+  }else if(c == '5'){
+    re = 5;
+  }else if(c == '6'){
+    re = 6;
+  }else if(c == '7'){
+    re = 7;
+  }else if(c == '8'){
+    re = 8;
+  }else if(c == '9'){
+    re = 9;
+  }
+  return re;
+}
+
+*/
+
+
+void Wayside::initWayside(vector<Block> track){
   sector = track;
   PLCController p(track);
   hwPLC = p;
-  wayStrInit();
 
   line = track[0].getLine();
 
-  manualMode = 1; //set to manual mode
+  manualMode = 0; //set to auto mode
   maintenanceMode = 0;
 
   trackSize = track.size();
@@ -50,7 +76,7 @@ void Wayside_HW::initWayside(vector<Block> track){
   authority.resize(trackSize);
 
   for(int i = 0; i < trackSize; i++){
-    int id = track[i].getBlockNumber();
+    int id = track[i].getId();
     blockIDs.push_back(id);
     bool po = track[i].getSwitchStatus();
     blockSwitchPosition.push_back(po);
@@ -61,56 +87,35 @@ void Wayside_HW::initWayside(vector<Block> track){
     bool bro = track[i].getRailStatus();
     brokenRail.push_back(bro);
 
-    if(sector[i].getType()=="SWITCH"){
-        ifBlockHasSwitch.push_back(1);
-    }else{
-        ifBlockHasSwitch.push_back(0);
-    }
-
-    if(sector[i].getType()=="CROSSING"){
-        ifBlockHasCrossing.push_back(1);
-    }else{
-        ifBlockHasCrossing.push_back(0);
-    }
-
-    if(sector[i].getType()=="SWITCH")
-        swich.push_back(sector[i]);
-    else if(sector[i].getType()=="CROSSING")
-        crossing.push_back(sector[i]);
-
-
   }
 }
 
-int Wayside_HW::getTrackSize(){
+int Wayside::getTrackSize(){
   //cout << trackSize << endl;
   return trackSize;
 }
 
-string Wayside_HW::getLine(){
+string Wayside::getLine(){
   return line;
 }
 
-vector<int> Wayside_HW::getId(){
+vector<int> Wayside::getId(){
   return blockIDs;
 }
 
-void Wayside_HW::setMode(bool m){
+void Wayside::setMode(bool m){
   manualMode = m;
 }
 
-bool Wayside_HW::getMode(){
+bool Wayside::getMode(){
   return manualMode;
 }
 
-void Wayside_HW::sendToArduino(int s){
+void Wayside::sendToArduino(int s){
   string c = to_string(s);
-  if(s>=0 && s<=9){
-      c = "0" + c;
-  }
   writeToArdu(c);
 }
-int Wayside_HW::receiveFromArduino(){
+void Wayside::receiveFromArduino(){
   receiveFromArdu();
   string id, id0;
   char tSwicth, crossing;
@@ -127,9 +132,6 @@ int Wayside_HW::receiveFromArduino(){
   for (int i = 4;i < outSize; i++){
     if(output[i] != '\n')
     out = out + output[i];
-  }
-  if(out == ""){
-      return 0;
   }
   //cout <<"out = "<< out << endl;
   id0 = out;
@@ -154,196 +156,89 @@ int Wayside_HW::receiveFromArduino(){
   }
   for(int i = 0; i < trackSize; i++){
     if(blockIDs[i] == idd){
-        if(!sector[i].getTrainPresent()){
-              blockSwitchPosition[i] = tSwicthh;
-              blockCrossingState[i] = crossingg;
-              sector[i].setSwitchStatus(tSwicthh);
-              sector[i].setCrossingStatus(crossingg);
-              cout << "id: " << blockIDs[i] << endl;
-              cout << "switch: " << sector[i].getSwitchStatus() << endl;
-              cout << "Crossing: " << sector[i].getCrossingStatus() << endl;
-        }else{
-            cout << "Update failed -- Train Present!!!" << endl;
-            return -1;
-        }
+      blockSwitchPosition[i] = tSwicthh;
+      blockCrossingState[i] = crossingg;
+      cout << "id: " << blockIDs[i] << endl;
+      cout << "switch: " << blockSwitchPosition[i] << endl;
+    cout << "Crossing: " << blockCrossingState[i] << endl;
     }
   }
-  return 1;
 }
 
+//string encode();
+//void decode(string);
 
-vector<bool> Wayside_HW::getIfBlockHasSwitch(){
-    return ifBlockHasSwitch;
+//void updateWayside();
+
+void Wayside::calculateCommandedSpeed(){
+
+    commandedSpeed = suggestedSpeed - 1.1;
+
 }
 
-vector<bool> Wayside_HW::getIfBlockHasCrossing(){
-    return ifBlockHasCrossing;
+void Wayside::setSuggestedSpeed(double sugg){
+
+    suggestedSpeed = sugg;
+
 }
 
-vector<bool> Wayside_HW::getBlockSwitchPosition(){
+double Wayside::getSuggestedSpeed(){
+  return suggestedSpeed;
+}
+
+double Wayside::getCommandedSpeed(){
+  calculateCommandedSpeed();
+  return commandedSpeed;
+}
+
+void Wayside::setAuthority(vector<Authority> au){
+  int size = au.size();
+  for(int i = 0; i < size; i++){
+    authority[i] = au[i];
+  }
+}
+
+vector<Authority> Wayside::getAuthority(){
+  return authority;
+}
+
+vector<bool> Wayside::getBlockSwitchPosition(){
   return blockSwitchPosition;
 }
 
-vector<bool> Wayside_HW::getBlockCrossingState(){
+vector<bool> Wayside::getBlockCrossingState(){
   return blockCrossingState;
 }
 
-vector<bool> Wayside_HW::getBrokenRail(){
+vector<bool> Wayside::getBrokenRail(){
   return brokenRail;
 }
 
-void Wayside_HW::setBlockOccupancy(vector<bool> occ){
+void Wayside::setBlockOccupancy(vector<bool> occ){
   int size = occ.size();
   for(int i = 0; i < size; i++){
     blockOccupany[i] = occ[i];
   }
 }
-vector<bool> Wayside_HW::getBlockOccupancy(){
+vector<bool> Wayside::getBlockOccupancy(){
   return blockOccupany;
 }
 
+//void runPLC();
 
-void Wayside_HW::setMaintenanceMode(bool m){
+void Wayside::setMaintenanceMode(bool m){
   maintenanceMode = m;
 }
 
-bool Wayside_HW::getMaintenanceMode(){
+bool Wayside::getMaintenanceMode(){
   return maintenanceMode;
 }
+/*
+bool Wayside::ifArduConnected(){
+  return ardu.isConnected();
+}
+*/
 
-
-bool Wayside_HW::ifHWConnected(){
+bool Wayside::ifHWConnected(){
     return ifArduConnected();
 }
-
-
-void Wayside_HW::importPLC(string filename){
-    hwPLC.track = sector;
-    hwPLC.importPLC(filename);
-}
-
-bool Wayside_HW::runPLC(){
-    bool correct;
-    hwPLC.auth = authority;
-    hwPLC.track = sector;
-    hwPLC.execute();
-    correct = hwPLC.verifyPLC();
-    updatetFromPLC();
-    return correct;
-}
-
-bool Wayside_HW::updatetFromPLC(){
-    bool change = 0;
-    if(manualMode == 0){
-        for(int i = 0; i < sector.size(); i++){
-            if(sector[i].getSwitchStatus() != hwPLC.SW[i]){
-                change = 1;
-                sector[i].setSwitchStatus(hwPLC.SW[i]);
-                blockSwitchPosition[i] = hwPLC.SW[i];
-            }
-            if(sector[i].getCrossingStatus() != hwPLC.CR[i]){
-                change = 1;
-                sector[i].setCrossingStatus(hwPLC.CR[i]);
-                blockCrossingState[i] = hwPLC.CR[i];
-            }
-        }
-    }
-    return change;
-}
-
-
-
-void Wayside_HW::wayStrInit(){
-    wayStr.suggestedSpeed = suggestedSpeed;
-    wayStr.id = 0;
-    wayStr.sector = sector;
-    wayStr.auth = authority;
-}
-
-void Wayside_HW::updateFromWayStr(){
-    suggestedSpeed = wayStr.suggestedSpeed;
-    //sector = wayStr.sector;
-    authority = wayStr.auth;
-}
-
-void Wayside_HW::updateToWayStr(){
-    wayStr.sector = sector;
-    wayStr.auth = authority;
-    wayStr.id = 0;
-}
-
-void Wayside_HW::updateTrack(vector<Block> t){
-    sector = t;
-    int trackSize = t.size();
-    blockOccupany.clear();
-    for(int i = 0; i < trackSize; i++){
-        blockOccupany.push_back(t[i].getTrainPresent());
-    }
-    detectTrack();
-}
-
-bool Wayside_HW::detectTrack(){
-    bool found = 0;
-    if(!runPLC())
-        cout << "From detectTrack: PLC output was incorrect. Track wasnot changed." << endl;
-    for(int i = 0; i < sector.size(); i++){
-        for(int j = 0; j < swich.size(); j++){
-            if(swich[j].getSwitchStatus() != sector[i].getSwitchStatus() && swich[j].getBlockNumber() == sector[i].getBlockNumber()){
-                cout << "Switch " << to_string(swich[j].getBlockNumber()) << " Toggled." << endl;
-                swich[j].setSwitchStatus(sector[i].getSwitchStatus());
-                blockSwitchPosition[i] = swich[j].getSwitchStatus();
-            }
-        }
-        for(int j = 0; j < crossing.size(); j++){
-            if(crossing[j].getCrossingStatus() != sector[i].getCrossingStatus() && crossing[j].getBlockNumber() == sector[i].getBlockNumber()){
-                cout << "Crossing " << to_string(crossing[j].getBlockNumber()) << " Toggled." << endl;
-                crossing[j].setCrossingStatus(sector[i].getCrossingStatus());
-                blockCrossingState[i] = crossing[j].getCrossingStatus();
-            }
-        }
-        for(int j = 0; j < brokenRail.size(); j++){
-            if(brokenRail[j] != sector[i].getRailStatus() && j == i){
-                cout << "Rail " << i << " Broken." << endl;
-                brokenRail[j] = sector[i].getRailStatus();
-                found = 1;
-            }
-        }
-        //if(!found && sector[i].getRailStatus() == true)
-            //brokenRail.push_back(sector[i]);
-        if(hwPLC.SS[i] == 1)
-            sector[i].setSuggestedSpeed(sector[i].getSpeedLimit());
-        if(hwPLC.ST[i] == 1)
-            sector[i].setSuggestedSpeed(0);
-        else
-            sector[i].setSuggestedSpeed(sector[i].getSpeedLimit());
-    }
-    return found;
-}
-
-WayStruct Wayside_HW::getWayStruct(){
-    return wayStr;
-}
-
-void Wayside_HW::updateHW(){
-
-    //if(manualMode == 0){
-        updateFromWayStr();
-        detectTrack();
-        updateToWayStr();
-    //}else{
-        //updateFromWayStr();
-    //}
-
-}
-
-
-
-
-
-
-
-
-
-
-
-

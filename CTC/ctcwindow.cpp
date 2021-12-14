@@ -137,7 +137,7 @@ void CTCWindow::on_pushButton_dispatchTrain_clicked()
     std::string trainNo;
     int destinationBlockId;
     int destinationTime;
-    std::cout << "Test\n";
+
     try{
         trainNo = ui->label_manualDispatchtrain->text().toStdString();
         destinationBlockId = std::stoi(ui->label_manualDispatchTo->text().toStdString());

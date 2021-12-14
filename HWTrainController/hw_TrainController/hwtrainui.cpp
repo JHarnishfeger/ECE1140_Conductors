@@ -16,11 +16,11 @@ HWTrainUI::HWTrainUI(QWidget *parent) :
        ui->ports->addItem(portName);
    }
 
-   setTimer = new QTimer(this);
-   setTimer->setInterval(1000);
+//   setTimer = new QTimer(this);
+//   setTimer->setInterval(1000);
 
-   connect(setTimer, &QTimer::timeout, this, &HWTrainUI::updates);
-   setTimer->start();
+//   connect(setTimer, &QTimer::timeout, this, &HWTrainUI::updates);
+//   setTimer->start();
 }
 
 HWTrainUI::~HWTrainUI()
@@ -77,7 +77,7 @@ void HWTrainUI::updates()
         qDebug() << "Serial Port Not Connected...";
     }
 
-    decodeSignals();
+    //decodeSignals();
 
 }
 

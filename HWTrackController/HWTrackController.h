@@ -9,9 +9,8 @@ class HWTrackController{
 
 private:
   WayStruct *WayStruPtr;
-  WayStruct wayStrHW;
-  Wayside_HW *WaysideHWptr;
-  Wayside_HW WaysideHW;
+  Wayside *WaysideHWptr;
+  Wayside WaysideHW;
   vector<Block> assignedTrack;
   void setBlocks(vector<Block>);
   void creatWayside();
@@ -20,12 +19,18 @@ public:
   HWTrackController();
   ~HWTrackController();
   void initializeHW(vector<Block>);
-  Wayside_HW* getWayside();
+  Wayside* getWayside();
+  void setSuggestedSpeed(double);
+  double getCommandedSpeed();
+  void setAuthority(vector<Authority>);
+  vector<Authority> getAuthority();
   int getTrackSize();
   void setControlMode(bool);
   void selectBlock_Manual(int);
-  WayStruct* getWayStructHW();
-  void updateHWWayside();
+  void updateTrack();
+  void updateFromWayStruc();
+  void updateToWayStruc();
+  //importPLC();
 };
 
 #endif

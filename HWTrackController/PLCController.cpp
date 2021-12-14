@@ -37,7 +37,7 @@ PLCController::PLCController(vector<Block> tr)
         auCheck = 0;
         for(int j=0;j<auth.size();j++)
         {
-            if(track[i].getBranch()==auth[j].branch&&track[i].getBlockNumber()<=auth[j].endBlock)
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
         }
         AU.push_back(auCheck);
@@ -108,7 +108,7 @@ void PLCController::importPLC(string file)
         auCheck = 0;
         for(int j=0;j<auth.size();j++)
         {
-            if(track[i].getBranch()==auth[j].branch&&track[i].getBlockNumber()<=auth[j].endBlock)
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
         }
         AU.push_back(auCheck);
@@ -1024,7 +1024,7 @@ void PLCController::execute()
         auCheck = 0;
         for(int j=0;j<auth.size();j++)
         {
-            if(track[i].getBranch()==auth[j].branch&&track[i].getBlockNumber()<=auth[j].endBlock)
+            if(track[i].getBranch()==auth[j].branch&&track[i].getId()<=auth[j].endBlock)
                 auCheck = 1;
         }
         AU.push_back(auCheck);

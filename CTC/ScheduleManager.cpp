@@ -9,29 +9,6 @@ CTCSchedule::CTCSchedule(std::string _train, int _destination, int _time){
     time = _time;
 }
 
-ScheduleManager::ScheduleManager(){
-    //These are the station names coming from the MBO.
-    stations["STATION; PIONEER"] = 2;
-    stations["STATION; EDGEBROOK"] = 9;
-    stations["STATION"] = 16;
-    stations["STATION; WHITED"] = 22;
-    stations["STATION; SOUTHBANK"] = 31;
-    stations["STATION; CENTRAL"] = 38; //USED TWICE
-    stations["STATION; INGLEWOOD"] = 47; //USED TWICE
-    stations["STATION; OVERBROOK"] = 56; //USED TWICE
-    stations["STATION; GLENBURY"] = 65; //USED TWICE
-    stations["STATION; DORMONT"] = 73; //USED TWICE
-    stations["STATION; MT LEBANON"] = 77;
-    stations["STATION; POPLAR"] = 88;
-    stations["STATION; CASTLE SHANNON"] = 96;
-    stations["STATION; DORMONT"] = 105; //USED TWICE
-    stations["STATION; GLENBURY"] = 114; //USED TWICE
-    stations["STATION; OVERBROOK"] = 122; //USED TWICE
-    stations["STATION; INGLEWOOD"] = 131; //USED TWICE
-    stations["STATION; CENTRAL"] = 140; //USED TWICE
-
-}
-
 std::string ScheduleManager::displaySchedule(){
  	std::string rtn = "";
     for(CTCSchedule s : schedule){
@@ -59,11 +36,10 @@ void ScheduleManager::loadSchedule(std::string filepath){
         try{
             auto itr = l.begin();
             std::string train = *(itr++);
-            std::string stationName = *(itr++);
-            int destination = stations.at(stationName);
+            int destination = std::stoi(*(itr++));
             int time = std::stoi(*(itr++));
             addSchedule(CTCSchedule(train, destination, time));
-        }catch(std::exception& e){
+        }catch(std::exception){
             std::cout << "Could not parse schedule " + filepath << std::endl;
         }
    	}
@@ -81,10 +57,5 @@ CTCSchedule ScheduleManager::loadNextSchedule(){
 	}
 
 	return schedule[0];
-}
-
-void ScheduleManager::popNextSchedule(){
-    if(!schedule.empty()){
-        schedule.erase(schedule.begin());
-    }
+	schedule.erase(schedule.begin());
 }
