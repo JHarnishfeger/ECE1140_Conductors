@@ -277,7 +277,7 @@ void Wayside_HW::wayStrInit(){
 
 void Wayside_HW::updateFromWayStr(){
     suggestedSpeed = wayStr.suggestedSpeed;
-    //sector = wayStr.sector;
+    sector = wayStr.sector;
     authority = wayStr.auth;
 }
 

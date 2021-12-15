@@ -151,6 +151,7 @@ void HWTCInterface::on_pushButton_2_clicked() //Update button
         QMessageBox::about(this, "Update Failed", "Update Failed -- Train Present on the Block! ");
     }
     emit updateToHWTrack(hwWaysidePtr->sector);
+    emit updateCTCWayStruct(hwWaysidePtr->wayStr);
 }
 
 
@@ -187,7 +188,7 @@ void HWTCInterface::on_PLCButton_clicked()
     }
     cout << endl;
     */
-
+    emit updateCTCWayStruct(hwWaysidePtr->wayStr);
 }
 
 void HWTCInterface::updateHWTrackController(){
@@ -211,6 +212,7 @@ void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
         }
     }
     hwWaysidePtr->updateTrack(track);
+    emit updateCTCWayStruct(hwWaysidePtr->wayStr);
     /*std::cout << "Track Before: " << std::endl;
     for(int i=0;i<track.size();i++)
         std::cout << track[i].getSwitchStatus() << " ";
@@ -225,7 +227,7 @@ void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
     std::cout << std::endl;
     for(int i=0;i<hwWaysidePtr->sector.size();i++)
         std::cout << hwWaysidePtr->sector[i].getSwitchStatus() << " ";*/
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 void HWTCInterface::runHWPLC(){
@@ -234,5 +236,7 @@ void HWTCInterface::runHWPLC(){
         if(hwWaysidePtr->hwPLC.getFilename()!=""){
             hwWaysidePtr->detectTrack();
         }
+        emit updateToHWTrack(hwWaysidePtr->sector);
+        emit updateCTCWayStruct(hwWaysidePtr->wayStr);
     }
 }
