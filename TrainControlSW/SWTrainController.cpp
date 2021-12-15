@@ -88,53 +88,53 @@ double SWTrainController::calculatePower(){
     }
 
     //Check if need to stop at a station in automatic mode
-    if (mode){
+    if (mode&&(authority||mb_authority)){
         atStation();
     }
 
-//LOOK INTO FIXING WHEN CMND SPEED LOWERS TO 0, then hits - and keeps going -
-    //if(power_command<0)
-     //   train->setBrakes(1);
+    //Regulates to slow down train using service brake if speed>suggested speed
+    if(power_command<0&&!brakeForSlow){
+        brakeForSlow=1;
+        train->setBrakes(1);
+    }else if(power_command>0&&brakeForSlow){
+        brakeForSlow=0;
+        train->setBrakes(0);
+    }
 
     train->setPower(power_command);
 }
 
 
 void SWTrainController::atStation(){
-    double temp_pow = power_command;
 
-    //Set power to zero if station on the block
-    if (at_station == true&&!(current_velocity==0.0)&&!service_brake){ //If not stopped and service brake isn't on
-        setServiceBrake(1);
+    //Station signals to stop train using service brake
+    if (at_station == true&&!(train->getSpeed()==0.0)&&!train->getBrakes()){ //If not stopped and service brake isn't on
+        train->setBrakes(1);
+        stopForStation=1;
     }
+
 
     //When the train stopped at a station, check timer if 60s passed (test when flipped with code belowe and see if timing error)
-    if (at_station == true && just_stopped == true){
-        //if (systemClock->currentTime() >= stationTimerEnd){ // train has been stopped for 60sec
-            Sleep(5000);//Sleep timer for first demo, will have to use the commented out code once we are able to use the same timer
+    if (stopForStation == true && (train->getSpeed()==0.0)){
+        if (stationCounter <= 5){ //If train has been stopped for 60sec
             //close doors
-            setLeftDoors(0);
-            setRightDoors(0);
-            setServiceBrake(0);
-            train->updatePassengers();
-            setServiceBrake(0);
-        //}
-    }
-
-    //When train just stopped, set a flag and start a timer
-    if (at_station == true && current_velocity == 0.0 && just_stopped == false){
-        just_stopped = true;
-        //stationTimerStart = systemClock->currentTime();
-        //stationTimerEnd = stationTimerStart.addSecs(60);
-        //open doors
-        setLeftDoors(1);
-        setRightDoors(1);
+            setLeftDoors(1);
+            setRightDoors(1);
+            train->setBrakes(1);
+            stationCounter++;
+        }
     }
 
 
     //When train has left the block with station, reset station flag.
-    if (at_station == false && just_stopped == true){
-        just_stopped = false;
+    if (stopForStation == true && stationCounter>5){
+        train->updatePassengers();
+        stationCounter=0;
+        stopForStation=false;
+        setLeftDoors(0);
+        setRightDoors(0);
+        train->setBrakes(0);
+        at_station=false;
     }
 }
 
@@ -142,49 +142,52 @@ void SWTrainController::atStation(){
 void SWTrainController::decodeBeacon(){
 
     uint16_t beacon = train->getBeaconData();
+    if(beacon!=0){//If beacon data is being read
 
-    int stationCode = (beacon >> 8) & 0xFF;
-    int incomingCode = beacon & 0xFF;
+        int stationCode = (beacon >> 8) & 0xFF;
+        int incomingCode = beacon & 0xFF;
 
-    //Station NameDecoder
-    if(stationCode == 1)                incommingStation = "Shadyside";
-    else if(stationCode == 2)           incommingStation = "Herron Ave";
-    else if(stationCode == 3)           incommingStation = "Swissville";
-    else if(stationCode == 4)           incommingStation = "Penn Station";
-    else if(stationCode == 5)           incommingStation = "Steel Plaza";
-    else if(stationCode == 6)           incommingStation = "First Ave";
-    else if(stationCode == 7)           incommingStation = "Station Square";
-    else if(stationCode == 8)           incommingStation = "South Hills Junction";
-    else if(stationCode == 9)           incommingStation = "Pioneer";
-    else if(stationCode == 10)          incommingStation = "Edgebrook";
-    else if(stationCode == 11)          incommingStation = "Whited";
-    else if(stationCode == 12)          incommingStation = "South Bank";
-    else if(stationCode == 13)          incommingStation = "Central";
-    else if(stationCode == 14)          incommingStation = "Inglewood";
-    else if(stationCode == 15)          incommingStation = "Overbrook";
-    else if(stationCode == 16)          incommingStation = "Glenbury";
-    else if(stationCode == 17)          incommingStation = "Dormont";
-    else if(stationCode == 18)          incommingStation = "Mt Lebanon";
-    else if(stationCode == 19)          incommingStation = "Poplar";
-    else if(stationCode == 20)          incommingStation = "Castle Shannon";
-    else if(stationCode == 21)          incommingStation = "Yard";
-    else if(stationCode == 31)          incommingStation = "None";
+        //Station NameDecoder
+        if(stationCode == 1)                incommingStation = "Shadyside";
+        else if(stationCode == 2)           incommingStation = "Herron Ave";
+        else if(stationCode == 3)           incommingStation = "Swissville";
+        else if(stationCode == 4)           incommingStation = "Penn Station";
+        else if(stationCode == 5)           incommingStation = "Steel Plaza";
+        else if(stationCode == 6)           incommingStation = "First Ave";
+        else if(stationCode == 7)           incommingStation = "Station Square";
+        else if(stationCode == 8)           incommingStation = "South Hills Junction";
+        else if(stationCode == 9)           incommingStation = "Pioneer";
+        else if(stationCode == 10)          incommingStation = "Edgebrook";
+        else if(stationCode == 11)          incommingStation = "Whited";
+        else if(stationCode == 12)          incommingStation = "South Bank";
+        else if(stationCode == 13)          incommingStation = "Central";
+        else if(stationCode == 14)          incommingStation = "Inglewood";
+        else if(stationCode == 15)          incommingStation = "Overbrook";
+        else if(stationCode == 16)          incommingStation = "Glenbury";
+        else if(stationCode == 17)          incommingStation = "Dormont";
+        else if(stationCode == 18)          incommingStation = "Mt Lebanon";
+        else if(stationCode == 19)          incommingStation = "Poplar";
+        else if(stationCode == 20)          incommingStation = "Castle Shannon";
+        else if(stationCode == 21)          incommingStation = "Yard";
+        else if(stationCode == 31)          incommingStation = "None";
 
-    if(incomingCode == 1){//No station and no headlights
-      at_station=0;
-      exterior_lights=0;
-    }else if(incomingCode == 2){//No station and headlights
-        at_station=0;
-        exterior_lights=1;
-    }else if(incomingCode == 3){//Station and no headlights
-        at_station=1;
-        exterior_lights=0;
-    }else if(incomingCode == 4){//Station and headlights
-        at_station=1;
-        exterior_lights=1;
+        if(incomingCode == 1){//No station and no headlights
+          at_station=0;
+          exterior_lights=0;
+        }else if(incomingCode == 2){//No station and headlights
+            at_station=0;
+            exterior_lights=1;
+        }else if(incomingCode == 3){//Station and no headlights
+            at_station=1;
+            exterior_lights=0;
+        }else if(incomingCode == 4){//Station and headlights
+            at_station=1;
+            exterior_lights=1;
+        }
     }
 }
 
+//Decodes track circuit data
 void SWTrainController::decodeTrackCircuit(){
 
     int64_t tcdata = train->getTCData();
@@ -196,6 +199,31 @@ void SWTrainController::decodeTrackCircuit(){
     authority = (tcdata) & 0xFF;
 }
 
+//Checks if train is in failure mode
+void SWTrainController::failureCheck(){
+    if(train->getEngineFail()){//If track circuit failure
+        if(!train->getEbrakes()&&!train->getBrakeFail())//Enable Ebrake if not
+            train->setEbrakes(1);
+    }else if(train->getSignalFail()){//If track engine failure
+        if(!train->getEbrakes()&&!(train->getBrakeFail()))//Enable Ebrake if not
+            train->setEbrakes(1);
+    }else if(train->getBrakeFail()){//If brake failure
+        train->setEbrakes(0);
+        train->setBrakes(0);
+    }
+}
+
+//Checks if the block has been fully traverced
+bool SWTrainController::newBlock(){
+    //qDebug()<<distTraveledOnBlock;
+    if(blocklength<=distTraveledOnBlock){
+        distTraveledOnBlock=0;
+        return 1;
+    }else{
+        distTraveledOnBlock+=((current_velocity/3.6)*T); //Converts km/hr to m/s then divides by clock speed
+        return 0;
+    }
+}
 
 //Accessors and mutators
 
@@ -281,15 +309,6 @@ void SWTrainController::setEmergencyBrake(bool eb){
 bool SWTrainController::getEmergencyBrake(){
     return train->getEbrakes();
 }
-/*
-void SWTrainController::setPassengerBrake(bool pb){
-    passenger_brake = pb;
-}
-
-bool SWTrainController::getPassengerBrake(){
-    return passenger_brake;
-}
-*/
 
 void SWTrainController::setLeftDoors(bool ld){
     left_doors = ld;
@@ -370,19 +389,6 @@ bool SWTrainController::getBrakeFailure(){
     return train->getBrakeFail();
 }
 
-void SWTrainController::failureCheck(){
-    if(train->getEngineFail()){//If track circuit failure
-        if(!train->getEbrakes()&&!train->getBrakeFail())//Enable Ebrake if not
-            train->setEbrakes(1);
-    }else if(train->getSignalFail()){//If track engine failure
-        if(!train->getEbrakes()&&!(train->getBrakeFail()))//Enable Ebrake if not
-            train->setEbrakes(1);
-    }else if(train->getBrakeFail()){//If brake failure
-        train->setEbrakes(0);
-        train->setBrakes(0);
-    }
-}
-
 int SWTrainController::getTrainID(){
     return train->getID();
 }
@@ -399,16 +405,6 @@ double SWTrainController::getdistTraveledOnBlock(){
     return distTraveledOnBlock;
 }
 
-bool SWTrainController::newBlock(){
-    //qDebug()<<distTraveledOnBlock;
-    if(blocklength<=distTraveledOnBlock){
-        distTraveledOnBlock=0;
-        return 1;
-    }else{
-        distTraveledOnBlock+=((current_velocity/3.6)*T); //Converts km/hr to m/s then divides by clock speed
-        return 0;
-    }
-}
 
 uint8_t SWTrainController::getEncodedBlock(){
     return(((uint8_t)blocknum));
@@ -418,6 +414,7 @@ void SWTrainController::setCorrectAuthority(bool a){
     use_authority = a;
 }
 
+//Chooses correct authority
 double SWTrainController::getCorrectAuthority(){
     if(use_authority){
         return mb_authority;

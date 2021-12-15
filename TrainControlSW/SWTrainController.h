@@ -42,9 +42,12 @@ class SWTrainController{
         bool at_station = false;
         bool just_stopped = false;
         bool mode = true;
-        int blocknum = -1;
+        int blocknum = 0;
         int blocklength = 0;
         double distTraveledOnBlock = 0;
+        bool brakeForSlow = 0;
+        int stationCounter = 0;
+        bool stopForStation = 0;
 
       public:
         trainModel* train;
