@@ -151,7 +151,7 @@ void WaysideWin::on_SwitchRight_clicked(){
 void WaysideWin::on_ImportPLC_clicked(){
     string filename;
     filename = ui->PLCFile->text().toStdString() + ".txt";
-    std::cout << QDir::currentPath().toStdString() << std::endl;
+    //std::cout << QDir::currentPath().toStdString() << std::endl;
     way->plc.importPLC(filename);
     std::cout << "RUNNING " << way->plc.getFilename() << std::endl;
     way->detectTrack();

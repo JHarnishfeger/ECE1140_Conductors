@@ -36,11 +36,11 @@ void CTCWindow::returnWayStructs(){
 }
 
 void CTCWindow::updateLocalWayStructs(WayStruct wayStr){
-    std::cout << "WAYSTR " << wayStr.id << std::endl;
-    std::cout << "SWITCH ON 12: " << wayStr.sector[11].getSwitchStatus() << std::endl;
+    //std::cout << "WAYSTR " << wayStr.id << std::endl;
+    //std::cout << "SWITCH ON 12: " << wayStr.sector[11].getSwitchStatus() << std::endl;
     for(WayStruct* w : ctc->waysideManager.waysides){
         if(wayStr.id==w->id){
-            std::cout << "ORIGINAL: " << w->sector[11].getSwitchStatus() << std::endl;
+            //std::cout << "ORIGINAL: " << w->sector[11].getSwitchStatus() << std::endl;
             *w = wayStr;
         }
     }

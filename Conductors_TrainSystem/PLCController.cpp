@@ -27,7 +27,7 @@ PLCController::PLCController(vector<Block> tr){
         CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
-        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
+        BR.push_back(!track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0); //STOP
@@ -91,7 +91,7 @@ void PLCController::importPLC(string file){
         CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
-        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
+        BR.push_back(!track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0);
@@ -1061,7 +1061,7 @@ void PLCController::execute(){
         CL.push_back(track[i].getType()=="CROSSING"); //CROSSING LOCATION
         SW.push_back(track[i].getSwitchStatus()); //SWITCH POSITION
         CR.push_back(track[i].getCrossingStatus()); //CROSSING POSITION
-        BR.push_back(track[i].getRailStatus()); //BROKEN RAIL
+        BR.push_back(!track[i].getRailStatus()); //BROKEN RAIL
         SS.push_back(track[i].getSuggestedSpeed()>track[i].getSpeedLimit()); //SUGGESTED SPEED
         SR.push_back(0); //SPEED RESET
         ST.push_back(0);
@@ -1618,7 +1618,7 @@ bool PLCController::verifyPLC(){
     correct = correct && (checkVecs[11]==NB);
     correct = correct && (checkVecs[12]==TL);
     correct = correct && (checkVecs[13]==TC);
-    std::cout << "VALID: " << correct << std::endl;
+    //std::cout << "VALID: " << correct << std::endl;
     if(!correct){
         TR = oldVecs[0];
         SL = oldVecs[1];
