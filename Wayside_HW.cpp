@@ -19,7 +19,7 @@ char* unconstchar(const char* s) {
     }
 }
 
-const char *port0 = "\\\\.\\COM4";
+const char *port0 = "\\\\.\\COM13";
 char output[MAX_DATA_LENGTH];
 char incoming[MAX_DATA_LENGTH];
 char *port = unconstchar(port0);

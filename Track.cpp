@@ -10,15 +10,17 @@ Track::Track(){
     //suggSpeed = 45.0;
 }
 //Full input constructor
-Track::Track(vector<Block*> greenLineIN, vector<Block*> redLineIN, double suggSpeedIN){
+Track::Track(vector<Block*> greenLineIN, vector<Block*> redLineIN, double suggSpeedIN, bool directionIN){
     greenLine = greenLineIN;
     redLine = redLineIN;
     suggSpeed = suggSpeedIN;
+    direction = directionIN;
 }
 //Functional constructor
 Track::Track(string filename, double suggSpeedIN){
     loadTrack(filename);
     suggSpeed = suggSpeedIN;
+    direction = 1;
 }
 
 //Initalize for QT
@@ -26,6 +28,7 @@ Track::Track(string filename, double suggSpeedIN){
 void Track::initalize(string filename, double suggSpeedIN){
     loadTrack(filename);
     suggSpeed = suggSpeedIN;
+    direction = 1;
 }
 
 //Attributes:
@@ -57,6 +60,20 @@ void Track::setSuggSpeed(double suggSpeedIN){
 //Desc: returns the value of the attribute suggSpeed as a double
 double Track::getSuggSpeed(){
     return suggSpeed;
+}
+
+//direction ------------------------------------------------------------
+//Params: bool
+//Returns: None
+//Desc: sets the value of the attribute direction = to inputted bool
+void Track::setDirection(bool directionIN){
+    direction = directionIN;
+}
+//Params: None
+//Returns: bool
+//Desc: returns the value of the attribute direction as a bool
+bool Track::getDirection(){
+    return direction;
 }
 
 //Class Functions:
@@ -322,7 +339,7 @@ bool Track::loadTrack(string filename){
             int blockNumG, speedLimG;
             ss2 >> blockNumG;
             ss3 >> speedLimG;
-            greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), 0.0));
+            greenLine.push_back(new Block(line, branch, blockNumG, stod(length), stod(grade), speedLimG, type, stationSDEG, stod(elevation), (double)speedLimG));
             if(type.substr(0,2) == "ST"){
                 greenLine.at(i - 1)->setBeaconPresent(true);
             }
@@ -344,7 +361,7 @@ bool Track::loadTrack(string filename){
             int blockNumR, speedLimR;
             ss5 >> blockNumR;
             ss6 >> speedLimR;
-            redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), 0.0));
+            redLine.push_back(new Block(line, branch, blockNumR, stod(length), stod(grade), speedLimR, type, stationSDER, stod(elevation), (double)speedLimR));
             if(type.substr(0,2) == "ST"){
                 redLine.at(i - 1)->setBeaconPresent(true);
             }
@@ -492,73 +509,170 @@ void Track::updateTrack(vector<Block> newTrack){
         }
     }
 }
-//Params: uint8_t, int
+//Params: uint8_t, int, bool
 //Returns: uint64_t
 //Desc: handles the train info sent to Track Model by the Train Model
 uint64_t Track::handleTCTrainInfo(uint8_t currBlock, int ID, bool line){
 
     int blockNum = (currBlock) & 0xFF;
 
-    if(blockNum == 0 && line == 1){
+    //fixing block counting by 2
+    if(blockNum != 0){
+        blockNum = (blockNum - 1);
+    }
+
+    //init placemnet
+    if(line == 1 && blockNum == 0){
+        qDebug() << "(init)entering block g:" << 63;
+        greenLine.at(63)->setTrainPresent(true);
         return greenLine.at(63)->getTrackCircuitData();
-    }else if(blockNum == 0 && line == 0){
+    }
+    if(line == 0 && blockNum == 0){
+        redLine.at(10)->setTrainPresent(true);
         return redLine.at(10)->getTrackCircuitData();
-    }else{
-        if(line == 1){
-            if(greenLine.at(blockNum)->getType() == "SWITCH"){
-                if(greenLine.at(blockNum)->getSwitchStatus() == 1){
-                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+    }
+
+    //checking line 1 == green 0 == red
+    if(line == 1){
+        //removing train from currBlock (leaving block)
+        qDebug() << "leaving block g:" << blockNum;
+        greenLine.at(blockNum)->setTrainPresent(false);
+        //special cases
+        //Q -> N
+        if(blockNum == 100){
+            direction = 0;
+            qDebug() << "(special 100)entering block g:" << 83;
+            greenLine.at(83)->setTrainPresent(true);
+            return greenLine.at(83)->getTrackCircuitData();
+        }
+        //Z -> F
+        if(blockNum == 150){
+            direction = 0;
+            qDebug() << "(special 150)entering block g:" << 28;
+            greenLine.at(28)->setTrainPresent(true);
+            return greenLine.at(28)->getTrackCircuitData();
+        }
+        //A -> D
+        if(blockNum == 1){
+            direction = 1;
+            qDebug() << "(special 1)entering block g:" << 13;
+            greenLine.at(13)->setTrainPresent(true);
+            return greenLine.at(13)->getTrackCircuitData();
+        }
+        //testing for switch
+        if(greenLine.at(blockNum)->getType() == "SWITCH"){
+            //track is SWITCH
+            if(greenLine.at(blockNum)->getSwitchStatus() == 1){
+                //switch == 1
+                if(greenLine.at(blockNum)->getNextBlocks().at(0) == 0){
+                    //switch to yard
+                    qDebug() << "(yard)leaving block g:" << blockNum;
+                    greenLine.at(blockNum)->setTrainPresent(false);
+                    return 0;
                 }else{
-                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+                    //switch to block #
+                    qDebug() << "(switch)entering block g:" << greenLine.at(blockNum)->getNextBlocks().at(0);
+                    greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
                 }
             }else{
-                return greenLine.at(blockNum + 1)->getTrackCircuitData();
+                //switch == 0
+                if(greenLine.at(blockNum)->getNextBlocks().at(1) == 0){
+                    //switch to yard
+                    qDebug() << "(yard)leaving block g:" << blockNum;
+                    greenLine.at(blockNum)->setTrainPresent(false);
+                    return 0;
+                }else{
+                    //switch to block #
+                    qDebug() << "(switch)entering block g:" << greenLine.at(blockNum)->getNextBlocks().at(1);
+                    greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
+                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
+                }
             }
         }else{
-            if(redLine.at(blockNum)->getType() == "SWITCH"){
-                if(redLine.at(blockNum)->getSwitchStatus() == 1){
-                    return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+            //track is NOT SWITCH
+            qDebug() << "Direction: " << direction;
+            if(direction == 1){
+                //moving forward
+                qDebug() << "(forward)entering block g:" << (blockNum + 1);
+                greenLine.at(blockNum + 1)->setTrainPresent(true);
+                return greenLine.at(blockNum + 1)->getTrackCircuitData();
+            }else{
+                //moving backward
+                qDebug() << "(backward)entering block g:" << (blockNum - 1);
+                greenLine.at(blockNum - 1)->setTrainPresent(true);
+                return greenLine.at(blockNum - 1)->getTrackCircuitData();
+            }
+        }
+    //end green line
+    }else{
+        //removing train from currBlock (leaving block)
+        redLine.at(blockNum)->setTrainPresent(false);
+        //special cases
+
+        //testing for switch
+        if(redLine.at(blockNum)->getType() == "SWITCH"){
+            //track is SWITCH
+            if(redLine.at(blockNum)->getSwitchStatus() == 1){
+                //switch == 1
+                if(redLine.at(blockNum)->getNextBlocks().at(1) == 0){
+                    //switch to yard
+                    redLine.at(blockNum)->setTrainPresent(false);
+                    return 0;
                 }else{
+                    //switch to block #
+                    redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->setTrainPresent(true);
                     return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getTrackCircuitData();
                 }
             }else{
-                return redLine.at(blockNum+1)->getTrackCircuitData();
+                //switch == 0
+                if(redLine.at(blockNum)->getNextBlocks().at(0) == 0){
+                    //switch to yard
+                    redLine.at(blockNum)->setTrainPresent(false);
+                    return 0;
+                }else{
+                    //switch to block #
+                    redLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->setTrainPresent(true);
+                    return redLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getTrackCircuitData();
+                }
+            }
+        }else{
+            //track is NOT SWITCH
+            if(direction == 1){
+                //moving forward
+                redLine.at(blockNum + 1)->setTrainPresent(true);
+                return redLine.at(blockNum + 1)->getTrackCircuitData();
+            }else{
+                //moving backward
+                redLine.at(blockNum - 1)->setTrainPresent(true);
+                return redLine.at(blockNum - 1)->getTrackCircuitData();
             }
         }
+    //end red line
     }
 }
-//Params: uint8_t, int
+//Params: uint8_t, int, bool
 //Returns: uint16_t
 //Desc: handles the train info sent to Track Model by the Train Model
 uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
 
-    int blockNum = (currBlock) & 0xFF;
+     int blockNum = (currBlock) & 0xFF;
+     if(blockNum != 0){
+         blockNum = blockNum - 1;
+     }
 
-    if(blockNum == 0 && line == 1){
-        return greenLine.at(63)->getBeaconData();
-    }else if(blockNum == 0 && line == 0){
-        return redLine.at(10)->getBeaconData();
-    }else{
-        if(line == 1){
-            if(greenLine.at(blockNum)->getType() == "SWITCH"){
-                if(greenLine.at(blockNum)->getSwitchStatus() == 1){
-                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
-                }else{
-                    return greenLine.at(greenLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
-                }
-            }else{
-                return greenLine.at(blockNum + 1)->getBeaconData();
-            }
+    if(line == 1){
+        if(greenLine.at(blockNum)->getBeaconPresent() == true){
+            qDebug() << "getting beacon data g:" << blockNum;
+            return greenLine.at(blockNum + 1)->getBeaconData();
         }else{
-            if(redLine.at(blockNum)->getType() == "SWITCH"){
-                if(redLine.at(blockNum)->getSwitchStatus() == 1){
-                    return redLine.at(redLine.at(blockNum)->getNextBlocks().at(0))->getBeaconData();
-                }else{
-                    return redLine.at(redLine.at(blockNum)->getNextBlocks().at(1))->getBeaconData();
-                }
-            }else{
-                return redLine.at(blockNum+1)->getBeaconData();
-            }
+            return 0;
+        }
+    }else{
+        if(redLine.at(blockNum)->getBeaconPresent() == true){
+            return redLine.at(blockNum + 1)->getBeaconData();
+        }else{
+            return 0;
         }
     }
 }
