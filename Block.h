@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cmath>
 #include <vector>
+#include <qDebug>
 using std::string;
 using std::vector;
 
@@ -39,12 +40,12 @@ class Block{
 		bool switchStatus;
 		bool trainPresent;
 		bool beaconPresent;
-		uint32_t trackCircuitData;
+        uint64_t trackCircuitData;
 		uint16_t beaconData;
 	public:
 		//Constructors: ------------------------------------------------
 		Block();
-		Block(string,string,string,string,string,vector<int>,int,int,int,int,int,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,bool,uint32_t,uint16_t);
+        Block(string,string,string,string,string,vector<int>,int,int,int,int,int,double,double,double,double,double,bool,bool,bool,bool,bool,bool,bool,bool,bool,uint64_t,uint16_t);
 		Block(string,string,int,double,double,int,string,int,double,double);
 		//Attributes: --------------------------------------------------
 		//line:
@@ -132,7 +133,7 @@ class Block{
 		bool getBeaconPresent();
 		//trackCircuitData:
 		void encodeTrackCircuitData();
-		uint32_t getTrackCircuitData();
+        uint64_t getTrackCircuitData();
 		//beaconData:
 		void encodeBeaconData();
 		uint16_t getBeaconData();
