@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <string.h>
 
-trainUI::trainUI(QWidget *parent,bool HardwareOrSoftware)
+
+trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware,int ID, bool RedOrGreen)
     : QMainWindow(parent)
     , ui(new Ui::trainUI)
 {
@@ -12,15 +13,30 @@ trainUI::trainUI(QWidget *parent,bool HardwareOrSoftware)
     //timer set up and updateUI running function
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(updateTestUI()));
-    timer->start(1000);
 
     //Connects traincontroller to train and train timer to TC timer
-    //s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
-    //s.show();
-    //connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
-    //timer ->start(1000);
+    if (HardwareOrSoftware == 1){
+        s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
+        s.show();
+        connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
+
+//        //Connects train controller getTCData to train model GetTCData
+//        connect(&s,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+    }
+    else if (HardwareOrSoftware == 0){
+        hw.trainController.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
+        hw.show();
+        connect(timer, SIGNAL(timeout()),&hw,SLOT(updates()));
+
+//        //Connects train controller getTCData to train model GetTCData
+//        connect(&hw,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+    }
+
+    timer ->start(1000);
 
     HorS = HardwareOrSoftware;
+    RorG = RedOrGreen;
+    mainTrain->setID(ID);
     ui->Height_2->display(3);
     ui->Length_2->display(20);
     ui->Width_2->display(3);
@@ -33,7 +49,7 @@ trainUI::~trainUI(){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setBFail(bool bt){
+QString trainUI::setBFail(){
 
   if (brakeFail == true){
     return "FAIL";
@@ -48,7 +64,7 @@ QString trainUI::setBFail(bool bt){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setEFail(bool et){
+QString trainUI::setEFail(){
   if (engineFail == true){
     return "FAIL";
   }
@@ -61,7 +77,7 @@ QString trainUI::setEFail(bool et){
 /*Function is for murphy inputs to set
   failures at any point in time.
   */
-QString trainUI::setSFail(bool st){
+QString trainUI::setSFail(){
   if (signalFail == true){
     return "FAIL";
   }
@@ -79,7 +95,7 @@ void trainUI::on_EngineFail_clicked()
     else {
          engineFail = true;
     }
-    ui->label->setText(setEFail(engineFail));
+    ui->label->setText(setEFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -93,7 +109,7 @@ void trainUI::on_BrakeFail_clicked()
          brakeFail = true;
     }
 
-    ui->label_2->setText(setBFail(brakeFail));
+    ui->label_2->setText(setBFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -106,7 +122,7 @@ void trainUI::on_SignalFail_clicked()
     else {
          signalFail = true;
     }
-    ui->label_3->setText(setSFail(signalFail));
+    ui->label_3->setText(setSFail());
     mainTrain->setFailures(engineFail,signalFail,brakeFail);
 }
 
@@ -142,7 +158,6 @@ void trainUI::updateTestUI(){
     ui->lcdNumber_5->display(mainTrain->getCrew());
     ui->lcdNumber_6->display(mainTrain->getTemperature());
     ui->lcdNumber_7->display(mainTrain->getPower());
-
 
 
     //Brakes
@@ -198,4 +213,7 @@ void trainUI::on_Temp_Change_sliderMoved(int position)
     mainTrain->setTemperature(position);
 }
 
+void callTCData(uint8_t currentBlock){
+    callAgainTCData(currentBlock,mainTrain->getID());
+}
 

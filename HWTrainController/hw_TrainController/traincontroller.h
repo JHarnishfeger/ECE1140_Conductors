@@ -16,6 +16,9 @@ class TrainController : public QObject
     Q_OBJECT
 public:
 
+    explicit TrainController(QObject *parent = nullptr);
+
+    //Serial
     SerialPort serialport;
 
     //connected train
@@ -38,6 +41,10 @@ public:
     QString nextStation = "ShadySide";
     QString stationCode = "00000";
 
+    int blocknum = 0;
+    int blocklength = 0;
+    double distTraveledOnBlock = 0;
+
     //Utilities Variables
     bool leftDoors = false;
     bool rightDoors = false;
@@ -56,10 +63,7 @@ public:
     bool at_station = false;
     bool just_stopped = false;
 
-    explicit TrainController(QObject *parent = nullptr);
-    void readSerial();
-    void writeSerial();
-    void atStation();
+    //Accessors
     QString getKp();
     QString getKi();
     QString getCommandedSpeed();
@@ -68,7 +72,6 @@ public:
     double getSpeedLimit();
     double getAuthority();
     QString getMode();
-    void double2string();
     bool getLeftDoors();
     bool getRightDoors();
     bool getInteriorLights();
@@ -77,6 +80,17 @@ public:
     bool getEBreak();
     bool getPassengerBreak();
     QString getCommandedPower();
+    QString getEngineFailure();
+    QString getTCFailure();
+    QString getBrakeFailure();
+    int getTrainID();
+    int getblocknum();
+    int getblocklength();
+    double getdistTraveledOnBlock();
+    uint8_t getEncodedBlock();
+
+
+    //Mutators
     void setKp(QString kp);
     void setKi(QString ki);
     void setCommandedSpeed(QString CommandedSpeed);
@@ -85,13 +99,6 @@ public:
     void setSpeedLimit(QString SpeedLimit);
     void setAuthority(QString Authority);
     void setNextStation(QString NextStation);
-    void decodeData(QString inputData);
-    QByteArray encodeData();
-    void decodeTrackCircuit();
-    void decodeBeacon();
-    bool getEngineFailure();
-    bool getTCFailure();
-    bool getBrakeFailure();
     void setLeftDoors(bool ld);
     void setRightDoors(bool rd);
     void setInteriorLights(bool il);
@@ -99,9 +106,22 @@ public:
     void setServiceBreaks(bool sb);
     void setEmergencyBreaks(bool eb);
 
+    //serial functions
+    void readSerial();
+    void writeSerial();
+
+    //Decoding/Encoding Data
+    void decodeData(QString inputData);
+    QByteArray encodeData();
+    void decodeTrackCircuit();
+    void decodeBeacon();
+
+    //extra methods
+    void atStation();
+    void double2string();
+
+    bool newBlock();
 
 };
-
-//extern TrainController trainController;
 
 #endif // TRAINCONTROLLER_H

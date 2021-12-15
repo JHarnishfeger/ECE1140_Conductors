@@ -15,20 +15,11 @@ class SerialPort : public QObject
 {
     Q_OBJECT
 public:
-    QSerialPort *arduino = nullptr;
 
-//    QTimer *writeTimer;
-//    QTimer *readTimer;
+    QSerialPort *arduino = nullptr;
 
     explicit SerialPort(QObject *parent = nullptr);
     void openSerialPort(QSerialPortInfo &portInfo);
-
-public slots:
-//    void readSerial();
-//    void writeSerial();
-
-
-signals:
 
 };
 

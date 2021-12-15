@@ -28,17 +28,16 @@ public:
     explicit HWTrainUI(QWidget *parent = nullptr);
     ~HWTrainUI();
 
+signals:
+    void getNewTCSignal(uint8_t encodedBlock);
+
 private slots:
+
     void decodeSignals();
-
     void on_connectButton_clicked();
-
     void on_commandedSpeed_returnPressed();
-
     void on_enterButton_clicked();
-
     void updates();
-
     void on_ports_currentIndexChanged(int index);
 
 private:

@@ -16,11 +16,6 @@ HWTrainUI::HWTrainUI(QWidget *parent) :
        ui->ports->addItem(portName);
    }
 
-   setTimer = new QTimer(this);
-   setTimer->setInterval(1000);
-
-   connect(setTimer, &QTimer::timeout, this, &HWTrainUI::updates);
-   setTimer->start();
 }
 
 HWTrainUI::~HWTrainUI()
@@ -69,6 +64,7 @@ void HWTrainUI::updates()
 {
     if(trainController.serialport.arduino->isOpen())
     {
+        qDebug() << "here";
         trainController.writeSerial();
         trainController.readSerial();
     }
@@ -76,9 +72,10 @@ void HWTrainUI::updates()
     {
         qDebug() << "Serial Port Not Connected...";
     }
-
     decodeSignals();
-
+    if(trainController.newBlock()){
+        emit getNewTCSignal(trainController.getEncodedBlock());
+    }
 }
 
 

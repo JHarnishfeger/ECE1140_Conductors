@@ -1,4 +1,4 @@
-#include "traincontrollermainwindow.h"
+include "traincontrollermainwindow.h"
 
 #include <QApplication>
 

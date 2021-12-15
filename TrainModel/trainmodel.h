@@ -41,7 +41,8 @@ class trainModel{
         bool leftDoor,rightDoor;
 
         //authority
-        int authority;
+        double authDistance;
+        double authSpeed;
 
         //temperature
         double temperature;
@@ -50,7 +51,7 @@ class trainModel{
         double distanceTraveled;
 
         //Track Circuit Data
-        uint32_t TCData;
+        uint64_t TCData;
 
         //Beacon Data
         uint16_t BeaconData;
@@ -58,7 +59,6 @@ class trainModel{
     public:
         trainModel(bool HardwareOfSoftware);
         ~trainModel();
-
 
         //IDs
         void setID(int id);
@@ -96,7 +96,7 @@ class trainModel{
         bool getBrakeFail();
 
         //authority
-        void setAuthority(int mba);
+        void setAuthority(double Distance,double Speed);
         int getAuthority();
 
         //lights
@@ -123,15 +123,14 @@ class trainModel{
         int getSpeedLimit();
 
         //send Track Circuit Data
-        void setTCData(uint32_t Data);
-        uint32_t getTCData();
+        void setTCData(uint64_t Data);
+        uint64_t getTCData();
 
         //send Beacon Data
         void setBeaconData(uint16_t Data);
         uint16_t getBeaconData();
 
     signals:
-
         //Signals for MBO
         double getMovingBlockAuthority();
         double getMovingBlockSpeed();

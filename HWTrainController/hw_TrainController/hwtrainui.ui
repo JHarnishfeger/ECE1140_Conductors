@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>01000</string>
+     <string>1000</string>
     </property>
    </widget>
    <widget class="QLabel" name="Engineer">
@@ -66,7 +66,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>01000</string>
+     <string>1000</string>
     </property>
    </widget>
    <widget class="QPushButton" name="enterButton">
@@ -174,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>751</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

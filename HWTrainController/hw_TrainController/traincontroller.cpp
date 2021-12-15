@@ -63,12 +63,13 @@ QByteArray TrainController::encodeData()
     char 0            = parity
     char 1-4          = kp
     char 5-8          = ki
-    char 9-13        = commandedSpeed
+    char 9-13         = commandedSpeed
     char 14-18        = currentSpeed
     char 19-23        = suggestedSpeed
     char 24-28        = speedLimit
     char 29-33        = authority
     char 34-38        = stationCode
+    char 39           = brakeFailure
     */
 
     if(nextStation == "Shadyside")                  stationCode = "00000";
@@ -107,6 +108,7 @@ QByteArray TrainController::encodeData()
     output += speedLimit_s.toLocal8Bit();
     output += authority_s.toLocal8Bit();
     output += stationCode.toLocal8Bit();
+    output += getBrakeFailure().toLocal8Bit();
     output += '\n';
 
     return output;
@@ -125,7 +127,6 @@ void TrainController::readSerial()
 
     //qDebug() << "Initial Data: " << temp.length() << " " << temp;
 
-
     for(int i = 13; i < 19; i++)
     {
         if ((len%i) == 0)
@@ -135,15 +136,6 @@ void TrainController::readSerial()
             break;
         }
     }
-//    if (((len%13) == 0)||((len%14) == 0)||((len%15) == 0)||((len%16) == 0)||((len%17) == 0)||((len%18) == 0))
-//    {
-//        temp1 = temp.toStdString();
-//        temp2 = QString::fromStdString(temp.toStdString().substr(0, 18));
-//    }
-
-//    temp2 = QString::fromStdString(temp.toStdString().substr(0, 18));
-    //qDebug() << "Temp2: " << temp2;
-
 
     if(dataIN_concat.length() <= 18)
     {
@@ -177,7 +169,6 @@ void TrainController::writeSerial()
 void TrainController::atStation()
 {
     QString temp_pow = commandedPower;
-
     //set power to zero if station is on the block
     if ((at_station == true) && !(getCurrentSpeed() == 0.0) && !(serviceBreak))
     {
@@ -231,8 +222,10 @@ void TrainController::atStation()
 
 void TrainController::decodeTrackCircuit(){
 
-    uint32_t tcdata = train->getTCData();
+    int64_t tcdata = train->getTCData();
 
+    blocklength = (tcdata >> 32) & 0x1FF;
+    blocknum = (tcdata >> 24) & 0xFF;
     speedLimit = (tcdata >> 16) & 0xFF;
     suggestedSpeed = (tcdata >> 8) & 0xFF;
     authority = (tcdata) & 0xFF;
@@ -310,11 +303,6 @@ void TrainController::double2string()
     {
         temp_authority_s.insert(0, QString('0'));
     }
-
-//    qDebug() << "Current Speed: " << temp_currentSpeed_s;
-//    qDebug() << "Suggested Speed: " << temp_suggestedSpeed_s;
-//    qDebug() << "SpeedLimit: " << temp_speedLimit_s;
-//    qDebug() << "Authority: " << temp_authority_s;
 
     setCurrentSpeed(temp_currentSpeed_s);
     setSuggestedSpeed(temp_suggestedSpeed_s);
@@ -403,18 +391,31 @@ QString TrainController::getCommandedPower()
     return commandedPower;
 }
 
-bool TrainController::getEngineFailure(){
-    return train->getEngineFail();
+QString TrainController::getEngineFailure()
+{
+    return QString(train->getEngineFail());
 }
 
-bool TrainController::getTCFailure(){
-    return train->getSignalFail();
+QString TrainController::getTCFailure()
+{
+    return QString(train->getSignalFail());
 }
 
-bool TrainController::getBrakeFailure(){
-    return train->getBrakeFail();
-}
+QString TrainController::getBrakeFailure()
+{
+    QString bf;
 
+    if (train->getBrakeFail() == false)
+    {
+        bf = "0";
+    }
+    else if (train->getBrakeFail() == true)
+    {
+        bf = "1";
+    }
+
+    return bf;
+}
 void TrainController::setKp(QString kp)
 {
     Kp = kp;
@@ -477,10 +478,60 @@ void TrainController::setExteriorLights(bool el)
 
 void TrainController::setServiceBreaks(bool sb)
 {
-    train->setBrakes(sb);
+    if(getBrakeFailure() == "1")
+    {
+        train->setBrakes(0);
+    }
+    else
+    {
+        train->setBrakes(sb);
+    }
 }
 
 void TrainController::setEmergencyBreaks(bool eb)
 {
-    train->setEbrakes(eb);
+    if(getTCFailure() == "1" || getEngineFailure() == "1")
+    {
+        train->setEbrakes(1);
+    }
+    else if(getBrakeFailure() == "1")
+    {
+        train->setEbrakes(0);
+    }
+    else
+    {
+        train->setEbrakes(eb);
+    }
 }
+
+int TrainController::getTrainID(){
+    return train->getID();
+}
+
+int TrainController::getblocknum(){
+    return blocknum;
+}
+
+int TrainController::getblocklength(){
+    return blocklength;
+}
+
+double TrainController::getdistTraveledOnBlock(){
+    return distTraveledOnBlock;
+}
+
+bool TrainController::newBlock(){
+    if(blocklength<=distTraveledOnBlock){
+        distTraveledOnBlock=0;
+        return 1;
+    }else{
+        distTraveledOnBlock+=((currentSpeed/3.6)*1); //Converts km/hr to m/s then divides by clock speed
+        return 0;
+    }
+}
+
+uint8_t TrainController::getEncodedBlock(){
+    return(((uint8_t)blocknum));
+}
+
+

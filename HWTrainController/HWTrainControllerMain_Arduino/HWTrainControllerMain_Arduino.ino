@@ -14,6 +14,7 @@ String authorityString = "00.00";
 String stationCode = "";
 bool stationUpcoming = true;
 String stationName = "";
+bool breakFail = false;
 
 //Power Variables
 double commandedPower;
@@ -84,5 +85,5 @@ void loop() {
   ReceiveData();
   calculatePower();
   TransmitData();
-  delay(100);
+  delay(1000);
 }
