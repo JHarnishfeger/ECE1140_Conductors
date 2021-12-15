@@ -43,14 +43,14 @@ Wayside& Wayside::operator=(Wayside& w){
 }
 
 void Wayside::update(){
-    suggestedSpeed = wayStr.suggestedSpeed;
-    sector = wayStr.sector;
-    authority = wayStr.auth;
+    //suggestedSpeed = wayStr.suggestedSpeed;
+    //sector = wayStr.sector;
+    //authority = wayStr.auth;
     if(plc.getFilename()!="")
         detectTrack();
-    wayStr.sector = sector;
-    wayStr.auth = authority;
-    wayStr.id = id;
+    //wayStr.sector = sector;
+    //wayStr.auth = authority;
+    //wayStr.id = id;
 }
 
 void Wayside::updateNoPLC(){
@@ -82,6 +82,7 @@ void Wayside::updateNoPLC(){
 
 bool Wayside::detectTrack(){
     bool found=0;
+    std::cout << "PREPLC " << sector[28].getSwitchStatus() << std::endl;
     if(!runPLC())
         alerts.push_back("PLC output was incorrect. Track was not changed.");
     for(int i=0;i<sector.size();i++){
@@ -113,6 +114,7 @@ bool Wayside::detectTrack(){
         else
             sector[i].setSuggestedSpeed(sector[i].getSpeedLimit());
     }
+    std::cout << "POSTPLC " << sector[28].getSwitchStatus() << std::endl;
     return 1;
 }
 

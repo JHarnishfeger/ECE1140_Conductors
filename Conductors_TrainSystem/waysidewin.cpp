@@ -106,7 +106,7 @@ void WaysideWin::on_CrossingList_itemClicked(QListWidgetItem *item){
     stringstream str(qs.toStdString());
     str >> word;
     str >> id;
-    type = "CROSSING";
+    type = "";
 }
 
 
@@ -120,6 +120,7 @@ void WaysideWin::on_SwitchLeft_clicked(){
         }
     }
     way->updateNoPLC();
+    emit updateFromWayside(way->sector);
     fillLists();
 }
 
@@ -134,6 +135,7 @@ void WaysideWin::on_SwitchRight_clicked(){
         }
     }
     way->updateNoPLC();
+    emit updateFromWayside(way->sector);
     fillLists();
 }
 
@@ -150,7 +152,7 @@ void WaysideWin::on_ImportPLC_clicked(){
 
 
 void WaysideWin::on_CrossingOn_clicked(){
-    if(type=="CROSSING"&&way->getMode()){
+    if(type==""&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
             if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setCrossingStatus(1);
@@ -159,12 +161,13 @@ void WaysideWin::on_CrossingOn_clicked(){
         }
     }
     way->updateNoPLC();
+    emit updateFromWayside(way->sector);
     fillLists();
 }
 
 
 void WaysideWin::on_CrossingOff_clicked(){
-    if(type=="CROSSING"&&way->getMode()){
+    if(type==""&&way->getMode()){
         for(int i=0;i<way->sector.size();i++){
             if(way->sector[i].getBlockNumber()==id){
                 way->sector[i].setCrossingStatus(0);
@@ -173,6 +176,7 @@ void WaysideWin::on_CrossingOff_clicked(){
         }
     }
     way->updateNoPLC();
+    emit updateFromWayside(way->sector);
     fillLists();
 }
 

@@ -62,6 +62,10 @@ void SWTCInterface::update(){
     }
 }
 
+void SWTCInterface::updateWayside(vector<Block> sec){
+    emit updateToTrack(sec);
+}
+
 void SWTCInterface::updateFromTrack(vector<Block*> red, vector<Block*> green){
     emit updateWaysidesFromTrack(red,green);
 }
@@ -91,6 +95,9 @@ void SWTCInterface::on_CreateWaysides_clicked(){
             wui[i]->show();
         }
         tc.updateWaysides();
+        for(int i=0;i<wui.size();i++){
+            connect(wui[i],SIGNAL(updateFromWayside(vector<Block>)),this,SLOT(updateWayside(vector<Block>)));
+        }
     }
 }
 

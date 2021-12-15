@@ -46,6 +46,8 @@ public slots:
 
     void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
+    void updateWayside(vector<Block> sec);
+
 private:
     Ui::SWTCInterface *ui;
     QVector<WaysideWin*> wui;

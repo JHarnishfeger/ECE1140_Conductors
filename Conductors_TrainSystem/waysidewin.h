@@ -40,6 +40,9 @@ private slots:
 public slots:
     void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
+signals:
+    void updateFromWayside(vector<Block> sec);
+
 private:
     Ui::WaysideWin *ui;
     string type;

@@ -5,7 +5,6 @@ TrackModel::TrackModel(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TrackModel)
 {
-    std::cout << "right up in there" << std::endl;
     greenCreated = 0;
     redCreated = 0;
     trackSent = 0;
@@ -19,11 +18,13 @@ TrackModel::~TrackModel()
 
 void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
     t.updateTrack(waysideBlocks);
+    updateDisplay();
 }
 
 void TrackModel::TrainInfo(uint8_t currentBlock, int ID, bool line){
     emit TCData(t.handleTCTrainInfo(currentBlock, ID, line), ID);
     emit BeaconData(t.handleBeaconTrainInfo(currentBlock, ID, line), ID);
+    updateDisplay();
 }
 
 void TrackModel::on_loadTrackButton_clicked()
@@ -249,4 +250,56 @@ void TrackModel::on_selectBlockButton_clicked()
    ui->stationSideTextBox->setText(currBlockStationSide);
    ui->trafficLightStatusTextBox->setText(currBlockTrafficLightStatus);
    ui->beaconPresentTextBox->setText(currBlockBeaconPresent);
+}
+
+void TrackModel::updateDisplay(){
+    QString currLine = ui->currentBlockTextBoxLine->text();
+    QString currId = ui->currentBlockTextBoxId->text();
+    if(currLine != "" && currLine != "line" && currLine != " "){
+        Block* searchedBlock = t.searchBlock(currLine.toStdString(),currId.toInt()-1);
+
+        //get stats for searchedBlock
+        QString currBlockRailStatus = QString::number(searchedBlock->getRailStatus());
+        QString currBlockCircuitStatus = QString::number(searchedBlock->getCircuitStatus());
+        QString currBlockPowerStatus = QString::number(searchedBlock->getPowerStatus());
+        QString currBlockHeaterStatus = QString::number(searchedBlock->getHeaterStatus());
+        QString currBlockHeaterTemp = QString::number(searchedBlock->getTemperature());
+        QString currBlockType = QString::fromStdString(searchedBlock->getType());
+        QString currBlockLength = QString::number(searchedBlock->getLength());
+        QString currBlockGrade = QString::number(searchedBlock->getGrade());
+        QString currBlockElevation = QString::number(searchedBlock->getElevation());
+        QString currBlockSpeedLimit = QString::number(searchedBlock->getSpeedLimit());
+        QString currBlockSuggestedSpeed = QString::number(searchedBlock->getSuggestedSpeed());
+        QString currBlockStationName = QString::fromStdString(searchedBlock->getStationName());
+        QString currBlockAuthority = QString::number(searchedBlock->getAuthority());
+        QString currBlockCrossingStatus = QString::number(searchedBlock->getCrossingStatus());
+        QString currBlockSwitchStatus = QString::number(searchedBlock->getSwitchStatus());
+        QString currBlockTrainPresent = QString::number(searchedBlock->getTrainPresent());
+        QString currBlockPassengers = QString::number(searchedBlock->getPassengerCount());
+        QString currBlockStationSide = QString::number(searchedBlock->getStationSide());
+        QString currBlockTrafficLightStatus = QString::number(searchedBlock->getTrafficLightStatus());
+        QString currBlockBeaconPresent = QString::number(searchedBlock->getBeaconPresent());
+
+        //update stats for searchedBlock
+        ui->railStatusTextBox->setText(currBlockRailStatus);
+        ui->circuitStatusTextBox->setText(currBlockCircuitStatus);
+        ui->powerStatusTextBox->setText(currBlockPowerStatus);
+        ui->trackHeaterStatusTextBox->setText(currBlockHeaterStatus);
+        ui->trackHeaterTemperatureTextBox->setText(currBlockHeaterTemp);
+        ui->typeTextBox->setText(currBlockType);
+        ui->lengthTextBox->setText(currBlockLength);
+        ui->gradeTextBox->setText(currBlockGrade);
+        ui->elevationTextBox->setText(currBlockElevation);
+        ui->speedLimitTextBox->setText(currBlockSpeedLimit);
+        ui->suggestedSpeedTextBox->setText(currBlockSuggestedSpeed);
+        ui->stationNameTextBox->setText(currBlockStationName);
+        ui->authorityTextBox->setText(currBlockAuthority);
+        ui->crossingStatusTextBox->setText(currBlockCrossingStatus);
+        ui->switchStatusTextBox->setText(currBlockSwitchStatus);
+        ui->trainPresentTextBox->setText(currBlockTrainPresent);
+        ui->passengersTextBox->setText(currBlockPassengers);
+        ui->stationSideTextBox->setText(currBlockStationSide);
+        ui->trafficLightStatusTextBox->setText(currBlockTrafficLightStatus);
+        ui->beaconPresentTextBox->setText(currBlockBeaconPresent);
+    }
 }
