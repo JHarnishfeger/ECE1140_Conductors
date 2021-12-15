@@ -26,15 +26,9 @@ public slots:
 
     void update();
 
-    void returnWayStructs();
-
-    void updateLocalWayStructs(WayStruct waystr);
-
 signals:
 
     void makeNewTrain();
-
-    void sendWayStructs(std::list<WayStruct*> waysides);
 
 private slots:
 

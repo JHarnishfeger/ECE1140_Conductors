@@ -19,13 +19,6 @@ HWTCInterface::~HWTCInterface()
     delete ui;
 }
 
-void HWTCInterface::getCTCWayStruct(std::list<WayStruct*> waystrs){
-    for(WayStruct* w : waystrs){
-        if(w->id==hwWaysidePtr->wayStr.id)
-            hwWaysidePtr->wayStr = *w;
-    }
-}
-
 void HWTCInterface::setHWTrack(vector<Block> tk){
     hwTrack = tk;
     hwtc.initializeHW(hwTrack);

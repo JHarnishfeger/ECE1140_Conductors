@@ -42,7 +42,6 @@ public slots:
 
 signals:
     void updateFromWayside(vector<Block> sec);
-    void updateCTCWayStruct(WayStruct ws);
 
 private:
     Ui::WaysideWin *ui;

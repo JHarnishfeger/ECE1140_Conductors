@@ -22,9 +22,11 @@ void TrackModel::updateFromWayside(vector<Block> waysideBlocks){
 }
 
 void TrackModel::TrainInfo(uint8_t currentBlock, int ID, bool line){
-    emit TCData(t.handleTCTrainInfo(currentBlock, ID, line), ID);
-    emit BeaconData(t.handleBeaconTrainInfo(currentBlock, ID, line), ID);
-    updateDisplay();
+    if(greenCreated == 1 && redCreated == 1){
+        emit TCData(t.handleTCTrainInfo(currentBlock, ID, line), ID);
+        emit BeaconData(t.handleBeaconTrainInfo(currentBlock, ID, line), ID);
+        updateDisplay();
+    }
 }
 
 void TrackModel::on_loadTrackButton_clicked()

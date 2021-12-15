@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "Block.h"
+#include <QDebug>
 using std::vector;
 using std::string;
 using std::fstream;

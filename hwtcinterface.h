@@ -38,13 +38,12 @@ public slots:
     void setTrack(vector<Block> track);
     void updateFromHWTrack(vector<Block*> red, vector<Block*> green);
     void runHWPLC();
-    void getCTCWayStruct(std::list<WayStruct*> waystrs);
+
 
 signals:
     void sendHWWayStruct(WayStruct *way);
     void updateToHWTrack(vector<Block> track);
-    void pingForWayStruct();
-    void updateCTCWayStruct(WayStruct waystr);
+
 private:
     Ui::HWTCInterface *ui;
     HWTrackController hwtc;

@@ -122,7 +122,6 @@ void WaysideWin::on_SwitchLeft_clicked(){
     way->wayStr.sector = way->sector;
     way->wayStr.auth = way->getAuthority();
     way->wayStr.id = way->getBlockNumber();
-    emit updateCTCWayStruct(way->wayStr);
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -140,8 +139,8 @@ void WaysideWin::on_SwitchRight_clicked(){
     }
     way->wayStr.sector = way->sector;
     way->wayStr.auth = way->getAuthority();
-    way->wayStr.id = way->getBlockNumber();
-    emit updateCTCWayStruct(way->wayStr);
+    way->wayStr.id = 12;
+    //way->wayStr.id = way->getBlockNumber();
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -151,7 +150,7 @@ void WaysideWin::on_SwitchRight_clicked(){
 void WaysideWin::on_ImportPLC_clicked(){
     string filename;
     filename = ui->PLCFile->text().toStdString() + ".txt";
-    //std::cout << QDir::currentPath().toStdString() << std::endl;
+    std::cout << QDir::currentPath().toStdString() << std::endl;
     way->plc.importPLC(filename);
     std::cout << "RUNNING " << way->plc.getFilename() << std::endl;
     way->detectTrack();
@@ -171,7 +170,6 @@ void WaysideWin::on_CrossingOn_clicked(){
     way->wayStr.sector = way->sector;
     way->wayStr.auth = way->getAuthority();
     way->wayStr.id = way->getBlockNumber();
-    emit updateCTCWayStruct(way->wayStr);
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -190,7 +188,6 @@ void WaysideWin::on_CrossingOff_clicked(){
     way->wayStr.sector = way->sector;
     way->wayStr.auth = way->getAuthority();
     way->wayStr.id = way->getBlockNumber();
-    emit updateCTCWayStruct(way->wayStr);
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
