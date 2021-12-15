@@ -9,6 +9,7 @@
 #include "WaysideManager.h"
 #include "ScheduleManager.h"
 #include "TrainTracker.h"
+class CTCWindow;
 
 
 /*
@@ -32,9 +33,11 @@ class CTC{
 
         TrainTracker trainTracker;
 
+        CTCWindow* window;
+
     public:
 
-        CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
+        CTC(CTCWindow *ctcWindow, std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
         ~CTC();
         std::string displaySchedule();
         WaysideManager waysideManager;

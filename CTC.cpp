@@ -3,9 +3,10 @@
 #include <stdexcept>
 #include <sstream>
 #include "WaysideManager.h"
+#include "ctcwindow.h"
 
-CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) :
-trainTracker(&track, &waysideManager){
+CTC::CTC( CTCWindow* ctcWindow, std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) :
+ trainTracker(&track, &waysideManager), window(ctcWindow){
 
     /*if(sw_waystructs == nullptr || hw_waystruct == nullptr){
         std::cout << "CTC: WayStructs are being recieved as null!\n";
@@ -121,6 +122,7 @@ void CTC::dispatchTrain(CTCSchedule schedule, bool hw){
         startingBranch = "YARD";
         std::cout << "CTC: Creating a new train: \"" << schedule.train << "\"\n";
         //TODO Create new train here
+        window->makeNewTrainEmit(hw);
         //newTrain(int 1,int) //first int is hardware(0) or software(1)
                             //second int is if its on the green(0) or red(1)
     }
@@ -200,7 +202,7 @@ bool CTC::getBlockDirection(int blockId){
         //std::cout << "CTC: Switch " << blockId << " Is now " << block->getSwitchStatus() << std::endl;
         return block->getSwitchStatus();
     }else{
-        std::cout << "CTC Error: Can't find switch\n";
+        //std::cout << "CTC Error: Can't find switch\n";
         return false;
     }
 }

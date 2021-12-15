@@ -5,6 +5,7 @@
 #include "CTC.hpp"
 #include <QGraphicsScene>
 #include "TrackMap.hpp"
+#include "CTC.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CTCWindow; }
@@ -22,7 +23,7 @@ public slots:
 
     void initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
 
-    void makeNewTrainEmit();
+    void makeNewTrainEmit(bool);
 
     void update();
 
@@ -32,7 +33,7 @@ public slots:
 
 signals:
 
-    void makeNewTrain();
+    void makeNewTrain(bool, bool);
 
     void sendWayStructs(std::list<WayStruct*> waysides);
 

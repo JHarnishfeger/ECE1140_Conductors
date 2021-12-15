@@ -10,7 +10,7 @@
 CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CTCWindow)
-    , ctc(new CTC(sw_waystructs, hw_waystruct))
+    , ctc(new CTC(this, sw_waystructs, hw_waystruct))
 {
     ui->setupUi(this);
     this->setFixedSize(this->size().width(), this->size().height());
@@ -198,11 +198,11 @@ void CTCWindow::on_pushButton_openCloseSwitch_clicked()
 void CTCWindow::initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct){
     //std::cout << "INTERMEDIARY: " << &sw_waystructs << std::endl;
     delete ctc;
-    ctc = new CTC(sw_waystructs, hw_waystruct);
+    ctc = new CTC(this, sw_waystructs, hw_waystruct);
 }
 
-void CTCWindow::makeNewTrainEmit(){
-    emit makeNewTrain();
+void CTCWindow::makeNewTrainEmit(bool hw){
+    emit makeNewTrain(!hw, true);
 }
 
 
@@ -216,6 +216,7 @@ void CTCWindow::dispatchTrain(bool hw){
         std::string destinationTimeStr = ui->lineEdit_dispatchTime->text().toStdString();
         destinationTime = std::stoi(destinationTimeStr);
     }catch(std::exception& e){
+        std::cout << "CTC: Could not parse dispatch info\n";
         return;
     }
     ctc->dispatchTrain(CTCSchedule(trainNo, destinationStation, destinationTime), hw);
