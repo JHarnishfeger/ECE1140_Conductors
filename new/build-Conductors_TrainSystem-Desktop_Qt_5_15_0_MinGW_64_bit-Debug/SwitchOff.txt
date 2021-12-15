@@ -1,0 +1,4 @@
+TASK SwitchOff
+OPP (SL0)
+OUT SW0 0
+ENDTASK
