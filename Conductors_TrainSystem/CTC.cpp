@@ -200,7 +200,7 @@ bool CTC::getBlockDirection(int blockId){
         //std::cout << "CTC: Switch " << blockId << " Is now " << block->getSwitchStatus() << std::endl;
         return block->getSwitchStatus();
     }else{
-        std::cout << "CTC Error: Can't find switch\n";
+        //std::cout << "CTC Error: Can't find switch\n";
         return false;
     }
 }

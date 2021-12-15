@@ -50,7 +50,9 @@ int main(int argc, char *argv[])
     QObject::connect(&swtrack,SIGNAL(waysidesSet(std::vector<WayStruct>*,WayStruct*)),&cwin,SLOT(initializeWaystructs(std::vector<WayStruct>*,WayStruct*)));
     QObject::connect(&cwin,SIGNAL(sendWayStructs(std::list<WayStruct*>)),&swtrack,SLOT(getCTCWayStruct(std::list<WayStruct*>)));
     QObject::connect(&swtrack,SIGNAL(pingForWayStruct()),&cwin,SLOT(returnWayStructs()));
+    QObject::connect(&hwtrack,SIGNAL(pingForWayStruct()),&cwin,SLOT(returnWayStructs()));
     QObject::connect(&swtrack,SIGNAL(updateCTCWayStruct(WayStruct)),&cwin,SLOT(updateLocalWayStructs(WayStruct)));
+    QObject::connect(&hwtrack,SIGNAL(updateCTCWayStruct(WayStruct)),&cwin,SLOT(updateLocalWayStructs(WayStruct)));
 
 
 

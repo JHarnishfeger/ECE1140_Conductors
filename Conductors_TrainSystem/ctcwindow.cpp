@@ -42,6 +42,7 @@ void CTCWindow::updateLocalWayStructs(WayStruct wayStr){
         if(wayStr.id==w->id){
             //std::cout << "ORIGINAL: " << w->sector[11].getSwitchStatus() << std::endl;
             *w = wayStr;
+            //std::cout << "SET: " << w->sector[11].getSwitchStatus() << std::endl << std::endl;
         }
     }
 }

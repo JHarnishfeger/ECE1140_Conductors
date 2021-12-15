@@ -233,10 +233,14 @@ void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
 void HWTCInterface::runHWPLC(){
     //std::cout << HWready << std::endl;
     if(HWready){
+        emit pingForWayStruct();
         if(hwWaysidePtr->hwPLC.getFilename()!=""){
             hwWaysidePtr->detectTrack();
         }
         emit updateToHWTrack(hwWaysidePtr->sector);
+        hwWaysidePtr->updateToWayStr();
+        //std::cout << "BEFORE: " << hwWaysidePtr->wayStr.sector[11].getSwitchStatus() << std::endl;
+        //std::cout << "Its: " << hwWaysidePtr->wayStr.id << std::endl;
         emit updateCTCWayStruct(hwWaysidePtr->wayStr);
     }
 }
