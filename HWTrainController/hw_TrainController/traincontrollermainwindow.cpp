@@ -12,8 +12,7 @@ TrainControllerMainWindow::TrainControllerMainWindow(QWidget *parent)
     //variables
     portList = QSerialPortInfo::availablePorts();
 
-    for(auto &port : portList)
-    {
+    for(auto &port : portList){
         QString portName = port.portName();
         ui->connectionComboBox->addItem(portName);
     }
@@ -26,20 +25,16 @@ TrainControllerMainWindow::TrainControllerMainWindow(QWidget *parent)
 
 }
 
-TrainControllerMainWindow::~TrainControllerMainWindow()
-{
+TrainControllerMainWindow::~TrainControllerMainWindow(){
     delete ui;
 }
 
-void TrainControllerMainWindow::updates()
-{
-    if(trainController.serialport.arduino->isOpen())
-    {
+void TrainControllerMainWindow::updates(){
+    if(trainController.serialport.arduino->isOpen()){
         trainController.writeSerial();
         trainController.readSerial();
     }
-    else
-    {
+    else{
         qDebug() << "Serial Port Not Connected...";
     }
 
@@ -47,14 +42,12 @@ void TrainControllerMainWindow::updates()
     setPower();
 }
 
-void TrainControllerMainWindow::on_enterButton_clicked()
-{
+void TrainControllerMainWindow::on_enterButton_clicked(){
     trainController.setKp(ui->KpText->text());
     trainController.setKi(ui->KiText->text());
 }
 
-void TrainControllerMainWindow::on_testButton_clicked()
-{
+void TrainControllerMainWindow::on_testButton_clicked(){
     trainController.setCommandedSpeed(ui->commandedSpeed->text());
     trainController.setCurrentSpeed(ui->currentSpeed->text());
     trainController.setSuggestedSpeed(ui->suggestedSpeed->text());
@@ -64,8 +57,7 @@ void TrainControllerMainWindow::on_testButton_clicked()
 
 }
 
-void TrainControllerMainWindow::setUtilities()
-{
+void TrainControllerMainWindow::setUtilities(){
     ui->LeftDoorsCB->setChecked(trainController.getLeftDoors());
     ui->RightDoorsCB->setChecked(trainController.getRightDoors());
     ui->InteriorLightsCB->setChecked(trainController.getInteriorLights());
@@ -76,28 +68,22 @@ void TrainControllerMainWindow::setUtilities()
     ui->mode->setText(trainController.getMode());
 }
 
-void TrainControllerMainWindow::setPower()
-{
+void TrainControllerMainWindow::setPower(){
     ui->powerLabel->setText(trainController.getCommandedPower());
 }
 
 
-void TrainControllerMainWindow::on_connectionComboBox_currentIndexChanged(int index)
-{
-    if(index>= 0 && index < portList.length())
-    {
+void TrainControllerMainWindow::on_connectionComboBox_currentIndexChanged(int index){
+    if(index>= 0 && index < portList.length()){
         portInfo = &(portList[index]);
     }
 }
 
-void TrainControllerMainWindow::on_ConnectButton_clicked()
-{
-    if(portInfo != NULL)
-    {
+void TrainControllerMainWindow::on_ConnectButton_clicked(){
+    if(portInfo != NULL){
         trainController.serialport.openSerialPort(*portInfo);
     }
-    else
-    {
+    else{
         qDebug() << "NULL";
     }
 }

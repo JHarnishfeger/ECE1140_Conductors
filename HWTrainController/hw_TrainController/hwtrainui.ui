@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
+    <width>846</width>
     <height>265</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <widget class="QLabel" name="Kp">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>550</x>
       <y>100</y>
       <width>21</width>
       <height>16</height>
@@ -30,7 +30,7 @@
    <widget class="QLineEdit" name="KiText">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>660</x>
       <y>120</y>
       <width>113</width>
       <height>20</height>
@@ -45,7 +45,7 @@
      <rect>
       <x>450</x>
       <y>0</y>
-      <width>311</width>
+      <width>381</width>
       <height>81</height>
      </rect>
     </property>
@@ -59,7 +59,7 @@
    <widget class="QLineEdit" name="KpText">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>500</x>
       <y>120</y>
       <width>113</width>
       <height>20</height>
@@ -72,7 +72,7 @@
    <widget class="QPushButton" name="enterButton">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>600</x>
       <y>160</y>
       <width>75</width>
       <height>23</height>
@@ -85,7 +85,7 @@
    <widget class="QLabel" name="Ki">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>710</x>
       <y>100</y>
       <width>16</width>
       <height>16</height>
@@ -157,14 +157,37 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>160</x>
       <y>20</y>
-      <width>101</width>
+      <width>121</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>Commanded Speed</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Train ID:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>101</width>
+      <height>51</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -173,8 +196,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>751</width>
-     <height>20</height>
+     <width>846</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

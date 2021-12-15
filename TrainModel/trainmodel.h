@@ -2,7 +2,6 @@
 #define TRAINMODEL_H
 #include <iostream>
 #include <QObject>
-//#include "SMBA.h"
 
 class trainModel{
 

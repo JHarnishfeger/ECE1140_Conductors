@@ -1,12 +1,10 @@
 #include "serialport.h"
 
-SerialPort::SerialPort(QObject *parent) : QObject(parent)
-{
+SerialPort::SerialPort(QObject *parent) : QObject(parent){
     arduino = new QSerialPort(this);
 }
 
-void SerialPort::openSerialPort(QSerialPortInfo &arduinoInfo)
-{
+void SerialPort::openSerialPort(QSerialPortInfo &arduinoInfo){
     arduino->setPortName(arduinoInfo.portName());
     arduino->setPort(arduinoInfo);
     arduino->open(QSerialPort::ReadWrite);
@@ -16,12 +14,10 @@ void SerialPort::openSerialPort(QSerialPortInfo &arduinoInfo)
     arduino->setStopBits(QSerialPort::OneStop);
     arduino->setFlowControl(QSerialPort::NoFlowControl);
 
-    if(arduino->isOpen())
-    {
+    if(arduino->isOpen()){
         qDebug() << "Arduino Connected at port: " << arduino->portName();
     }
-    else
-    {
+    else{
         qDebug() << "Arduino connection failed";
         qDebug() << arduino->NotOpenError;
     }

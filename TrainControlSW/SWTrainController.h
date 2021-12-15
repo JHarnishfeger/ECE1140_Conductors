@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <stdlib.h>
-#include "..\TrainModel\trainModel.h"
+#include "..\TrainModel\trainmodel.h"
 
 class SWTrainController{
     private:

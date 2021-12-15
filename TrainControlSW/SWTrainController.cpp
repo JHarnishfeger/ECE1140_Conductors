@@ -393,7 +393,7 @@ double SWTrainController::getdistTraveledOnBlock(){
 }
 
 bool SWTrainController::newBlock(){
-    qDebug()<<distTraveledOnBlock;
+    //qDebug()<<distTraveledOnBlock;
     if(blocklength<=distTraveledOnBlock){
         distTraveledOnBlock=0;
         return 1;

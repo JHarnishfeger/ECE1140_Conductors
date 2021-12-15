@@ -22,8 +22,8 @@ void UISWTrainController::timerInst()
     updateUI();
     swtraincontroller.calculatePower();
     swtraincontroller.failureCheck();
-    if(swtraincontroller.newBlock())
-        emit getnewTCSignal(swtraincontroller.getEncodedBlock());
+    if(swtraincontroller.newBlock()){
+        emit getnewTCSignal(swtraincontroller.getEncodedBlock());}
 }
 
 

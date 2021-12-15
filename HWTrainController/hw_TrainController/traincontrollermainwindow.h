@@ -14,8 +14,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class TrainControllerMainWindow; }
 QT_END_NAMESPACE
 
-class TrainControllerMainWindow : public QMainWindow
-{
+class TrainControllerMainWindow : public QMainWindow{
     Q_OBJECT
 
 public:

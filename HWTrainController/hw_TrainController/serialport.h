@@ -11,8 +11,7 @@
 #include <QDebug>
 
 
-class SerialPort : public QObject
-{
+class SerialPort : public QObject{
     Q_OBJECT
 public:
 

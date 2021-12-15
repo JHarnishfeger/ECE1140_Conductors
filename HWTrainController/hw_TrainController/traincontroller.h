@@ -11,8 +11,7 @@
 
 using namespace std;
 
-class TrainController : public QObject
-{
+class TrainController : public QObject{
     Q_OBJECT
 public:
 
