@@ -47,6 +47,7 @@ void SWTCInterface::setTrack(vector<Block*> rl,vector<Block*> gl){
 }
 
 void SWTCInterface::getHWWaystruct(WayStruct* hwWaystr){
+    //std::cout << "LOCAL ADDRESS OF VECTOR: " << &tc.wayPtr << std::endl;
     emit waysidesSet(tc.wayPtr,hwWaystr);
 }
 
@@ -55,10 +56,18 @@ vector<Block> SWTCInterface::getHWTrack(){
 }
 
 void SWTCInterface::update(){
-    std::cout << "Updating!" << std::endl;
+    //std::cout << "Updating!" << std::endl;
+    //std::cout << std::endl << "WAYSTRUCT DATA DUMP" << std::endl;
+    //std::cout << tc.wayPtr->size() << " initialized." << std::endl;
     for(int i=0;i<wui.size();i++){
-        wui[i]->update();
-        emit updateToTrack(wui[i]->way->sector);
+        /*std::cout << "WAYSTR " << wui[i]->way->wayStr.id << ":" << std::endl;
+        std::cout << "SWITCH AT 12: " << wui[i]->way->wayStr.sector[11].getSwitchStatus() << std::endl;
+        std::cout << "SANITY TYPE: " << wui[i]->way->wayStr.sector[11].getType() << std::endl;
+        std::cout << "ADDRESS MAYBE?: " << &wui[i]->way->wayStr << std::endl;*/
+        if(i!=tc.hwWay){
+            wui[i]->update();
+            emit updateToTrack(wui[i]->way->sector);
+        }
     }
 }
 

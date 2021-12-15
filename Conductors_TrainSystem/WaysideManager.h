@@ -58,6 +58,9 @@ class WaysideManager{
 
         std::list<int> redMaintenence; //Blocks closed for maintenence on the red line
         std::list<int> greenMaintenence; //Blocks closed for maintenence on the green line
+
+        //Suggested speeds for green line
+        std::unordered_map<std::string, double> suggestedSpeeds;
 };
 
 #endif

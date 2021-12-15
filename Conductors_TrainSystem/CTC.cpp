@@ -7,13 +7,14 @@
 CTC::CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct) :
 trainTracker(&track, &waysideManager){
 
-    if(sw_waystructs == nullptr || hw_waystruct == nullptr){
+    /*if(sw_waystructs == nullptr || hw_waystruct == nullptr){
         std::cout << "CTC: WayStructs are being recieved as null!\n";
     }else{
         std::cout << "CTC: WayStructs are OK\n";
-    }
+    }*/
 
 	//Give the waystructs to WaysideManager
+    //std::cout << "Original Addr: Vector: " << &sw_waystructs << std::endl;
 	std::list<WayStruct*> waystructs;
     if(sw_waystructs != nullptr && hw_waystruct != nullptr){
         for(unsigned int i = 0; i < sw_waystructs->size(); i++){
@@ -58,9 +59,8 @@ std::string CTC::displaySchedule(){
  * trains to get to their destinations.
  */
 void CTC::update(int current_time){
-    time = current_time;
+    time += current_time;
 
-    //TODO stuff here
     auto nextSchedule = scheduleManager.loadNextSchedule();
     if(mode == true && time >= nextSchedule.time && nextSchedule.train != ""){
         dispatchTrain(nextSchedule);
@@ -115,27 +115,32 @@ std::list<int> CTC::getSwitches(){
 /*
  * Dispatch a single schedule
  */
-void CTC::dispatchTrain(CTCSchedule schedule){
-    std::cout << "Dispatched train " << schedule.train << " to block " <<
-                 schedule.destination << " at time " << time << std::endl;
-
-    //TODO
-    //Get the route
-
+void CTC::dispatchTrain(CTCSchedule schedule, bool hw){
     std::string startingBranch;
     if(!trainTracker.trainExists(schedule.train)){
         startingBranch = "YARD";
-        //Create the train here
-        //TODO
-    }else{
-        startingBranch = trainTracker.getTrainLocation(schedule.train);
+        std::cout << "CTC: Creating a new train: \"" << schedule.train << "\"\n";
+        //TODO Create new train here
+        //newTrain(int 1,int) //first int is hardware(0) or software(1)
+                            //second int is if its on the green(0) or red(1)
+    }
+    startingBranch = trainTracker.getTrainLocation(schedule.train);
+    int destinationBlock = scheduleManager.getDestinationBlock(schedule.destination);
+    std::list<std::string> route;
+    try{
+        route = track.getBranchRoute(
+            startingBranch,
+            track.getBranchOfBlock(destinationBlock)
+        );
+    }catch(std::exception& e){
+        std::cout << "CTC Error: " <<  e.what() << std::endl;
+        return;
     }
 
-    int destinationBlock = schedule.destination;
-    std::list<std::string> route = track.getBranchRoute(
-        startingBranch,
-        track.getBranchOfBlock(schedule.destination)
-    );
+    std::cout << "Dispatched train " << schedule.train << " from branch " <<
+                 startingBranch << " to block " << scheduleManager.getDestinationBlock(schedule.destination) <<
+                 ", Branch " << track.getBranchOfBlock(scheduleManager.getDestinationBlock(schedule.destination)) <<
+                 " at time " << schedule.time << ".\n";
 
     //Send Authorities to each wayside
     std::list<Authority> authorities;
@@ -190,11 +195,12 @@ bool CTC::getBlockHasTrainPresent(int blockId){
  * Get the direction property of a Block
  */
 bool CTC::getBlockDirection(int blockId){
-    //THIS IS OK, unlike the setSwitch() implementation
     Block* block = waysideManager.getBlock(blockId);
     if(block != nullptr){
+        //std::cout << "CTC: Switch " << blockId << " Is now " << block->getSwitchStatus() << std::endl;
         return block->getSwitchStatus();
     }else{
+        std::cout << "CTC Error: Can't find switch\n";
         return false;
     }
 }

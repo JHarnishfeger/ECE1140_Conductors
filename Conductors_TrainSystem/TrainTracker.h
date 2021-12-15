@@ -14,7 +14,7 @@ class TrainTracker{
 
         TrainTracker(TrackNodes* _track, WaysideManager* _waysideManager);
 
-        //Get train location. If train DNE, then
+        //Get train location. If train DNE, then new train is added at YARD branch.
         std::string getTrainLocation(std::string trainName);
 
         //Update how many trains are on which branches

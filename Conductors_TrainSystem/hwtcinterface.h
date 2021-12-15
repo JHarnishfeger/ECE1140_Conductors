@@ -57,5 +57,6 @@ private:
     void updateSwitchToUI(int);
     void updateCrossingToUI(int);
     void updateTrainPresentToUI(int);
+    bool HWready;
 };
 #endif // HWTCINTERFACE_H

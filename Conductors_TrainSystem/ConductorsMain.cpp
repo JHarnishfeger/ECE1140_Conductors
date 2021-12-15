@@ -11,11 +11,14 @@
 #include "swtcinterface.h"
 #include "trackmodel.h"
 #include "hwtcinterface.h"
+#include "TrainModel/trainmaker.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     int interval = 1000;
+
+    std::cout << QDir::currentPath().toStdString() << std::endl;
 
     CTCWindow cwin;
     cwin.show();
@@ -25,10 +28,8 @@ int main(int argc, char *argv[])
     hwtrack.show();
     TrackModel trmodel;
     trmodel.show();
-    //Init TrackModel
-    //Init TrainModel
-    //Init SWTrain
-    //Init HWTrain
+    trainMaker tnmodel;
+
     //Init MBO
     //std::cout << "Here" << std::endl;
 
@@ -36,6 +37,9 @@ int main(int argc, char *argv[])
     //Connect signals/slots
 
     QObject::connect(&sysTimer,SIGNAL(tick()),&swtrack,SLOT(update()));
+    QObject::connect(&sysTimer,SIGNAL(tick()),&hwtrack,SLOT(runHWPLC()));
+    QObject::connect(&sysTimer,SIGNAL(tick()),&tnmodel,SLOT(update()));
+    QObject::connect(&sysTimer,SIGNAL(tick()),&cwin,SLOT(update()));
     QObject::connect(&trmodel,SIGNAL(updateWaysides(vector<Block*>,vector<Block*>)),&swtrack,SLOT(updateFromTrack(vector<Block*>,vector<Block*>)));
     QObject::connect(&trmodel,SIGNAL(updateWaysides(vector<Block*>,vector<Block*>)),&hwtrack,SLOT(updateFromHWTrack(vector<Block*>,vector<Block*>)));
     QObject::connect(&swtrack,SIGNAL(updateToTrack(vector<Block>)),&trmodel,SLOT(updateFromWayside(vector<Block>)));
@@ -45,6 +49,10 @@ int main(int argc, char *argv[])
     QObject::connect(&hwtrack,SIGNAL(sendHWWayStruct(WayStruct*)),&swtrack,SLOT(getHWWaystruct(WayStruct*)));
     QObject::connect(&swtrack,SIGNAL(waysidesSet(std::vector<WayStruct>*,WayStruct*)),&cwin,SLOT(initializeWaystructs(std::vector<WayStruct>*,WayStruct*)));
 
+
+
+    //tnmodel.newTrain(1,0);
+    //tnmodel.newTrain(0,0);
 
     /* UI SIDE
      *

@@ -10,6 +10,7 @@ HWTCInterface::HWTCInterface(QWidget *parent)
     hwMode = 1; //Set to manual mode
     ui->ModeBox->setChecked(true);
     brokenRailDetected = 0;
+    HWready = 0;
 
 }
 
@@ -21,6 +22,7 @@ HWTCInterface::~HWTCInterface()
 void HWTCInterface::setHWTrack(vector<Block> tk){
     hwTrack = tk;
     hwtc.initializeHW(hwTrack);
+    HWready = 1;
     hwWaysidePtr = hwtc.getWayside();
     bool hwConnect = hwWaysidePtr->ifHWConnected();
     if(hwConnect){
@@ -141,6 +143,7 @@ void HWTCInterface::on_pushButton_2_clicked() //Update button
     }else if(successfulReveive == -1){
         QMessageBox::about(this, "Update Failed", "Update Failed -- Train Present on the Block! ");
     }
+    emit updateToHWTrack(hwWaysidePtr->sector);
 }
 
 
@@ -201,9 +204,28 @@ void HWTCInterface::updateFromHWTrack(vector<Block*> red, vector<Block*> green){
         }
     }
     hwWaysidePtr->updateTrack(track);
-    emit updateToHWTrack(hwWaysidePtr->sector);
+    /*std::cout << "Track Before: " << std::endl;
+    for(int i=0;i<track.size();i++)
+        std::cout << track[i].getSwitchStatus() << " ";
+    std::cout << std::endl;
+    for(int i=0;i<hwWaysidePtr->sector.size();i++)
+        std::cout << hwWaysidePtr->sector[i].getSwitchStatus() << " ";
+    std::cout << std::endl;*/
+    //emit updateToHWTrack(hwWaysidePtr->sector);
+    /*std::cout << "Track Before: " << std::endl;
+    for(int i=0;i<track.size();i++)
+        std::cout << track[i].getSwitchStatus() << " ";
+    std::cout << std::endl;
+    for(int i=0;i<hwWaysidePtr->sector.size();i++)
+        std::cout << hwWaysidePtr->sector[i].getSwitchStatus() << " ";*/
+    std::cout << std::endl;
 }
 
 void HWTCInterface::runHWPLC(){
-    hwWaysidePtr->detectTrack();
+    //std::cout << HWready << std::endl;
+    if(HWready){
+        if(hwWaysidePtr->hwPLC.getFilename()!=""){
+            hwWaysidePtr->detectTrack();
+        }
+    }
 }

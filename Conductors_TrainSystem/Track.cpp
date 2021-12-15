@@ -314,7 +314,7 @@ bool Track::loadTrack(string filename){
         }else if(stationSide.substr(0,2) == "Le"){
             stationSDEG = 0;
         }else{
-            stationSide = -1;
+            stationSDEG = -1;
         }
         if(line == "Green"){
             std::stringstream ss2(blockNumber);
@@ -339,7 +339,7 @@ bool Track::loadTrack(string filename){
             }else if(stationSide.substr(0,2) == "Le"){
                 stationSDER = 0;
             }else{
-                stationSide = -1;
+                stationSDER = -1;
             }
             int blockNumR, speedLimR;
             ss5 >> blockNumR;
@@ -462,6 +462,7 @@ bool Track::fixPower(string line, int id){
 //Returns: None
 //Desc: takes in a vector of blocks and updates the track with inputted vector<Block>
 void Track::updateTrack(vector<Block> newTrack){
+    //cout << "updating Track" << endl;
     for(unsigned int t = 0; t < newTrack.size(); t++){
         for(unsigned int g = 0; g < greenLine.size(); g++){
             if((newTrack.at(t).getLine() == "Green") && (newTrack.at(t).getBlockNumber() == greenLine.at(g)->getBlockNumber())){
@@ -469,7 +470,7 @@ void Track::updateTrack(vector<Block> newTrack){
                     greenLine.at(g)->setSwitchStatus(newTrack.at(t).getSwitchStatus());
                 }
                 if(greenLine.at(g)->getCrossingStatus() != newTrack.at(t).getCrossingStatus()){
-                    greenLine.at(g)->setCrossingStatus(newTrack.at(t).getCircuitStatus());
+                    greenLine.at(g)->setCrossingStatus(newTrack.at(t).getCrossingStatus());
                 }
                 if(greenLine.at(g)->getSuggestedSpeed() != newTrack.at(t).getSuggestedSpeed()){
                     greenLine.at(g)->setSuggestedSpeed(newTrack.at(t).getSuggestedSpeed());
@@ -482,7 +483,7 @@ void Track::updateTrack(vector<Block> newTrack){
                     redLine.at(r)->setSwitchStatus(newTrack.at(t).getSwitchStatus());
                 }
                 if(redLine.at(r)->getCrossingStatus() != newTrack.at(t).getCrossingStatus()){
-                    redLine.at(r)->setCrossingStatus(newTrack.at(t).getCircuitStatus());
+                    redLine.at(r)->setCrossingStatus(newTrack.at(t).getCrossingStatus());
                 }
                 if(redLine.at(r)->getSuggestedSpeed() != newTrack.at(t).getSuggestedSpeed()){
                     redLine.at(r)->setSuggestedSpeed(newTrack.at(t).getSuggestedSpeed());

@@ -1,5 +1,5 @@
 #include"Wayside_HW.h"
-#include"SerialPort.h"
+#include"SerialPortTrack.h"
 
 char* unconstchar(const char* s) {
     if(!s)
@@ -23,7 +23,7 @@ const char *port0 = "\\\\.\\COM4";
 char output[MAX_DATA_LENGTH];
 char incoming[MAX_DATA_LENGTH];
 char *port = unconstchar(port0);
-SerialPort ardu(port);
+SerialPortTrack ardu(port);
 
 bool ifArduConnected(){
   return ardu.isConnected();
@@ -49,7 +49,9 @@ void receiveFromArdu(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+Wayside_HW::Wayside_HW(){
 
+}
 void Wayside_HW::initWayside(vector<Block> track){
   sector = track;
   PLCController p(track);
@@ -176,11 +178,7 @@ int Wayside_HW::receiveFromArduino(){
               blockCrossingState[i] = crossingg;
               sector[i].setSwitchStatus(tSwicthh);
               sector[i].setCrossingStatus(crossingg);
-              cout << "id: " << blockIDs[i] << endl;
-              cout << "switch: " << sector[i].getSwitchStatus() << endl;
-              cout << "Crossing: " << sector[i].getCrossingStatus() << endl;
         }else{
-            cout << "Update failed -- Train Present!!!" << endl;
             return -1;
         }
     }

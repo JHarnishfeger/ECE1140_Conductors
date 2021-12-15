@@ -48,8 +48,18 @@ private slots:
 
     void on_pushButton_openCloseSwitch_clicked();
 
+    void on_pushButton_dispatchTrain_2_clicked();
+
 private:
+
+    void dispatchTrain(bool hw);
+
+    void updateSelectedSwitchStatus();
+
+    void updateSelectedBlockStatus();
+
     Ui::CTCWindow *ui;
+
     CTC* ctc;
 
     TrackMap* trackMap;

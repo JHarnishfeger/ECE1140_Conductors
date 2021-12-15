@@ -1,5 +1,5 @@
 QT -= gui
-QT += widgets
+QT += widgets serialport
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -13,13 +13,22 @@ SOURCES += \
         CTC.cpp \
         ConductorsMain.cpp \
         HWTrackController.cpp \
+        HWTrainController/hw_TrainController/hwtrainui.cpp \
+        HWTrainController/hw_TrainController/serialport.cpp \
+        HWTrainController/hw_TrainController/traincontroller.cpp \
+        HWTrainController/hw_TrainController/traincontrollermainwindow.cpp \
         PLCController.cpp \
         SWTrackController.cpp \
         ScheduleManager.cpp \
-        SerialPort.cpp \
+        SerialPortTrack.cpp \
         Track.cpp \
         TrackMap.cpp \
         TrackNodes.cpp \
+        TrainControlSW/SWTrainController.cpp \
+        TrainControlSW/uiswtraincontroller.cpp \
+        TrainModel/trainmaker.cpp \
+        TrainModel/trainmodel.cpp \
+        TrainModel/trainui.cpp \
         TrainTracker.cpp \
         Wayside.cpp \
         WaysideManager.cpp \
@@ -37,6 +46,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 FORMS += \
+    HWTrainController/hw_TrainController/hwtrainui.ui \
+    HWTrainController/hw_TrainController/traincontrollermainwindow.ui \
+    TrainControlSW/uiswtraincontroller.ui \
+    TrainModel/trainui.ui \
     ctcwindow.ui \
     hwtcinterface.ui \
     swtcinterface.ui \
@@ -56,14 +69,23 @@ HEADERS += \
     CTC.hpp \
     Clock.h \
     HWTrackController.h \
+    HWTrainController/hw_TrainController/hwtrainui.h \
+    HWTrainController/hw_TrainController/serialport.h \
+    HWTrainController/hw_TrainController/traincontroller.h \
+    HWTrainController/hw_TrainController/traincontrollermainwindow.h \
     Node.hpp \
     PLCController.h \
     SWTrackController.h \
     ScheduleManager.h \
-    SerialPort.h \
+    SerialPortTrack.h \
     Track.h \
     TrackMap.hpp \
     TrackNodes.h \
+    TrainControlSW/SWTrainController.h \
+    TrainControlSW/uiswtraincontroller.h \
+    TrainModel/trainmaker.h \
+    TrainModel/trainmodel.h \
+    TrainModel/trainui.h \
     TrainTracker.h \
     WayStruct.h \
     Wayside.h \

@@ -119,6 +119,9 @@ void WaysideWin::on_SwitchLeft_clicked(){
             }
         }
     }
+    way->wayStr.sector = way->sector;
+    way->wayStr.auth = way->getAuthority();
+    way->wayStr.id = way->getBlockNumber();
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -134,6 +137,10 @@ void WaysideWin::on_SwitchRight_clicked(){
             }
         }
     }
+    way->wayStr.sector = way->sector;
+    way->wayStr.auth = way->getAuthority();
+    way->wayStr.id = 12;
+    //way->wayStr.id = way->getBlockNumber();
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -160,6 +167,9 @@ void WaysideWin::on_CrossingOn_clicked(){
             }
         }
     }
+    way->wayStr.sector = way->sector;
+    way->wayStr.auth = way->getAuthority();
+    way->wayStr.id = way->getBlockNumber();
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();
@@ -175,6 +185,9 @@ void WaysideWin::on_CrossingOff_clicked(){
             }
         }
     }
+    way->wayStr.sector = way->sector;
+    way->wayStr.auth = way->getAuthority();
+    way->wayStr.id = way->getBlockNumber();
     way->updateNoPLC();
     emit updateFromWayside(way->sector);
     fillLists();

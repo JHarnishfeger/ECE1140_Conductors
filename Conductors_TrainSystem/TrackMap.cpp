@@ -9,7 +9,6 @@ TrackMap::TrackMap(QObject* parent){
     backgroundItem = scene->addPixmap(*background);
 
     QBrush greenBrush(Qt::green);
-    QBrush yellowBrush(Qt::yellow);
     QPen blackPen(Qt::black);
     blackPen.setWidth(2);
 
@@ -51,7 +50,6 @@ TrackMap::~TrackMap(){
     delete[] testRect;
     delete scene;
     delete background;
-    delete backgroundItem;
 }
 
 QGraphicsScene* TrackMap::getScene(){
@@ -72,7 +70,7 @@ void TrackMap::setOccupiedBranches(std::list<std::string> occupiedList){
     for(int i = 0; i < 26; i++){
         testRect[i]->setBrush(transparentBrush);
     }
-    for(std::string item : occupiedList){
+    for(std::string& item : occupiedList){
         int index = branchStringToIndex(item);
         testRect[index]->setBrush(greenBrush);
     }

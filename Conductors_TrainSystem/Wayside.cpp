@@ -43,14 +43,17 @@ Wayside& Wayside::operator=(Wayside& w){
 }
 
 void Wayside::update(){
-    //suggestedSpeed = wayStr.suggestedSpeed;
-    //sector = wayStr.sector;
-    //authority = wayStr.auth;
+    suggestedSpeed = wayStr.suggestedSpeed;
+    sector = wayStr.sector;
+    //std::cout << "BEFORE Local: " << sector[11].getSwitchStatus() << ", WayStruct: " << wayStr.sector[11].getSwitchStatus() << std::endl;
+    authority = wayStr.auth;
     if(plc.getFilename()!="")
         detectTrack();
-    //wayStr.sector = sector;
-    //wayStr.auth = authority;
-    //wayStr.id = id;
+    wayStr.sector = sector;
+    //std::cout << "AFTER Local: " << sector[11].getSwitchStatus() << ", WayStruct: " << wayStr.sector[11].getSwitchStatus() << std::endl;
+    wayStr.auth = authority;
+    wayStr.id = id;
+    //std::cout << "WayStr ID: " << wayStr.id << std::endl;
 }
 
 void Wayside::updateNoPLC(){

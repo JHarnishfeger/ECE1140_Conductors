@@ -32,6 +32,7 @@ class Wayside_HW{
     bool maintenanceMode;
 
   public:
+    Wayside_HW();
     void initWayside(vector<Block>); //Initialize Wayside
     int getTrackSize();
     vector<int> getId();

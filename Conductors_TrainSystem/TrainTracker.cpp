@@ -16,7 +16,10 @@ bool TrainTracker::trainExists(std::string train){
 
 std::string TrainTracker::getTrainLocation(std::string trainName){
     if(!trainExists(trainName)){
-        return "";
+        existentTrains.push_back(trainName);
+        trainLocations[trainName] = "YARD";
+        trainOrder["YARD"].push_back(trainName);
+        return "YARD";
     }
     return  trainLocations[trainName];
 }
