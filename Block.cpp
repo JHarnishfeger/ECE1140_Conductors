@@ -556,84 +556,79 @@ uint64_t Block::getTrackCircuitData(){
 //Returns: None
 //Dessc: encodes that that needs transfferred between modules into a decodable unsigned 16 bit integer
 void Block::encodeBeaconData(){
-    if(beaconPresent == 1){
 
-        int stationCode, incomingCode;
-        bool headlights, stationHere;
+    int stationCode, incomingCode;
+    bool headlights, stationHere;
 
-        if(stationName == "SHADYSIDE"){
-            stationCode = 1;
-        }else if(stationName == "HERRON_AVE"){
-            stationCode = 2;
-        }else if(stationName == "SWISSVILLE"){
-            stationCode = 3;
-        }else if(stationName == "PENN_STATION"){
-            stationCode = 4;
-        }else if(stationName == "STEEL_PLAZA"){
-            stationCode = 5;
-        }else if(stationName == "FIRST_AVE"){
-            stationCode = 6;
-        }else if(stationName == "STATION_SQUARE"){
-            stationCode = 7;
-        }else if(stationName == "SOUTH_HILLS_JUNCTION"){
-            stationCode = 8;
-        }else if(stationName == "PIONEER"){
-            stationCode = 9;
-        }else if(stationName == "EDGEBROOK"){
-            stationCode = 10;
-        }else if(stationName == "WHITED"){
-            stationCode = 11;
-        }else if(stationName == "SOUTH_BANK"){
-            stationCode = 12;
-        }else if(stationName == "CENTRAL"){
-            stationCode = 13;
-        }else if(stationName == "INGLEWOOD"){
-            stationCode = 14;
-        }else if(stationName == "OVERBROOK"){
-            stationCode = 15;
-        }else if(stationName == "GLENBURY"){
-            stationCode = 16;
-        }else if(stationName == "DORMONT"){
-            stationCode = 17;
-        }else if(stationName == "MT_LEBANON"){
-            stationCode = 18;
-        }else if(stationName == "POPLAR"){
-            stationCode = 19;
-        }else if(stationName == "CASTLE_SHANNON"){
-            stationCode = 20;
-        }else if(type == "YARD"){
-            stationCode = 21;
-        }else{
-            stationCode = 31;
-        }
-
-        if(type == "UNDERGROUND"){
-            headlights = 1;
-        }else{
-            headlights = 0;
-        }
-
-        if(type == "STATION"){
-            stationHere = 1;
-        }else{
-            stationHere = 0;
-        }
-
-        if(headlights == 0 && stationHere == 0){
-            incomingCode = 1;
-        }else if(headlights == 1 && stationHere == 0){
-            incomingCode = 2;
-        }else if(headlights == 0 && stationHere == 1){
-            incomingCode = 3;
-        }else{
-            incomingCode = 4;
-        }
-
-        beaconData = (((uint16_t)stationCode<<8)+(((uint16_t)incomingCode)));
-
+    if(stationName == "SHADYSIDE"){
+        stationCode = 1;
+    }else if(stationName == "HERRON_AVE"){
+        stationCode = 2;
+    }else if(stationName == "SWISSVILLE"){
+        stationCode = 3;
+    }else if(stationName == "PENN_STATION"){
+        stationCode = 4;
+    }else if(stationName == "STEEL_PLAZA"){
+        stationCode = 5;
+    }else if(stationName == "FIRST_AVE"){
+        stationCode = 6;
+    }else if(stationName == "STATION_SQUARE"){
+        stationCode = 7;
+    }else if(stationName == "SOUTH_HILLS_JUNCTION"){
+        stationCode = 8;
+    }else if(stationName == "PIONEER"){
+        stationCode = 9;
+    }else if(stationName == "EDGEBROOK"){
+        stationCode = 10;
+    }else if(stationName == "WHITED"){
+        stationCode = 11;
+    }else if(stationName == "SOUTH_BANK"){
+        stationCode = 12;
+    }else if(stationName == "CENTRAL"){
+        stationCode = 13;
+    }else if(stationName == "INGLEWOOD"){
+        stationCode = 14;
+    }else if(stationName == "OVERBROOK"){
+        stationCode = 15;
+    }else if(stationName == "GLENBURY"){
+        stationCode = 16;
+    }else if(stationName == "DORMONT"){
+        stationCode = 17;
+    }else if(stationName == "MT_LEBANON"){
+        stationCode = 18;
+    }else if(stationName == "POPLAR"){
+        stationCode = 19;
+    }else if(stationName == "CASTLE_SHANNON"){
+        stationCode = 20;
+    }else if(type == "YARD"){
+        stationCode = 21;
     }else{
-        beaconData = 0;
+        stationCode = 31;
     }
+
+    if(type == "UNDERGROUND"){
+        headlights = 1;
+    }else{
+        headlights = 0;
+    }
+
+    if(type == "STATION"){
+        stationHere = 1;
+    }else{
+        stationHere = 0;
+    }
+
+    if(headlights == 0 && stationHere == 0){
+        incomingCode = 1;
+    }else if(headlights == 1 && stationHere == 0){
+        incomingCode = 2;
+    }else if(headlights == 0 && stationHere == 1){
+        incomingCode = 3;
+    }else{
+        incomingCode = 4;
+    }
+
+    beaconData = (((uint16_t)stationCode<<8)+(((uint16_t)incomingCode)));
 }
 //Params: None
 //Returns uint16_t

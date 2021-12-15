@@ -664,13 +664,13 @@ uint16_t Track::handleBeaconTrainInfo(uint8_t currBlock, int ID, bool line){
     if(line == 1){
         if(greenLine.at(blockNum)->getBeaconPresent() == true){
             qDebug() << "getting beacon data g:" << blockNum;
-            return greenLine.at(blockNum)->getBeaconData();
+            return greenLine.at(blockNum + 1)->getBeaconData();
         }else{
             return 0;
         }
     }else{
         if(redLine.at(blockNum)->getBeaconPresent() == true){
-            return redLine.at(blockNum)->getBeaconData();
+            return redLine.at(blockNum + 1)->getBeaconData();
         }else{
             return 0;
         }
