@@ -31,6 +31,21 @@ CTCWindow::~CTCWindow()
     delete trackMap;
 }
 
+void CTCWindow::returnWayStructs(){
+    emit sendWayStructs(ctc->waysideManager.waysides);
+}
+
+void CTCWindow::updateLocalWayStructs(WayStruct wayStr){
+    std::cout << "WAYSTR " << wayStr.id << std::endl;
+    std::cout << "SWITCH ON 12: " << wayStr.sector[11].getSwitchStatus() << std::endl;
+    for(WayStruct* w : ctc->waysideManager.waysides){
+        if(wayStr.id==w->id){
+            std::cout << "ORIGINAL: " << w->sector[11].getSwitchStatus() << std::endl;
+            *w = wayStr;
+        }
+    }
+}
+
 void CTCWindow::update(){
     ctc->update(1);
     trackMap->setOccupiedBranches(ctc->getBranchesWithTrainsPresent());

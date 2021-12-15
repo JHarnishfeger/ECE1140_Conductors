@@ -20,7 +20,7 @@ public:
     void createWaysides(int); //Initializes a given number of waysides around the track
     vector<Block> setHardwareWayside(int); //Sets a wayside of the given ID to be the hardware-controlled wayside
     vector<Wayside> waysides; //Holds all waysides as part of the track controller
-    vector<WayStruct>* wayPtr; //Holds data from all waysides for the CTC to read/update
+    vector<WayStruct> WayStrVec; //Holds data from all waysides for the CTC to read/update
     vector<Block> redLine; //Holds all info about each block of the red line.
     vector<Block> greenLine; //Holds all info about each block of the green line.
     vector<Block> swich; //Holds the block number of any blocks with broken rails

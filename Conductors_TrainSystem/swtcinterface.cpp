@@ -47,26 +47,40 @@ void SWTCInterface::setTrack(vector<Block*> rl,vector<Block*> gl){
 }
 
 void SWTCInterface::getHWWaystruct(WayStruct* hwWaystr){
-    //std::cout << "LOCAL ADDRESS OF VECTOR: " << &tc.wayPtr << std::endl;
-    emit waysidesSet(tc.wayPtr,hwWaystr);
+    emit waysidesSet(&tc.WayStrVec,hwWaystr);
 }
 
 vector<Block> SWTCInterface::getHWTrack(){
     return hwTrack;
 }
 
+void SWTCInterface::getCTCWayStruct(std::list<WayStruct*> waystrs){
+    for(WayStruct* w : waystrs){
+        for(int j=0;j<wui.size();j++){
+            if(w->id==wui[j]->way->wayStr.id){
+                wui[j]->way->wayStr = *w;
+            }
+        }
+    }
+}
+
+void SWTCInterface::returnToCTCWayStruct(WayStruct waystr){
+    emit updateCTCWayStruct(waystr);
+}
+
 void SWTCInterface::update(){
     //std::cout << "Updating!" << std::endl;
     //std::cout << std::endl << "WAYSTRUCT DATA DUMP" << std::endl;
-    //std::cout << tc.wayPtr->size() << " initialized." << std::endl;
     for(int i=0;i<wui.size();i++){
         /*std::cout << "WAYSTR " << wui[i]->way->wayStr.id << ":" << std::endl;
         std::cout << "SWITCH AT 12: " << wui[i]->way->wayStr.sector[11].getSwitchStatus() << std::endl;
         std::cout << "SANITY TYPE: " << wui[i]->way->wayStr.sector[11].getType() << std::endl;
         std::cout << "ADDRESS MAYBE?: " << &wui[i]->way->wayStr << std::endl;*/
         if(i!=tc.hwWay){
+            emit pingForWayStruct();
             wui[i]->update();
             emit updateToTrack(wui[i]->way->sector);
+            emit updateCTCWayStruct(wui[i]->way->wayStr);
         }
     }
 }
@@ -106,6 +120,7 @@ void SWTCInterface::on_CreateWaysides_clicked(){
         tc.updateWaysides();
         for(int i=0;i<wui.size();i++){
             connect(wui[i],SIGNAL(updateFromWayside(vector<Block>)),this,SLOT(updateWayside(vector<Block>)));
+            connect(wui[i],SIGNAL(updateCTCWayStruct(WayStruct)),this,SLOT(returnToCTCWayStruct(WayStruct)));
         }
     }
 }
@@ -125,10 +140,10 @@ void SWTCInterface::on_DesignateHWWayside_clicked(){
         }
         std::cout << "Set Wayside " << tc.hwWay+1 << " as hardware controlled wayside!" << std::endl;
         //vector<WayStruct> swWayPtr;
-        tc.wayPtr->clear();
+        tc.WayStrVec.clear();
         for(int i=0;i<tc.waysides.size();i++){
             if(i!=tc.hwWay){
-                tc.wayPtr->push_back(tc.waysides[i].wayStr);
+                tc.WayStrVec.push_back(tc.waysides[i].wayStr);
             }
         }
         //tc.wayPtr = &swWayPtr;

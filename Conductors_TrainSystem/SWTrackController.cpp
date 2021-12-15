@@ -34,7 +34,6 @@ void SWTrackController::initialize(vector<Block*> red, vector<Block*> green, boo
         else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
     }
-    wayPtr = new vector<WayStruct>;
 }
 
 SWTrackController::SWTrackController(vector<Block*> red, vector<Block*> green, int num, bool m){
@@ -66,7 +65,6 @@ SWTrackController::SWTrackController(vector<Block*> red, vector<Block*> green, i
         else if(greenLine[i].getRailStatus())
             brokenRail.push_back(greenLine[i]);
     }
-    wayPtr = new vector<WayStruct>;
 }
 
 void SWTrackController::sanityCheck(){
@@ -95,7 +93,7 @@ void SWTrackController::update(){
     for(int i=0;i<waysides.size();i++){
         if(i!=hwWay){
             waysides[i].update();
-            (*wayPtr)[i] = waysides[i].wayStr;
+            WayStrVec[i] = waysides[i].wayStr;
         }
     }
 }
@@ -296,7 +294,6 @@ void SWTrackController::updateFromWaysides(){
                 }
             }
         }
-    //wayPtr = &waysides;
 }
 
 void SWTrackController::updateWaysides(){
@@ -305,7 +302,6 @@ void SWTrackController::updateWaysides(){
         //waysides[i].setAuthority(authority);
         waysides[i].setMode(manualMode);
     }
-    //wayPtr = &waysides;
     getTrackOccupancy();
 }
 
@@ -414,7 +410,7 @@ void SWTrackController::createWaysides(int waysideNum){
     for(int i=0;i<waysides.size();i++){
         //std::cout << i << std::endl;
         waysides[i].wayStrInit();
-        wayPtr->push_back(waysides[i].wayStr);
+        WayStrVec.push_back(waysides[i].wayStr);
     }
 }
 
