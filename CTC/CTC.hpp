@@ -45,7 +45,7 @@ class CTC{
         void setTrackSwitch(int blockId, bool direction);
         void setCTCMode(bool _mode);
         std::list<int> getSwitches();
-        void dispatchTrain(CTCSchedule schedule);
+        void dispatchTrain(CTCSchedule schedule, bool hw=false);
         double getSuggestedSpeed();
         bool getTrackMaintenence(int blockId);
         bool getBlockHasTrainPresent(int blockId);

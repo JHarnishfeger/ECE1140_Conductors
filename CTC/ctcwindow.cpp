@@ -34,6 +34,8 @@ CTCWindow::~CTCWindow()
 void CTCWindow::update(){
     ctc->update(0);
     trackMap->setOccupiedBranches(ctc->getBranchesWithTrainsPresent());
+    updateSelectedBlockStatus();
+    updateSelectedSwitchStatus();
 }
 
 void CTCWindow::on_button_chooseSchedule_clicked()
@@ -124,22 +126,17 @@ void CTCWindow::on_pushButton_selectBlockGo_clicked()
     on_lineEdit_selectBlock_returnPressed();
 }
 
+//SW Dispatch
 void CTCWindow::on_pushButton_dispatchTrain_clicked()
 {
-    std::string trainNo;
-    std::string destinationStation;
-    int destinationTime;
-    try{
-        trainNo = ui->lineEdit_dispatchTrain->text().toStdString();
-        destinationStation = ui->lineEdit_dispatchTo->text().toStdString();
-        std::string destinationTimeStr = ui->lineEdit_dispatchTime->text().toStdString();
-        destinationTime = std::stoi(destinationTimeStr);
-    }catch(std::exception& e){
-        return;
-    }
-    ctc->dispatchTrain(CTCSchedule(trainNo, destinationStation, destinationTime));
+    dispatchTrain(false);
 }
 
+//HW Dispatch
+void CTCWindow::on_pushButton_dispatchTrain_2_clicked()
+{
+    dispatchTrain(true);
+}
 
 void CTCWindow::on_comboBox_activated()
 {
@@ -156,6 +153,15 @@ void CTCWindow::on_comboBox_activated()
     }
     ui->textBrowser_switchDirection->setText(directionText);
 }
+
+void CTCWindow::updateSelectedSwitchStatus(){
+    on_comboBox_activated();
+}
+
+void CTCWindow::updateSelectedBlockStatus(){
+    on_pushButton_selectBlockGo_clicked();
+}
+
 
 void CTCWindow::on_pushButton_openCloseSwitch_clicked()
 {
@@ -178,4 +184,20 @@ void CTCWindow::initializeWaystructs(std::vector<WayStruct>* sw_waystructs, WayS
 
 void CTCWindow::makeNewTrainEmit(){
     emit makeNewTrain();
+}
+
+
+void CTCWindow::dispatchTrain(bool hw){
+    std::string trainNo;
+    std::string destinationStation;
+    int destinationTime;
+    try{
+        trainNo = ui->lineEdit_dispatchTrain->text().toStdString();
+        destinationStation = ui->lineEdit_dispatchTo->text().toStdString();
+        std::string destinationTimeStr = ui->lineEdit_dispatchTime->text().toStdString();
+        destinationTime = std::stoi(destinationTimeStr);
+    }catch(std::exception& e){
+        return;
+    }
+    ctc->dispatchTrain(CTCSchedule(trainNo, destinationStation, destinationTime), hw);
 }

@@ -114,11 +114,14 @@ std::list<int> CTC::getSwitches(){
 /*
  * Dispatch a single schedule
  */
-void CTC::dispatchTrain(CTCSchedule schedule){
+void CTC::dispatchTrain(CTCSchedule schedule, bool hw){
     std::string startingBranch;
     if(!trainTracker.trainExists(schedule.train)){
         startingBranch = "YARD";
         std::cout << "CTC: Creating a new train: \"" << schedule.train << "\"\n";
+        //TODO Create new train here
+        //newTrain(int 1,int) //first int is hardware(0) or software(1)
+                            //second int is if its on the green(0) or red(1)
     }
     startingBranch = trainTracker.getTrainLocation(schedule.train);
     int destinationBlock = scheduleManager.getDestinationBlock(schedule.destination);
