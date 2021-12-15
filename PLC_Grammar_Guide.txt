@@ -1,0 +1,69 @@
+PLC Compiler Grammar Guide
+
+Overview:
+    The PLC compiler is contained within the PLCController object, which is initialized from the Wayside and Wayside_HW classes in order
+    to make necessary changes and adjustments to the track in the Conductors' Train Control System. The compiler breaks down information
+    from the track controlled by each wayside into several binary strings, which can then have binary operations performed on them from
+    within the PLC.
+
+Binary Strings:
+    The compiler uses several pre-determined strings of binary values that have been pulled from each block of the track to allow the
+    programmer to compare and alter the state of the track. These binary strings are as follows:
+
+        TR: Binary string representing track occupancy (1 = Occupied, 0 = Open)
+        SL: Binary string representing switch location (1 = Switch, 0 = Not Switch)
+        SW: Binary string representing switch position (1 = 1 Position, 0 = 0 Position)
+        CL: Binary string representing crossing location (1 = Crossing, 0 = Not Crossing)
+        CR: Binary string representing switch position (1 = Active, 0 = Inactive)
+        BR: Binary string representing broken rail status (1 = Broken, 0 = Unbroken)
+        SS: Binary string representing a block where speed limit is violated (1 = Violated, 0 = Safe)
+        SR: Binary string representing blocks that need to be reduced to speed limit (1 = Reset, 0 = Keep)
+        ST: Binary string representing blocks that the commanded speed should be 0 (1 = Set 0, 0 = Keep)
+        SA: Binary string representing station location (1 = Station, 0 = Not Station)
+        AU: Binary string representing authority (1 = Auth on Block, 2 = No Auth on Block)
+        NB: Binary string representing next branch to be taken (0 = Switch Pos 0, 1 = Switch Pos 1)
+        TL: Binary string representing traffic light location (0 = Not Light, 1 = Light)
+        TC: Binary string representing traffic light color (0 = Red, 1 = Green)
+
+    During the execution of the PLC script, the compiler will iterate through each block of the track, running the imported file at each
+    index of the track. The way that specific values or groups of values can be targeted is in reference to the current position of the
+    compiler's iteration through the track.
+
+        For example:
+            -To reference the binary string TR at the current position, you would use TR0.
+            -To reference the binary string SL three blocks ahead of where the iterator is looking, you would use SL3.
+            -To reference the binary string SW two blocks behind of where the iterator is looking, you would use SL-2.
+
+    In addition to targeting specific values, you can also target entire substrings of binary values in each of these strings. This can be
+    done by leaving out the position of the track to use the value of ORing the entire sector controlled by the wayside, or by appending a
+    + or - to the end of the value in order to use the value of ORing all following blocks, or previous blocks in the branch, respectively.
+
+        For example:
+            -To reference the binary string SS over the entire sector, you would use SS.
+            -To reference the OR of all values beyond 2 blocks ahead of the current position over the entire branch on binary string AU,
+            you would use AU2+
+            -To reference the OR of all values before 2 blocks ahead of the current position over the entire branch on binary string NB,
+            you would use NB2-.
+
+Tasks:
+    Each PLC file (in the form of a .txt file) can consist of several operations to be performed on the track. These can be grouped through
+    the TASK and ENDTASK labels. For each section of operations and assignments you want to carry out, the commands can be bookended by
+    first a TASK label, with an optional taskname after it (eg. TASK Sample_Task), then lastly with an ENDTASK label.
+        Ex:
+            TASK Sample_Task
+            OPP (TR0) & (!AU0)
+            OUT ST0 1
+            ENDTASK
+
+OPPs:
+    In order to perform binary logic to determine whether the track should be changed, the OPP label is used. With the OPP label, individual,
+    sections, or even whole branches of binary values can be targeted and compared with other binary values using simple and (&) and or (|)
+    calculations. In the syntax of the OPP label, each binary value must be placed within a set of parentheses, and be separated by which
+    operation will be performed on them (&, |). If you wish to reverse (NOT) a given binary value, the value can be preceded by a ! within the
+    parentheses. Any number of operations can be performed in one OPP, however, all of the operations in one line will be performed from left
+    to right.
+
+OUTs:
+    If the most recent OPP is found to be true, then all following OUTs will be allowed to perform their changes to the track. The syntax for
+    the OUT label is simply the binary value you are referencing (without parentheses), and the binary value you would like to set it to (1 or
+    0). Any number of OUTs can follow an OPP, and all will only execute if the most recent OPP was true.
