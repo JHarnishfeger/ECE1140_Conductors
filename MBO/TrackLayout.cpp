@@ -48,7 +48,7 @@ void TrackLayout::insert(string line)
   }
 
   // make new blocks
-  Block* new_block = new Block; // block for normal progression
+  MBO_Block* new_block = new MBO_Block; // block for normal progression
 
   if(isRedLine && v[0] == "Peripheral"){ // determine if next blocks handle peripherals (only for red line)
       isPeripherals = !isPeripherals; // toggle isPeripherals
@@ -57,7 +57,7 @@ void TrackLayout::insert(string line)
          switch_block = current; // save spot for when leaving peripherals
       }
       else{ // leaving peripherals
-         Block* temp = current; // save end of peripheral loop
+         MBO_Block* temp = current; // save end of peripheral loop
          current = switch_block; // revert to saved spot for normal progression
          switch_block = temp; // save end of peripheral loop
       }
@@ -143,7 +143,7 @@ void TrackLayout::setOccupany(){
 void TrackLayout::linkOccupany(int duppedSection){
     // iterate until the dupped occupancy section is over
     while(true){
-        Block* temp; // create temp Block to find the duplicated sections
+        MBO_Block* temp; // create temp Block to find the duplicated sections
         temp = head; // set the temp Block instance to the beginning of the list
         while(temp != NULL){
             if(temp->occupiedSection == current->occupiedSection){
@@ -181,7 +181,7 @@ void TrackLayout::setPeripheralOccupancy(){
     // iterate through list to find peripheral loops
     while(current != NULL){ // iterate through linked list
         if(current->peripheralBlock != NULL){
-            Block* temp = current; // set temp variable to current block where switch is found
+            MBO_Block* temp = current; // set temp variable to current block where switch is found
 
             while(temp->peripheralBlock != NULL){
                 // test for occupancy sections in periph loops. Should skip switch block
@@ -200,7 +200,7 @@ void TrackLayout::setPeripheralOccupancy(){
 
 void TrackLayout::display()
 {
-  Block* temp = head;
+  MBO_Block* temp = head;
   while(temp != NULL)
   {
     cout << temp->section << ",";

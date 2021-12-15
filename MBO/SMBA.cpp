@@ -16,10 +16,10 @@ SMBA::SMBA(){
 
     // send the filepath depending on whether its the red or green line
     if(isRedLine){
-        filepath = "C:/Users/User/Downloads/redline_v2.csv";
+        filepath = "redline_v2.csv";
     }
     else{
-        filepath = "C:/Users/User/Downloads/greenline_v2.csv";
+        filepath = "greenline_v2.csv";
     }
     line.setTrack(isRedLine,filepath);
     head = line.getHead(); // get reference to head of track linked list
@@ -29,7 +29,7 @@ SMBA::SMBA(){
 * This method takes the coordinate signals from the Train Model
 */
 void SMBA::transferCoords(int trainID, int block, double distance, double velocity){
-
+    qDebug() << "cum in Owen";
     trainVelocity = velocity; // sets the velocity of the train in question
 
     updateTrainCoords(static_cast<double>(trainID), static_cast<double>(block), distance);
@@ -102,7 +102,7 @@ void SMBA::updateTrainCoords(double trainID, double blockID, double blockDistanc
 
 void SMBA::findTrain(double trainID){
     //Block* head = line.getHead(); // get reference to head of track linked list
-    Block* current = head;
+    MBO_Block* current = head;
 
     for(int i=0; i<trainCoords.size(); i++){ // iterate through train list
         if(trainCoords[i][0] == trainID){ // check if found train in question
@@ -120,7 +120,7 @@ void SMBA::findTrain(double trainID){
                     //}
                 }
                 if(isRedLine && current->peripheralBlock != NULL){ // case when train is on switch block, checks peripheral path
-                    Block* curr_periph = current; // branch from switch block in case there is no train in peripheral path
+                    MBO_Block* curr_periph = current; // branch from switch block in case there is no train in peripheral path
                     while(curr_periph->peripheralBlock != NULL){ // iterate through peripheral path
                         if(curr_periph->number == trainCoords[i][3]){ // find block that the train was just in
                             // confirm that train is moving in the direction that you are at in the block list
@@ -143,7 +143,7 @@ void SMBA::findTrain(double trainID){
     }
 }
 
-void SMBA::calculateAuthority(Block* current, double trainID, int i, bool isPeriph){
+void SMBA::calculateAuthority(MBO_Block* current, double trainID, int i, bool isPeriph){
 
     if(isPeriph){
         current = current->peripheralBlock; // progress one block, we are now in current block

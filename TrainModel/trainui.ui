@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>898</width>
+    <height>777</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -274,12 +274,12 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>191</width>
-      <height>352</height>
+      <width>131</width>
+      <height>325</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+     <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Speed(mph)</string>
@@ -287,9 +287,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QLCDNumber" name="lcdNumber"/>
+      <widget class="QLCDNumber" name="lcdNumber">
+       <property name="digitCount">
+        <number>7</number>
+       </property>
+      </widget>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Acceleration(mph^2)</string>
@@ -297,19 +301,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QLCDNumber" name="lcdNumber_2"/>
-     </item>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Authority(m)</string>
+      <widget class="QLCDNumber" name="lcdNumber_2">
+       <property name="smallDecimalPoint">
+        <bool>true</bool>
+       </property>
+       <property name="digitCount">
+        <number>7</number>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLCDNumber" name="lcdNumber_3"/>
-     </item>
-     <item alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>Number of Passengers</string>
@@ -319,7 +320,7 @@
      <item>
       <widget class="QLCDNumber" name="lcdNumber_4"/>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item>
       <widget class="QLabel" name="label_8">
        <property name="text">
         <string>Crew Size</string>
@@ -504,7 +505,7 @@
       <x>420</x>
       <y>90</y>
       <width>160</width>
-      <height>181</height>
+      <height>193</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -546,8 +547,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>24</height>
+     <width>898</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

@@ -22,8 +22,9 @@ void UISWTrainController::timerInst()
     updateUI();
     swtraincontroller.calculatePower();
     swtraincontroller.failureCheck();
-    if(swtraincontroller.newBlock())
+    if(swtraincontroller.newBlock()){
         emit getnewTCSignal(swtraincontroller.getEncodedBlock());
+    }
 }
 
 
@@ -54,7 +55,7 @@ void UISWTrainController::updateUI()
     ui->currentVelocity->setText(QString::number(swtraincontroller.getCurrentVelocity()));
     ui->suggestedVelocity->setText(QString::number(swtraincontroller.getSetpointVelocity()));
     ui->speedLimit->setText(QString::number(swtraincontroller.getSpeedLimit()));
-    ui->authority->setText(QString::number(swtraincontroller.getAuthority()));
+    ui->authority->setText(QString::number(swtraincontroller.getCorrectAuthority()));
     ui->power->setText(QString::number(swtraincontroller.getPowerCommand()));
     ui->incomingStation->setText(QString::fromStdString(swtraincontroller.getIncommingStation()));
     ui->nxtStation->setText(QString::fromStdString(swtraincontroller.getIncommingStation()));
@@ -126,5 +127,11 @@ void UISWTrainController::on_ki_returnPressed()
 void UISWTrainController::on_commandeVelocity_returnPressed()
 {
     swtraincontroller.setCommandedVelocity(ui->commandeVelocity->text().toDouble());
+}
+
+
+void UISWTrainController::on_radioButton_clicked(bool checked)
+{
+    swtraincontroller.setCorrectAuthority(checked);
 }
 

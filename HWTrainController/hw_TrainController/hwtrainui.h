@@ -14,8 +14,7 @@ namespace Ui {
 class HWTrainUI;
 }
 
-class HWTrainUI : public QMainWindow
-{
+class HWTrainUI : public QMainWindow{
     Q_OBJECT
 
 public:
@@ -29,7 +28,7 @@ public:
     ~HWTrainUI();
 
 signals:
-    void getNewTCSignal(uint8_t encodedBlock);
+    void getnewTCSignal(uint8_t encodedBlock);
 
 private slots:
 

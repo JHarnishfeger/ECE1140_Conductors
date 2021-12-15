@@ -17,6 +17,10 @@ SOURCES += \
         HWTrainController/hw_TrainController/serialport.cpp \
         HWTrainController/hw_TrainController/traincontroller.cpp \
         HWTrainController/hw_TrainController/traincontrollermainwindow.cpp \
+        MBO/SMBA.cpp \
+        MBO/TrackLayout.cpp \
+        MBO/drivers.cpp \
+        MBO/mbo.cpp \
         PLCController.cpp \
         SWTrackController.cpp \
         ScheduleManager.cpp \
@@ -48,6 +52,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 FORMS += \
     HWTrainController/hw_TrainController/hwtrainui.ui \
     HWTrainController/hw_TrainController/traincontrollermainwindow.ui \
+    MBO/mbo.ui \
     TrainControlSW/uiswtraincontroller.ui \
     TrainModel/trainui.ui \
     ctcwindow.ui \
@@ -73,6 +78,10 @@ HEADERS += \
     HWTrainController/hw_TrainController/serialport.h \
     HWTrainController/hw_TrainController/traincontroller.h \
     HWTrainController/hw_TrainController/traincontrollermainwindow.h \
+    MBO/SMBA.h \
+    MBO/TrackLayout.h \
+    MBO/drivers.h \
+    MBO/mbo.h \
     Node.hpp \
     PLCController.h \
     SWTrackController.h \

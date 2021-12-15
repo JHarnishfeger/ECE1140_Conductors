@@ -19,6 +19,13 @@ double SWTrainController::calculatePower(){
     current_velocity=getCurrentVelocity();
     emergency_brake=train->getEbrakes();
 
+    double auth = 0.0; //authority to use in power calc
+    if(use_authority){ //If in MB authority
+        auth = train->getMBAuthority();
+    }else if(!use_authority){
+        auth = authority;
+    }
+
     double power_redun = 0.0;
     double uk_redun = 0;
     double uk1_redun = uk1;
@@ -26,7 +33,7 @@ double SWTrainController::calculatePower(){
     double ek1_redun = ek1;
 
     //Redundancy check 1
-    if (service_brake || emergency_brake || train->getBrakeFail() || authority<=0){ //If any brake is enables or no authority, power is cut
+    if (service_brake || emergency_brake || train->getBrakeFail() || auth<=0){ //If any brake is enables or no authority, power is cut
         power_command = 0;
     }else{
         //If in automatic mode, use commanded velocity, if in manual use setpoint velocity
@@ -52,7 +59,7 @@ double SWTrainController::calculatePower(){
 
 
     //Redundancy check 2
-    if (service_brake || emergency_brake || train->getBrakeFail() || authority<=0){ //If any brake is enables or no authority, power is cut
+    if (service_brake || emergency_brake || train->getBrakeFail() || auth<=0){ //If any brake is enables or no authority, power is cut
         power_redun = 0;
     }else{
         //If in automatic mode, use commanded velocity, if in manual use setpoint velocity
@@ -393,7 +400,7 @@ double SWTrainController::getdistTraveledOnBlock(){
 }
 
 bool SWTrainController::newBlock(){
-    qDebug()<<distTraveledOnBlock;
+    //qDebug()<<distTraveledOnBlock;
     if(blocklength<=distTraveledOnBlock){
         distTraveledOnBlock=0;
         return 1;
@@ -405,4 +412,16 @@ bool SWTrainController::newBlock(){
 
 uint8_t SWTrainController::getEncodedBlock(){
     return(((uint8_t)blocknum));
+}
+
+void SWTrainController::setCorrectAuthority(bool a){
+    use_authority = a;
+}
+
+double SWTrainController::getCorrectAuthority(){
+    if(use_authority){
+        return mb_authority;
+    }else{
+        return authority;
+    }
 }

@@ -6,13 +6,11 @@
 #include <QDebug>
 #include <windows.h>
 
-TrainController::TrainController(QObject *parent) : QObject(parent)
-{
+TrainController::TrainController(QObject *parent) : QObject(parent){
 
 }
 
-void TrainController::decodeData(QString inputData)
-{
+void TrainController::decodeData(QString inputData){
 
     /*String decoding
         char 0    = parity bit      (1)
@@ -29,8 +27,7 @@ void TrainController::decodeData(QString inputData)
 
     string decodedData = inputData.toStdString();
 
-    if(decodedData.length() >= 10 && decodedData.length() <= 18)
-    {
+    if(decodedData.length() >= 10 && decodedData.length() <= 18){
         if(decodedData.substr(0,1) == "1")  setLeftDoors(1);
         else    setLeftDoors(0);
         if(decodedData.substr(1,1) == "1")  setRightDoors(1);
@@ -57,8 +54,7 @@ void TrainController::decodeData(QString inputData)
 
 }
 
-QByteArray TrainController::encodeData()
-{
+QByteArray TrainController::encodeData(){
     /*String decoding
     char 0            = parity
     char 1-4          = kp
@@ -109,14 +105,15 @@ QByteArray TrainController::encodeData()
     output += authority_s.toLocal8Bit();
     output += stationCode.toLocal8Bit();
     output += getBrakeFailure().toLocal8Bit();
+    output += getEngineFailure().toLocal8Bit();
+    output += getTCFailure().toLocal8Bit();
     output += '\n';
 
     return output;
 
 }
 
-void TrainController::readSerial()
-{
+void TrainController::readSerial(){
 //    qDebug() << "hello";
     dataIN = serialport.arduino->readAll();
     temp = QString(dataIN);
@@ -127,22 +124,18 @@ void TrainController::readSerial()
 
     //qDebug() << "Initial Data: " << temp.length() << " " << temp;
 
-    for(int i = 13; i < 19; i++)
-    {
-        if ((len%i) == 0)
-        {
+    for(int i = 13; i < 19; i++){
+        if ((len%i) == 0){
             temp1 = temp.toStdString();
             temp2 = QString::fromStdString(temp.toStdString().substr(0, i));
             break;
         }
     }
-
-    if(dataIN_concat.length() <= 18)
-    {
+    //qDebug() << "temp2: " << temp2.length() << " " << temp2;
+    if(dataIN_concat.length() <= 18){
         dataIN_concat += temp2;
         //qDebug() << "Data in concat: " << dataIN_concat.length() << " " << dataIN_concat;
-        if(dataIN_concat.length() <=18 && dataIN_concat.front() == "1")
-        {
+        if(dataIN_concat.length() <=18 && dataIN_concat.front() == "1"){
             dataIN_concat.remove(0,1);
             qDebug() << "Receiving: " << dataIN_concat.length() << " " << dataIN_concat;
             decodeData(dataIN_concat);
@@ -150,14 +143,12 @@ void TrainController::readSerial()
         }
 
     }
-    else
-    {
+    else{
         dataIN_concat = "";
     }
 }
 
-void TrainController::writeSerial()
-{
+void TrainController::writeSerial(){
     QByteArray temp = encodeData();
 
     const char* in = temp.data();
@@ -166,18 +157,15 @@ void TrainController::writeSerial()
     qDebug() << "Sending: " << in;
 }
 
-void TrainController::atStation()
-{
+void TrainController::atStation(){
     QString temp_pow = commandedPower;
     //set power to zero if station is on the block
-    if ((at_station == true) && !(getCurrentSpeed() == 0.0) && !(serviceBreak))
-    {
+    if ((at_station == true) && !(getCurrentSpeed() == 0.0) && !(serviceBreak)){
         //qDebug() << "At station";
         commandedPower = "00.00";
         setServiceBreaks(1);
     }
-    else if (at_station == true)
-    {
+    else if (at_station == true){
         commandedPower = "00.00";
     }
 
@@ -231,8 +219,7 @@ void TrainController::decodeTrackCircuit(){
     authority = (tcdata) & 0xFF;
 }
 
-void TrainController::decodeBeacon()
-{
+void TrainController::decodeBeacon(){
 
     uint16_t beacon = train->getBeaconData();
 
@@ -279,28 +266,23 @@ void TrainController::decodeBeacon()
 
 }
 
-void TrainController::double2string()
-{
+void TrainController::double2string(){
 
     QString temp_currentSpeed_s = QString::number(train->getSpeed(), 'f', 2);
     QString temp_suggestedSpeed_s = QString::number(getSuggestedSpeed(), 'f', 2);
     QString temp_speedLimit_s = QString::number(getSpeedLimit(), 'f', 2);
     QString temp_authority_s = QString::number(getAuthority(), 'f', 2);
 
-    if(temp_currentSpeed_s[1] == '.')
-    {
+    if(temp_currentSpeed_s[1] == '.'){
         temp_currentSpeed_s.insert(0, QString('0'));
     }
-    if(temp_suggestedSpeed_s[1] == '.')
-    {
+    if(temp_suggestedSpeed_s[1] == '.'){
         temp_suggestedSpeed_s.insert(0, QString('0'));
     }
-    if(temp_speedLimit_s[1] == '.')
-    {
+    if(temp_speedLimit_s[1] == '.'){
         temp_speedLimit_s.insert(0, QString('0'));
     }
-    if(temp_authority_s[1] == '.')
-    {
+    if(temp_authority_s[1] == '.'){
         temp_authority_s.insert(0, QString('0'));
     }
 
@@ -311,195 +293,174 @@ void TrainController::double2string()
 
 }
 
-QString TrainController::getKp()
-{
+QString TrainController::getKp(){
     return Kp;
 }
 
-QString TrainController::getKi()
-{
+QString TrainController::getKi(){
     return Ki;
 }
 
-QString TrainController::getCommandedSpeed()
-{
+QString TrainController::getCommandedSpeed(){
     return commandedSpeed_s;
 }
 
-double TrainController::getCurrentSpeed()
-{
+double TrainController::getCurrentSpeed(){
     return train->getSpeed();
 }
 
-double TrainController::getSuggestedSpeed()
-{
+double TrainController::getSuggestedSpeed(){
     return suggestedSpeed;
 }
 
-double TrainController::getSpeedLimit()
-{
+double TrainController::getSpeedLimit(){
     return speedLimit;
 }
 
-double TrainController::getAuthority()
-{
+double TrainController::getAuthority(){
     return authority;
 }
 
-QString TrainController::getMode()
-{
+QString TrainController::getMode(){
     return mode;
 }
 
-bool TrainController::getLeftDoors()
-{
+bool TrainController::getLeftDoors(){
     return train->getLeftDoor();
 }
 
-bool TrainController::getRightDoors()
-{
+bool TrainController::getRightDoors(){
     return train->getRightDoor();
 }
 
-bool TrainController::getInteriorLights()
-{
+bool TrainController::getInteriorLights(){
     return train->getInteriorLights();
 }
 
-bool TrainController::getExteriorLights()
-{
+bool TrainController::getExteriorLights(){
     return train->getExteriorLights();
 }
 
-bool TrainController::getServiceBreak()
-{
+bool TrainController::getServiceBreak(){
     return train->getBrakes();
 }
 
-bool TrainController::getEBreak()
-{
+bool TrainController::getEBreak(){
     return train->getEbrakes();
 }
 
-bool TrainController::getPassengerBreak()
-{
+bool TrainController::getPassengerBreak(){
     return train->getBrakes();
 }
 
-QString TrainController::getCommandedPower()
-{
+QString TrainController::getCommandedPower(){
     return commandedPower;
 }
 
-QString TrainController::getEngineFailure()
-{
-    return QString(train->getEngineFail());
+QString TrainController::getEngineFailure(){
+    QString ef;
+
+    if(train->getEngineFail() == false){
+        ef = "0";
+    }
+    else{
+        ef = "1";
+    }
+
+    return ef;
 }
 
-QString TrainController::getTCFailure()
-{
-    return QString(train->getSignalFail());
+QString TrainController::getTCFailure(){
+    QString tcf;
+
+    if(train->getSignalFail() == false){
+        tcf = "0";
+    }
+    else{
+        tcf = "1";
+    }
+
+    return tcf;
 }
 
-QString TrainController::getBrakeFailure()
-{
+QString TrainController::getBrakeFailure(){
     QString bf;
 
-    if (train->getBrakeFail() == false)
-    {
+    if (train->getBrakeFail() == false){
         bf = "0";
     }
-    else if (train->getBrakeFail() == true)
-    {
+    else{
         bf = "1";
     }
 
     return bf;
 }
-void TrainController::setKp(QString kp)
-{
+
+void TrainController::setKp(QString kp){
     Kp = kp;
 }
 
-void TrainController::setKi(QString ki)
-{
+void TrainController::setKi(QString ki){
     Ki = ki;
 }
 
-void TrainController::setCommandedSpeed(QString CommandedSpeed)
-{
+void TrainController::setCommandedSpeed(QString CommandedSpeed){
     commandedSpeed_s = CommandedSpeed;
 }
 
-void TrainController::setCurrentSpeed(QString CurrentSpeed)
-{
+void TrainController::setCurrentSpeed(QString CurrentSpeed){
     currentSpeed_s = CurrentSpeed;
 }
 
-void TrainController::setSuggestedSpeed(QString SuggestedSpeed)
-{
+void TrainController::setSuggestedSpeed(QString SuggestedSpeed){
     suggestedSpeed_s = SuggestedSpeed;
 }
 
-void TrainController::setSpeedLimit(QString SpeedLimit)
-{
+void TrainController::setSpeedLimit(QString SpeedLimit){
     speedLimit_s = SpeedLimit;
 }
 
-void TrainController::setAuthority(QString Authority)
-{
+void TrainController::setAuthority(QString Authority){
     authority_s = Authority;
 }
 
-void TrainController::setNextStation(QString NextStation)
-{
+void TrainController::setNextStation(QString NextStation){
     nextStation = NextStation;
 }
 
-void TrainController::setLeftDoors(bool ld)
-{
+void TrainController::setLeftDoors(bool ld){
     train->setLeftDoor(ld);
 }
 
-void TrainController::setRightDoors(bool rd)
-{
+void TrainController::setRightDoors(bool rd){
     train->setRightDoor(rd);
 }
 
-void TrainController::setInteriorLights(bool il)
-{
+void TrainController::setInteriorLights(bool il){
     train->setInteriorLights(il);
 }
 
-void TrainController::setExteriorLights(bool el)
-{
+void TrainController::setExteriorLights(bool el){
     train->setExteriorLights(el);
 }
 
-void TrainController::setServiceBreaks(bool sb)
-{
-    if(getBrakeFailure() == "1")
-    {
+void TrainController::setServiceBreaks(bool sb){
+    if(getBrakeFailure() == "1"){
         train->setBrakes(0);
     }
-    else
-    {
+    else{
         train->setBrakes(sb);
     }
 }
 
-void TrainController::setEmergencyBreaks(bool eb)
-{
-    if(getTCFailure() == "1" || getEngineFailure() == "1")
-    {
+void TrainController::setEmergencyBreaks(bool eb){
+    if(getTCFailure() == "1" || getEngineFailure() == "1"){
         train->setEbrakes(1);
     }
-    else if(getBrakeFailure() == "1")
-    {
+    else if(getBrakeFailure() == "1"){
         train->setEbrakes(0);
     }
-    else
-    {
+    else{
         train->setEbrakes(eb);
     }
 }

@@ -24,6 +24,9 @@ class CTC{
         //Time of day, in seconds.
         int time;
         
+        //Wayside Manager
+        WaysideManager waysideManager;
+        
         //Schedule Manager
         ScheduleManager scheduleManager;
         
@@ -37,7 +40,6 @@ class CTC{
         CTC(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
         ~CTC();
         std::string displaySchedule();
-        WaysideManager waysideManager;
         void update(int current_time);
         void setTrackMaintenence(int blockId, bool isBroken);
         void setTrackSwitch(int blockId, bool direction);

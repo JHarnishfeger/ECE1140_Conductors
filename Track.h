@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "Block.h"
+#include <QDebug>
 using std::vector;
 using std::string;
 using std::fstream;
@@ -18,10 +19,11 @@ class Track{
         vector<Block*> greenLine;
         vector<Block*> redLine;
         double suggSpeed;
+        bool direction;
     public:
         //Constructors:
         Track();
-        Track(vector<Block*>,vector<Block*>,double);
+        Track(vector<Block*>,vector<Block*>,double,bool);
         Track(string,double);
         void initalize(string,double);
         //Attributes:
@@ -32,6 +34,9 @@ class Track{
         //suggSpeed
         void setSuggSpeed(double);
         double getSuggSpeed();
+        //direction
+        void setDirection(bool);
+        bool getDirection();
         //class functions:
         Block* searchBlock(string,int);
         Block* searchBlockById(string,int);

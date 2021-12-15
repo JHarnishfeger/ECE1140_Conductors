@@ -37,7 +37,7 @@ Block::Block(){
 Block::Block(string lineIN, string branchIN, string typeIN, string stationNameIN, string nextBranchesIN, vector<int> nextBlocksIN, int numberIN, int speedLimitIN, int passengersIN,
 int trafficLightStatusIN, int stationSideIN, double suggestedSpeedIN, double temperatureIN, double lengthIN, double gradeIN, double elevationIN, bool authorityIN,
 bool railStatusIN, bool circuitStatusIN, bool powerStatusIN, bool heaterStatusIN, bool crossingStatusIN, bool switchStatusIN, bool trainPresentIN,
-bool beaconPresentIN, uint32_t trackCircuitDataIN, uint16_t beaconDataIN){
+bool beaconPresentIN, uint64_t trackCircuitDataIN, uint16_t beaconDataIN){
     line = lineIN;
     branch = branchIN;
     type = typeIN;
@@ -120,7 +120,7 @@ Block::Block(string lineIN, string branchIN, int numberIN, double lengthIN, doub
     length = floor(lengthIN);
     grade = gradeIN;
     elevation = elevationIN;
-    authority = false;
+    authority = true;
     railStatus = true;
     circuitStatus = true;
     powerStatus = true;
@@ -542,20 +542,13 @@ bool Block::getBeaconPresent(){
 //Desc: encodes data that needs tranferred between modules into a decodable unsigned 32 bit integer
 void Block::encodeTrackCircuitData(){
 
-    uint64_t speedLimitU, suggestedSpeedU, authorityU, blockNumberU, lengthU;
+    trackCircuitData = ((((uint64_t)length)<<32)+(((uint64_t)number)<<24)+(((uint64_t)speedLimit)<<16)+(((uint64_t)suggestedSpeed)<<8)+(((uint64_t)authority)));
 
-    speedLimitU = (uint64_t)(speedLimit + 0.5);
-    suggestedSpeedU = (uint64_t)(suggestedSpeed + 0.5);
-    authorityU = (uint64_t)(authority + 0.5);
-    blockNumberU = (uint64_t)(number);
-    lengthU = (uint64_t)(length);
-
-    trackCircuitData = ((((uint64_t)lengthU)<<32)+(((uint64_t)blockNumberU)<<24)+(((uint64_t)speedLimitU)<<16)+(((uint64_t)suggestedSpeedU)<<8)+(((uint64_t)authorityU)));
 }
 //Params: None
 //Returns: uint32_t
 //Desc: returns a unsigned 32-bit integer representation of the track circuit data
-uint32_t Block::getTrackCircuitData(){
+uint64_t Block::getTrackCircuitData(){
     return trackCircuitData;
 }
 //beaconData -----------------------------------------------------------

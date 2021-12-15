@@ -85,6 +85,7 @@ void Wayside::updateNoPLC(){
 
 bool Wayside::detectTrack(){
     bool found=0;
+    std::cout << "PREPLC " << sector[28].getSwitchStatus() << std::endl;
     if(!runPLC())
         alerts.push_back("PLC output was incorrect. Track was not changed.");
     for(int i=0;i<sector.size();i++){
@@ -116,6 +117,7 @@ bool Wayside::detectTrack(){
         else
             sector[i].setSuggestedSpeed(sector[i].getSpeedLimit());
     }
+    std::cout << "POSTPLC " << sector[28].getSwitchStatus() << std::endl;
     return 1;
 }
 

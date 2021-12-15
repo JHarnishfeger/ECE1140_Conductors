@@ -10,36 +10,26 @@ trainUI::trainUI(QWidget *parent, bool HardwareOrSoftware,int ID, bool RedOrGree
     , ui(new Ui::trainUI)
 {
     ui->setupUi(this);
-    //timer set up and updateUI running function
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()),this,SLOT(updateTestUI()));
 
     //Connects traincontroller to train and train timer to TC timer
     if (HardwareOrSoftware == 1){
         s.swtraincontroller.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
         s.show();
-        connect(timer, SIGNAL(timeout()),&s,SLOT(timerInst()));
-
-//        //Connects train controller getTCData to train model GetTCData
-//        connect(&s,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+        connect(this,SIGNAL(update3()),&s,SLOT(timerInst()));
+        //Connects train controller getTCData to train model GetTCData
+        connect(&s,SIGNAL(getnewTCSignal(uint8_t)), this, SLOT(callTCData(uint8_t)));
     }
     else if (HardwareOrSoftware == 0){
         hw.trainController.train=mainTrain;//Sets train in the traincontroller to the train in the trainModel UI
         hw.show();
-        connect(timer, SIGNAL(timeout()),&hw,SLOT(updates()));
-
-//        //Connects train controller getTCData to train model GetTCData
-//        connect(&hw,SIGNAL(getnewTCSignal()), this, SLOT(callTCData()));
+        connect(this,SIGNAL(update3()),&hw,SLOT(updates()));
+        //Connects train controller getTCData to train model GetTCData
+        connect(&hw,SIGNAL(getnewTCSignal(uint8_t)), this, SLOT(callTCData(uint8_t)));
     }
-
-    timer ->start(1000);
 
     HorS = HardwareOrSoftware;
     RorG = RedOrGreen;
-    mainTrain->setID(ID);
-    ui->Height_2->display(3);
-    ui->Length_2->display(20);
-    ui->Width_2->display(3);
+    uiID = ID;
 }
 
 trainUI::~trainUI(){
@@ -149,16 +139,39 @@ void trainUI::on_pushButton_clicked()
 //    return signalFail;
 //}
 
-void trainUI::updateTestUI(){
-    mainTrain->setSpeed(mainTrain->getPower());
-    ui->lcdNumber->display(mainTrain->getSpeed());
-    ui->lcdNumber_2->display(mainTrain->getAcceleration());
-    ui->lcdNumber_3->display(mainTrain->getAuthority());
-    ui->lcdNumber_4->display(mainTrain->getPassengers());
-    ui->lcdNumber_5->display(mainTrain->getCrew());
-    ui->lcdNumber_6->display(mainTrain->getTemperature());
-    ui->lcdNumber_7->display(mainTrain->getPower());
+void trainUI::updateUI(){
+    //updating controller UIs
+    emit update3();
+    if(HorS == 1){
+        emit xferCoords(mainTrain->getID(),s.swtraincontroller.getblocknum(),s.swtraincontroller.getdistTraveledOnBlock(),mainTrain->getSpeed());
+    }
+    else if (HorS == 0){
+        emit xferCoords(mainTrain->getID(),hw.trainController.getblocknum(),hw.trainController.getdistTraveledOnBlock(),mainTrain->getSpeed());
+    }
 
+    mainTrain->setSpeed(mainTrain->getPower());
+    mainTrain->setID(uiID);
+    ui->lcdNumber->display(QString::number(mainTrain->getSpeed()));
+    ui->lcdNumber_2->display(QString::number(mainTrain->getAcceleration()));
+    //ui->lcdNumber_3->display(QString::number(mainTrain->getAuthority()));
+    ui->lcdNumber_4->display(QString::number(mainTrain->getPassengers()));
+    ui->lcdNumber_5->display(QString::number(mainTrain->getCrew()));
+    ui->lcdNumber_6->display(QString::number(mainTrain->getTemperature()));
+    ui->lcdNumber_7->display(QString::number(mainTrain->getPower()));
+    ui->Height_2->display(QString::number(3));
+    ui->Length_2->display(QString::number(20));
+    ui->Width_2->display(QString::number(3));
+
+    //ui->Acceleration->setText(QString::number(mainTrain->getAcceleration()));
+    //ui->Speed->setText(QString::number(mainTrain->getSpeed()));
+    //ui->Authority->setText(QString::number(mainTrain->getAuthority()));
+    //ui->Passengers->setText(QString::number(mainTrain->getPassengers()));
+    //ui->Crew->setText(QString::number(mainTrain->getCrew()));
+    //ui->Temperature->setText(QString::number(mainTrain->getTemperature()));
+    //ui->Power->setText(QString::number(mainTrain->getPower()));
+    //ui->Length_2->setText(QString::number(32));
+    //ui->Width_2->setText(QString::number(3.2));
+    //ui->Height_2->setText(QString::number(2.84));
 
     //Brakes
     if(mainTrain->getBrakes() == true){
@@ -213,7 +226,7 @@ void trainUI::on_Temp_Change_sliderMoved(int position)
     mainTrain->setTemperature(position);
 }
 
-void callTCData(uint8_t currentBlock){
-    callAgainTCData(currentBlock,mainTrain->getID());
+void trainUI::callTCData(uint8_t currentBlock){
+    emit callAgainTCData(currentBlock,mainTrain->getID(),RorG);
 }
 

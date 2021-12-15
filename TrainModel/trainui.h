@@ -11,7 +11,7 @@
 #include "../HWTrainController/hw_TrainController/hwtrainui.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class trainUI; }
+    namespace Ui { class trainUI; }
 QT_END_NAMESPACE
 
 class trainUI : public QMainWindow
@@ -35,7 +35,7 @@ public:
     trainUI(QWidget *parent = nullptr, bool HardwareOrSoftware = 1,int ID = 1, bool RedOrGreen= 1);
     ~trainUI();
 
-private slots:
+public slots:
 
     //Set Functions for display
     QString setBFail();
@@ -43,7 +43,7 @@ private slots:
     QString setSFail();
 
     //update functoin
-    void updateTestUI();
+    void updateUI();
 
     //onclick functions
     void on_Temp_Change_sliderMoved(int position);
@@ -59,9 +59,12 @@ private slots:
     //Get new track circuit data
     void callTCData(uint8_t currentBlock);
 
+
 signals:
 
-    void callAgainTCData(uint8_t currentBlock, int trainID);
+    void callAgainTCData(uint8_t currentBlock, int trainID,bool RorG);
+    void xferCoords(int trainID,int currentBlock,double distance,double velocity);
+    void update3();
 
 private:
 
@@ -69,11 +72,12 @@ private:
     Ui::trainUI *ui;
 
     //all variables
+    int uiID;
     bool brakes;
     bool eBrakes;
     bool brakeFail,engineFail,signalFail;
     bool HorS; // Software is value of 1 // Hardware is value of 0
-    bool RorG; // Red is value of 1 // Green is value of 0
+    bool RorG; // Red is value of 0 // Green is value of 1
 
 };
 #endif // TRAINUI_H

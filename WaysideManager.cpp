@@ -36,11 +36,6 @@ WaysideManager::WaysideManager(std::list<WayStruct*> _waystructs, TrackNodes* _t
 	greenLineSwitches.push_back(85); //N->O and Q->N
 }
 
-std::list<WayStruct*> WaysideManager::getWayStructs()
-{
-    return waysides;
-}
-
 std::list<int> WaysideManager::getGreenLineSwitches(){
 	return greenLineSwitches;
 }

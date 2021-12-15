@@ -56,6 +56,8 @@ private slots:
     void on_ki_returnPressed();
 
 
+    void on_radioButton_clicked(bool checked);
+
 private:
     Ui::UISWTrainController *ui;
     double pow = 0.0;

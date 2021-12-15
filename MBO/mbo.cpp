@@ -41,10 +41,10 @@ bool MBO::schedule(){
 
   // send the filepath depending on whether its the red or green line
   if(isRedLine){
-      filepath = "C:/Users/User/Downloads/redline_v2.csv";
+      filepath = "redline_v2.csv";
   }
   else{
-      filepath = "C:/Users/User/Downloads/greenline_v2.csv";
+      filepath = "greenline_v2.csv";
   }
 
   TrackLayout line;// parse the track layout into a linked list
@@ -107,9 +107,9 @@ bool MBO::schedule(){
   // total passengers who have ridden on the train that day
   int totPass=0;
 
-  Block* head = line.getHead(); // get reference to head of track linked list
-  Block* current = head;
-  Block* save_curr = new Block;
+  MBO_Block* head = line.getHead(); // get reference to head of track linked list
+  MBO_Block* current = head;
+  MBO_Block* save_curr = new MBO_Block;
 
   /*
    * This for loop is the beginning of the schedule generation process. It starts at beginning of the day
@@ -286,7 +286,7 @@ bool MBO::schedule(){
 }
 
 void MBO::exportSchedule(){
-    QString filename = "C:/Users/User/Downloads/schedule.csv";
+    QString filename = "C:/Users/pauls/OneDrive/Documents/AAA_TrainSystem/Conductors_TrainSystem/MBO/schedule.csv";
     QFile file(filename);
     if (file.open(QIODevice::ReadWrite)) {
         QTextStream stream(&file);

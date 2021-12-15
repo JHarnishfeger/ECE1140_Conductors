@@ -28,8 +28,6 @@ signals:
     void waysidesSet(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystruct);
     void updateWaysidesFromTrack(vector<Block*> red, vector<Block*> green);
     void updateToTrack(vector<Block>);
-    void pingForWayStruct();
-    void updateCTCWayStruct(WayStruct waystr);
 private slots:
     void on_CreateWaysides_clicked();
 
@@ -49,10 +47,6 @@ public slots:
     void updateFromTrack(vector<Block*> red, vector<Block*> green);
 
     void updateWayside(vector<Block> sec);
-
-    void getCTCWayStruct(std::list<WayStruct*> waystrs);
-
-    void returnToCTCWayStruct(WayStruct waystr);
 
 private:
     Ui::SWTCInterface *ui;

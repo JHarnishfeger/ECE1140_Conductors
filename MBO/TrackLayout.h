@@ -14,7 +14,7 @@ struct Occupancy {
 };
 
 // Making a block struct
-struct Block {
+struct MBO_Block {
   string section;
   int number;
   int length;
@@ -25,8 +25,8 @@ struct Block {
   string infrastructure;
   int occupiedSection;
   Occupancy *occupied;
-  Block *next;
-  Block *peripheralBlock;
+  MBO_Block *next;
+  MBO_Block *peripheralBlock;
 };
 
 /*
@@ -37,16 +37,16 @@ struct Block {
 class TrackLayout
 {
     private:
-        Block* head;
-        Block* current;
-        Block* switch_block;
+        MBO_Block* head;
+        MBO_Block* current;
+        MBO_Block* switch_block;
         vector<int> occupancySections;
         bool isRedLine;
         bool isPeripherals;
     public:
         TrackLayout();
         void setTrack(bool isRedLine, string file);
-        Block* getHead(){return head;}
+        MBO_Block* getHead(){return head;}
         void insert(string line);
         void linkOccupany(int duppedOccupancy);
         void setOccupany();

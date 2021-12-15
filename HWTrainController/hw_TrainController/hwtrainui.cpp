@@ -10,72 +10,60 @@ HWTrainUI::HWTrainUI(QWidget *parent) :
    //variables
    portList = QSerialPortInfo::availablePorts();
 
-   for(auto &port : portList)
-   {
+   for(auto &port : portList){
        QString portName = port.portName();
        ui->ports->addItem(portName);
    }
 
 }
 
-HWTrainUI::~HWTrainUI()
-{
+HWTrainUI::~HWTrainUI(){
     delete ui;
 }
 
-void HWTrainUI::decodeSignals()
-{
+void HWTrainUI::decodeSignals(){
     trainController.decodeBeacon();
     trainController.decodeTrackCircuit();
 }
 
-void HWTrainUI::on_connectButton_clicked()
-{
-    if(portInfo != NULL)
-    {
+void HWTrainUI::on_connectButton_clicked(){
+    if(portInfo != NULL){
         trainController.serialport.openSerialPort(*portInfo);
     }
-    else
-    {
+    else{
         qDebug() << "NULL";
     }
 }
 
-void HWTrainUI::on_commandedSpeed_returnPressed()
-{
+void HWTrainUI::on_commandedSpeed_returnPressed(){
     trainController.setCommandedSpeed(ui->commandedSpeed->text());
 }
 
-void HWTrainUI::on_enterButton_clicked()
-{
+void HWTrainUI::on_enterButton_clicked(){
     trainController.setKp(ui->KpText->text());
     trainController.setKi(ui->KiText->text());
 }
 
-void HWTrainUI::on_ports_currentIndexChanged(int index)
-{
-    if(index>= 0 && index < portList.length())
-    {
+void HWTrainUI::on_ports_currentIndexChanged(int index){
+    if(index>= 0 && index < portList.length()){
         portInfo = &(portList[index]);
     }
 }
 
-void HWTrainUI::updates()
-{
-    if(trainController.serialport.arduino->isOpen())
-    {
-        qDebug() << "here";
+void HWTrainUI::updates(){
+    //qDebug() << "updates";
+    if(trainController.serialport.arduino->isOpen()){
         trainController.writeSerial();
         trainController.readSerial();
     }
-    else
-    {
-        qDebug() << "Serial Port Not Connected...";
+    else{
+        //qDebug() << "Serial Port Not Connected...";
     }
     decodeSignals();
     if(trainController.newBlock()){
-        emit getNewTCSignal(trainController.getEncodedBlock());
+        emit getnewTCSignal(trainController.getEncodedBlock());
     }
+    ui->lcdNumber->display(QString::number(trainController.getTrainID()));
 }
 
 
