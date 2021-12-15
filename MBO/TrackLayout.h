@@ -20,10 +20,13 @@ struct Block {
   int length;
   int speedLimit;
   int timeOccupied;
+  int delay;
   double blockTime;
   string infrastructure;
+  int occupiedSection;
   Occupancy *occupied;
   Block *next;
+  Block *peripheralBlock;
 };
 
 /*
@@ -36,14 +39,18 @@ class TrackLayout
     private:
         Block* head;
         Block* current;
-        vector<string> sections;
+        Block* switch_block;
+        vector<int> occupancySections;
+        bool isRedLine;
+        bool isPeripherals;
     public:
         TrackLayout();
-        TrackLayout(string file);
+        void setTrack(bool isRedLine, string file);
         Block* getHead(){return head;}
         void insert(string line);
-        void linkOccupany();
+        void linkOccupany(int duppedOccupancy);
         void setOccupany();
+        void setPeripheralOccupancy();
         void display();
 };
 #endif

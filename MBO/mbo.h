@@ -40,10 +40,12 @@ private slots:
     void on_DayThroughputButton_clicked();
     void on_StartOfDayButton_clicked();
     void on_ExportScheduleButton_clicked();
+    void on_horizontalSlider_valueChanged(int value);
 
 private:
     Ui::MBO *ui;
     Drivers drivers;
+    bool isRedLine;
     bool created;
     vector<vector<string>> generatedSchedule;
     vector<int> throughput;

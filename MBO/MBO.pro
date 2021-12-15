@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    SMBA.cpp \
     TrackLayout.cpp \
     drivers.cpp \
     main.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
 
 HEADERS += \
     ../../../AppData/Local/atom/Atom resources/ece1140_Iteration2/Scheduler.h \
+    SMBA.h \
     TrackLayout.h \
     drivers.h \
     mbo.h
@@ -30,4 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     ../../../Downloads/Layout.csv \
-    ../../../Downloads/greenline_v2.csv
+    ../../../Downloads/greenline_v2.csv \
+    ../../../Downloads/redline_v2.csv \
+    ../../../Downloads/schedule.csv
