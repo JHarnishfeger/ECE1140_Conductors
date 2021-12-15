@@ -55,13 +55,14 @@ void joystick()
   }
     else if(abs(jxValue) % 5 == 3)
   {
-
+    if(stationUpcoming)
+    {
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Arriving at Station: ");
       lcd.setCursor(0,1);
       lcd.print(stationName);
-    
+    }
   }
   
   //delay(150);

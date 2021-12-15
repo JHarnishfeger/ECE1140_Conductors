@@ -25,9 +25,7 @@ void ReceiveData()
     speedLimitString = receivedString.substring(24,29); //[24 25 26 27 28]
     authorityString = receivedString.substring(29,34); //[29 30 31 32 33]
     stationCode = receivedString.substring(34,39); //[34 35 36 37 38]
-    breakFailString = receivedString.substring(39,40) == '1'; //[39]
-    engineFailString = receivedString.substring(40,41); //[40]
-    tcFailString = receivedString.substring(41,42); //[41]
+    breakFail = receivedString.substring(39,40) == '1'; //[39]
 
     //decode the stationcode into name of the station
     stationName = decodeStationName(stationCode);

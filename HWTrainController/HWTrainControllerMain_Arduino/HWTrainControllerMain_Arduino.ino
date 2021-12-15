@@ -1,22 +1,20 @@
 #include <LiquidCrystal_I2C.h>
 
-
 LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 //Reveiver and Joystick Variables
 String receivedString;
-String KpString = "1000";
-String KiString = "1000";
+String KpString = "0000";
+String KiString = "0000";
 String commandedSpeedString = "00.00";
 String currentSpeedString = "00.00";
 String suggestedSpeedString = "00.00";
 String speedLimitString = "00.00";
 String authorityString = "00.00";
-String stationCode = "00000";
+String stationCode = "";
+bool stationUpcoming = true;
 String stationName = "";
-String breakFailString = "0";
-String engineFailString = "0";
-String tcFailString = "0";
+bool breakFail = false;
 
 //Power Variables
 double commandedPower;
@@ -59,11 +57,6 @@ bool eBreak = false;
 bool passengerBreak = false;
 bool mode = true;
 
-bool setBrake = false;
-bool serviceBreakFlag = false;
-bool stop4station = false;
-bool brake4slow = false;
-
 void setup() {
 
   //Pin Initializations
@@ -92,5 +85,5 @@ void loop() {
   ReceiveData();
   calculatePower();
   TransmitData();
-  delay(100);
+  delay(1000);
 }

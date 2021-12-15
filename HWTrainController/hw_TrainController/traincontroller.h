@@ -89,7 +89,7 @@ public:
     double getdistTraveledOnBlock();
     uint8_t getEncodedBlock();
 
-
+    void setCurrentSpeedDouble(QString CurrentSpeed);
     //Mutators
     void setKp(QString kp);
     void setKi(QString ki);

@@ -99,6 +99,8 @@ QByteArray TrainController::encodeData()
 
     double2string();
 
+    setCurrentSpeedDouble(currentSpeed_s);
+
     output += "1";
     output += Kp.toLocal8Bit();
     output += Ki.toLocal8Bit();
@@ -419,6 +421,10 @@ QString TrainController::getBrakeFailure()
 void TrainController::setKp(QString kp)
 {
     Kp = kp;
+}
+
+void TrainController::setCurrentSpeedDouble(QString CurrentSpeed){
+    currentSpeed = CurrentSpeed.toDouble();
 }
 
 void TrainController::setKi(QString ki)
