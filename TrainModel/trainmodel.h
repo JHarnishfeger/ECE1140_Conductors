@@ -27,7 +27,6 @@ class trainModel{
         int numPassengers;	//number of passengers
 
         //metrics of the train
-        double mass; //in Kg
         double modelMass = 4000; //kg
         double width,length,height;
         int carCount;
@@ -57,6 +56,8 @@ class trainModel{
     public:
         trainModel(bool HardwareOfSoftware);
         ~trainModel();
+
+        double mass; //in Kg
 
         //IDs
         void setID(int id);

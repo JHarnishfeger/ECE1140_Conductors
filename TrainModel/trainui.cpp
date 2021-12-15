@@ -158,9 +158,10 @@ void trainUI::updateUI(){
     ui->lcdNumber_5->display(QString::number(mainTrain->getCrew()));
     ui->lcdNumber_6->display(QString::number(mainTrain->getTemperature()));
     ui->lcdNumber_7->display(QString::number(mainTrain->getPower()));
-    ui->Height_2->display(QString::number(3));
-    ui->Length_2->display(QString::number(20));
-    ui->Width_2->display(QString::number(3));
+    ui->Height_2->display(QString::number(2.84));
+    ui->Length_2->display(QString::number(32));
+    ui->Width_2->display(QString::number(3.2));
+    ui->Mass->display(QString::number(mainTrain->mass));
 
     //ui->Acceleration->setText(QString::number(mainTrain->getAcceleration()));
     //ui->Speed->setText(QString::number(mainTrain->getSpeed()));

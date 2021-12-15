@@ -539,6 +539,16 @@
      <item>
       <widget class="QLCDNumber" name="Length_2"/>
      </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Mass(kg)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLCDNumber" name="Mass"/>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -548,7 +558,7 @@
      <x>0</x>
      <y>0</y>
      <width>898</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

@@ -73,8 +73,8 @@ void trainModel::setSpeed(double inputPower){
             acceleration1 = 0;
         acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
         if((actualSpeed1+acceleration1) <= 0){
-            engineFail = false;
-            signalFail = false;
+            //engineFail = false;
+            //signalFail = false;
             actualSpeed1 = 0;
             actualSpeed0 = 0;
             acceleration0 = 0;
@@ -91,7 +91,7 @@ void trainModel::setSpeed(double inputPower){
             actualSpeed0 = 0;
             acceleration0 = 0;
             acceleration1 = 0;
-            brakeFail = false;
+            //brakeFail = false;
         }
      }
   else if(engineFail == true){
@@ -103,7 +103,7 @@ void trainModel::setSpeed(double inputPower){
           actualSpeed0 = 0;
           acceleration0 = 0;
           acceleration1 = 0;
-          brakeFail = false;
+          //brakeFail = false;
       }
    }
     else {
