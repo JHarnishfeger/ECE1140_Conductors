@@ -314,7 +314,7 @@ bool Track::loadTrack(string filename){
 		}else if(stationSide.substr(0,2) == "Le"){
 			stationSDEG = 0;
 		}else{
-			stationSide = -1;
+			stationSDEG = -1;
 		}
 		if(line == "Green"){
 			std::stringstream ss2(blockNumber);
@@ -339,7 +339,7 @@ bool Track::loadTrack(string filename){
 			}else if(stationSide.substr(0,2) == "Le"){
 				stationSDER = 0;
 			}else{
-				stationSide = -1;
+				stationSDER = -1;
 			}
 			int blockNumR, speedLimR;
 			ss5 >> blockNumR;
