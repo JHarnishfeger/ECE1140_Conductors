@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <stdlib.h>
-#include "..\TrainModel\trainModel.h"
+#include "..\TrainModel\trainmodel.h"
 
 class SWTrainController{
     private:
@@ -23,6 +23,7 @@ class SWTrainController{
         //Transit data variables
         double authority = 0.0;
         double mb_authority = 0.0;
+        bool use_authority = 0; //Bool to choose what authority to use, 0=FB, 1=MB
         double speed_limit = 0;
         std::string incommingStation = "None";
         double commanded_velocity = 0.0;
@@ -41,9 +42,12 @@ class SWTrainController{
         bool at_station = false;
         bool just_stopped = false;
         bool mode = true;
-        int blocknum = -1;
+        int blocknum = 0;
         int blocklength = 0;
         double distTraveledOnBlock = 0;
+        bool brakeForSlow = 0;
+        int stationCounter = 0;
+        bool stopForStation = 0;
 
       public:
         trainModel* train;
@@ -108,6 +112,8 @@ class SWTrainController{
         int getblocklength();
         double getdistTraveledOnBlock();
         bool newBlock();
+        void setCorrectAuthority(bool);
+        double getCorrectAuthority();
 
 
 };

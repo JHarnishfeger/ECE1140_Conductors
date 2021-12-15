@@ -22,7 +22,7 @@ class SMBA : public QObject
         vector<vector<double>> trainCoords;
         //vector<vector<double>> safeDistances; // member will change to vector<vector<double>> when module can use prediction
         TrackLayout line; // member function for the track object
-        Block* head;
+        MBO_Block* head;
         double authDistance;
         double trainVelocity;
         bool isRedLine;
@@ -30,7 +30,7 @@ class SMBA : public QObject
         SMBA();
         void updateTrainCoords(double trainID, double blockID, double blockDistance);
         void findTrain(double trainID);
-        void calculateAuthority(Block* current, double trainID, int i, bool isPeriph);
+        void calculateAuthority(MBO_Block* current, double trainID, int i, bool isPeriph);
         //double getSafeDistance(double trainID);
     public slots:
         void transferCoords(int trainID, int block, double distance, double velocity);

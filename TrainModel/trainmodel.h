@@ -2,7 +2,6 @@
 #define TRAINMODEL_H
 #include <iostream>
 #include <QObject>
-//#include "SMBA.h"
 
 class trainModel{
 
@@ -28,7 +27,6 @@ class trainModel{
         int numPassengers;	//number of passengers
 
         //metrics of the train
-        double mass; //in Kg
         double modelMass = 4000; //kg
         double width,length,height;
         int carCount;
@@ -42,7 +40,6 @@ class trainModel{
 
         //authority
         double authDistance;
-        double authSpeed;
 
         //temperature
         double temperature;
@@ -59,6 +56,8 @@ class trainModel{
     public:
         trainModel(bool HardwareOfSoftware);
         ~trainModel();
+
+        double mass; //in Kg
 
         //IDs
         void setID(int id);
@@ -96,8 +95,8 @@ class trainModel{
         bool getBrakeFail();
 
         //authority
-        void setAuthority(double Distance,double Speed);
-        int getAuthority();
+        void setAuthority(double Distance);
+        double getMBAuthority();
 
         //lights
         void setInteriorLights(bool interiorLights);
@@ -129,12 +128,6 @@ class trainModel{
         //send Beacon Data
         void setBeaconData(uint16_t Data);
         uint16_t getBeaconData();
-
-    signals:
-        //Signals for MBO
-        double getMovingBlockAuthority();
-        double getMovingBlockSpeed();
-        void receiveCoords(int trainID, double latitude, double longitude, double distanceTravelled);
 
 };
 

@@ -10,7 +10,6 @@
   */
 trainModel::trainModel(bool HardwareOrSoftware) {
   authDistance = 0;
-  authSpeed = 0;
   numPassengers = 0;
   crewCount = 1;
   carCount = 2;
@@ -74,8 +73,8 @@ void trainModel::setSpeed(double inputPower){
             acceleration1 = 0;
         acceleration1 = acceleration1 + decelerationRateEmergencyBrake;
         if((actualSpeed1+acceleration1) <= 0){
-            engineFail = false;
-            signalFail = false;
+            //engineFail = false;
+            //signalFail = false;
             actualSpeed1 = 0;
             actualSpeed0 = 0;
             acceleration0 = 0;
@@ -92,7 +91,7 @@ void trainModel::setSpeed(double inputPower){
             actualSpeed0 = 0;
             acceleration0 = 0;
             acceleration1 = 0;
-            brakeFail = false;
+            //brakeFail = false;
         }
      }
   else if(engineFail == true){
@@ -104,7 +103,7 @@ void trainModel::setSpeed(double inputPower){
           actualSpeed0 = 0;
           acceleration0 = 0;
           acceleration1 = 0;
-          brakeFail = false;
+          //brakeFail = false;
       }
    }
     else {
@@ -224,15 +223,15 @@ bool trainModel::getBrakeFail(){
 /*Function is to set the authority using
   an input from the MBO, moving block authority.
   */
-void trainModel::setAuthority(double Distance,double Speed){
+void trainModel::setAuthority(double Distance){
   authDistance = Distance;
-  authSpeed = Speed;
+  qDebug() << authDistance;
 }
 
 /*Function is to access the authority of
   the train.
   */
-int trainModel::getAuthority(){
+double trainModel::getMBAuthority(){
   return authDistance;
 }
 

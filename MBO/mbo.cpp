@@ -41,10 +41,10 @@ bool MBO::schedule(){
 
   // send the filepath depending on whether its the red or green line
   if(isRedLine){
-      filepath = "C:/Users/User/Downloads/redline_v2.csv";
+      filepath = "redline_v2.csv";
   }
   else{
-      filepath = "C:/Users/User/Downloads/greenline_v2.csv";
+      filepath = "greenline_v2.csv";
   }
 
   TrackLayout line;// parse the track layout into a linked list
@@ -107,9 +107,9 @@ bool MBO::schedule(){
   // total passengers who have ridden on the train that day
   int totPass=0;
 
-  Block* head = line.getHead(); // get reference to head of track linked list
-  Block* current = head;
-  Block* save_curr = new Block;
+  MBO_Block* head = line.getHead(); // get reference to head of track linked list
+  MBO_Block* current = head;
+  MBO_Block* save_curr = new MBO_Block;
 
   /*
    * This for loop is the beginning of the schedule generation process. It starts at beginning of the day
@@ -126,13 +126,21 @@ bool MBO::schedule(){
           activeDrivers.push_back(drivers.getDriver(i));
         }
         else if(secondsOfDay == (shift + (4*60*60))){ // remove driver from activeDrivers if it is their break
-          activeDrivers.erase(activeDrivers.begin()+i);
+            for(int k=0;k<activeDrivers.size(); k++){
+                if(drivers.getDriver(i).at(0) == activeDrivers[k][0]){
+                    activeDrivers.erase(activeDrivers.begin()+i);
+                }
+            }
         }
         else if(secondsOfDay == (shift + (4.5*60*60))){ // add driver from activeDrivers if their break is over
           activeDrivers.push_back(drivers.getDriver(i));
         }
         else if(secondsOfDay == (shift + (8.5*60*60))){ // remove driver from activeDrivers if their shift is over
-          activeDrivers.erase(activeDrivers.begin()+i);
+            for(int k=0;k<activeDrivers.size(); k++){
+                if(drivers.getDriver(i).at(0) == activeDrivers[k][0]){
+                    activeDrivers.erase(activeDrivers.begin()+i);
+                }
+            }
         }
         else{ // do nothing --> purpose of if else is to skip calculation if earlier conditions are method
         }
@@ -286,7 +294,7 @@ bool MBO::schedule(){
 }
 
 void MBO::exportSchedule(){
-    QString filename = "C:/Users/User/Downloads/schedule.csv";
+    QString filename = "schedule.csv";
     QFile file(filename);
     if (file.open(QIODevice::ReadWrite)) {
         QTextStream stream(&file);
