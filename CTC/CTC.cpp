@@ -60,7 +60,6 @@ std::string CTC::displaySchedule(){
 void CTC::update(int current_time){
     time = current_time;
 
-    //TODO stuff here
     auto nextSchedule = scheduleManager.loadNextSchedule();
     if(mode == true && time >= nextSchedule.time && nextSchedule.train != ""){
         dispatchTrain(nextSchedule);
@@ -116,26 +115,28 @@ std::list<int> CTC::getSwitches(){
  * Dispatch a single schedule
  */
 void CTC::dispatchTrain(CTCSchedule schedule){
-    std::cout << "Dispatched train " << schedule.train << " to block " <<
-                 schedule.destination << " at time " << time << std::endl;
-
-    //TODO
-    //Get the route
-
     std::string startingBranch;
     if(!trainTracker.trainExists(schedule.train)){
         startingBranch = "YARD";
-        //Create the train here
-        //TODO
-    }else{
-        startingBranch = trainTracker.getTrainLocation(schedule.train);
+        std::cout << "CTC: Creating a new train: \"" << schedule.train << "\"\n";
+    }
+    startingBranch = trainTracker.getTrainLocation(schedule.train);
+    int destinationBlock = scheduleManager.getDestinationBlock(schedule.destination);
+    std::list<std::string> route;
+    try{
+        route = track.getBranchRoute(
+            startingBranch,
+            track.getBranchOfBlock(destinationBlock)
+        );
+    }catch(std::exception& e){
+        std::cout << "CTC Error: " <<  e.what() << std::endl;
+        return;
     }
 
-    int destinationBlock = schedule.destination;
-    std::list<std::string> route = track.getBranchRoute(
-        startingBranch,
-        track.getBranchOfBlock(schedule.destination)
-    );
+    std::cout << "Dispatched train " << schedule.train << " from branch " <<
+                 startingBranch << " to block " << scheduleManager.getDestinationBlock(schedule.destination) <<
+                 ", Branch " << track.getBranchOfBlock(scheduleManager.getDestinationBlock(schedule.destination)) <<
+                 " at time " << schedule.time << ".\n";
 
     //Send Authorities to each wayside
     std::list<Authority> authorities;

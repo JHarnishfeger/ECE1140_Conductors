@@ -3,7 +3,7 @@
 #include <iostream>
 #include "string_utils.hpp"
 
-CTCSchedule::CTCSchedule(std::string _train, int _destination, int _time){
+CTCSchedule::CTCSchedule(std::string _train, std::string _destination, int _time){
     train = _train;
     destination = _destination;
     time = _time;
@@ -29,14 +29,17 @@ ScheduleManager::ScheduleManager(){
     stations["STATION; OVERBROOK"] = 122; //USED TWICE
     stations["STATION; INGLEWOOD"] = 131; //USED TWICE
     stations["STATION; CENTRAL"] = 140; //USED TWICE
+}
 
+int ScheduleManager::getDestinationBlock(std::string stationName){
+    return stations[stationName];
 }
 
 std::string ScheduleManager::displaySchedule(){
  	std::string rtn = "";
     for(CTCSchedule& s : schedule){
         rtn += s.train + " ";
-        rtn += "to Block " + std::to_string(s.destination) + " ";
+        rtn += "to Block " + s.destination + " ";
         rtn += "at Time " + std::to_string(s.time) + "\n";
     }
     return rtn;
@@ -60,9 +63,8 @@ void ScheduleManager::loadSchedule(std::string filepath){
             auto itr = l.begin();
             std::string train = *(itr++);
             std::string stationName = *(itr++);
-            int destination = stations.at(stationName);
             int time = std::stoi(*(itr++));
-            addSchedule(CTCSchedule(train, destination, time));
+            addSchedule(CTCSchedule(train, stationName, time));
         }catch(std::exception& e){
             std::cout << "Could not parse schedule " + filepath << std::endl;
         }
@@ -77,7 +79,7 @@ void ScheduleManager::addSchedule(CTCSchedule _schedule){
 
 CTCSchedule ScheduleManager::loadNextSchedule(){
 	if(schedule.empty()){
-		return CTCSchedule("", 0, 0);
+        return CTCSchedule("", "", 0);
 	}
 
 	return schedule[0];

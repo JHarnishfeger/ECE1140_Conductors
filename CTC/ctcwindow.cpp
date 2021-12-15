@@ -17,7 +17,6 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
 
     ctc->update(0);
 
-    //TODO: Add switch list to drop-down here
     std::list<int> switches = ctc->getSwitches();
     for(int s : switches){
         ui->comboBox->addItem("Switch on Block " + QString::number(s), QVariant(s));
@@ -25,14 +24,6 @@ CTCWindow::CTCWindow(std::vector<WayStruct>* sw_waystructs, WayStruct* hw_waystr
 
     trackMap = new TrackMap(this->ui->graphicsView);
     ui->graphicsView->setScene(trackMap->getScene());
-
-    /*
-    std::list<std::string> fakeOccupiedList;
-    fakeOccupiedList.push_back("F");
-    fakeOccupiedList.push_back("I");
-    fakeOccupiedList.push_back("Q");
-    trackMap->setOccupiedBranches(fakeOccupiedList);
-    */
 }
 
 CTCWindow::~CTCWindow()
@@ -136,18 +127,17 @@ void CTCWindow::on_pushButton_selectBlockGo_clicked()
 void CTCWindow::on_pushButton_dispatchTrain_clicked()
 {
     std::string trainNo;
-    int destinationBlockId;
+    std::string destinationStation;
     int destinationTime;
-    std::cout << "Test\n";
     try{
-        trainNo = ui->label_manualDispatchtrain->text().toStdString();
-        destinationBlockId = std::stoi(ui->label_manualDispatchTo->text().toStdString());
-        destinationTime = std::stoi(ui->label_manualDispatchToTime->text().toStdString());
+        trainNo = ui->lineEdit_dispatchTrain->text().toStdString();
+        destinationStation = ui->lineEdit_dispatchTo->text().toStdString();
+        std::string destinationTimeStr = ui->lineEdit_dispatchTime->text().toStdString();
+        destinationTime = std::stoi(destinationTimeStr);
     }catch(std::exception& e){
         return;
     }
-    //string, int, int
-    ctc->dispatchTrain(CTCSchedule(trainNo, destinationBlockId, destinationTime));
+    ctc->dispatchTrain(CTCSchedule(trainNo, destinationStation, destinationTime));
 }
 
 

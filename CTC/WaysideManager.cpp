@@ -1,7 +1,32 @@
 #include "WaysideManager.h"
 
 WaysideManager::WaysideManager(){
-	
+    suggestedSpeeds["A"] = 45;
+    suggestedSpeeds["B"] = 45;
+    suggestedSpeeds["C"] = 45;
+    suggestedSpeeds["D"] = 70;
+    suggestedSpeeds["E"] = 60;
+    suggestedSpeeds["F"] = 70;
+    suggestedSpeeds["G"] = 30;
+    suggestedSpeeds["H"] = 30;
+    suggestedSpeeds["I"] = 30;
+    suggestedSpeeds["YARD"] = 30;
+    suggestedSpeeds["K"] = 70;
+    suggestedSpeeds["L"] = 40;
+    suggestedSpeeds["M"] = 40;
+    suggestedSpeeds["N"] = 70;
+    suggestedSpeeds["O"] = 25;
+    suggestedSpeeds["P"] = 25;
+    suggestedSpeeds["Q"] = 25;
+    suggestedSpeeds["R"] = 26;
+    suggestedSpeeds["S"] = 28;
+    suggestedSpeeds["T"] = 28;
+    suggestedSpeeds["U"] = 30;
+    suggestedSpeeds["V"] = 15;
+    suggestedSpeeds["W"] = 20;
+    suggestedSpeeds["X"] = 20;
+    suggestedSpeeds["Y"] = 20;
+    suggestedSpeeds["Z"] = 20;
 }
 
 WaysideManager::WaysideManager(std::list<WayStruct*> _waystructs, TrackNodes* _track) : waysides(_waystructs), track(_track) {
@@ -88,6 +113,7 @@ void WaysideManager::setAuthority(Authority authority){
         }
         if(includedInbranch){
             w->auth.push_back(authority);
+            w->suggestedSpeed = suggestedSpeeds[authority.branch];
         }
     }
 }
@@ -116,7 +142,6 @@ Authority WaysideManager::getAuthority(std::string branch){
 }
 
 void WaysideManager::setNextAuthorityFromQueue(std::string branch){
-    std::cout << "Made it to here!\n";
     if(authorityQueues[branch].empty()){
         return;
     }
