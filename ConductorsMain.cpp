@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     //QObject::connect(&mba,SIGNAL(setAuth(double,double,int)),&tnmodel,SLOT(setAuth(double,double,int)));
     //Qobject::connect(&tnmodel,SIGNAL(transferCoords(int,int,double)),&mba,SLOT(transferCoords(int,int,double)));
 
-    tnmodel.newTrain(0,1);
+    tnmodel.newTrain(1,1);
     //tnmodel.newTrain(0,0);
 
     /* UI SIDE
