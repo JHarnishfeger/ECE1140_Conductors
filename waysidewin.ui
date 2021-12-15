@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WaysideWin</class>
+ <widget class="QWidget" name="WaysideWin">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>467</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Switch</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5" rowspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Switches</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Crossings</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QPushButton" name="SwitchLeft">
+     <property name="text">
+      <string>Left</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" colspan="2">
+    <widget class="QPushButton" name="SwitchRight">
+     <property name="text">
+      <string>Right</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="6" rowspan="6">
+    <widget class="QListWidget" name="SwitchList"/>
+   </item>
+   <item row="1" column="7" rowspan="6">
+    <widget class="QListWidget" name="CrossingList"/>
+   </item>
+   <item row="2" column="0" colspan="6">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Crossing</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="QPushButton" name="CrossingOff">
+     <property name="text">
+      <string>Off</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" colspan="2">
+    <widget class="QPushButton" name="CrossingOn">
+     <property name="text">
+      <string>On</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="6">
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2" colspan="2">
+    <widget class="QLineEdit" name="PLCFile"/>
+   </item>
+   <item row="7" column="2" rowspan="2" colspan="2">
+    <widget class="QPushButton" name="ImportPLC">
+     <property name="text">
+      <string>Import PLC Program</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="6" rowspan="2">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Trains</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="7" rowspan="2">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Broken Rails</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" rowspan="2" colspan="2">
+    <widget class="Line" name="line_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1" rowspan="2" colspan="3">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
+      <string>Alerts</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="6" rowspan="3">
+    <widget class="QListWidget" name="TrainList"/>
+   </item>
+   <item row="9" column="7" rowspan="3">
+    <widget class="QListWidget" name="BrokenRailList"/>
+   </item>
+   <item row="11" column="1" colspan="3">
+    <widget class="QListWidget" name="AlertList"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
